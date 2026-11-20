@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import com.postpole.wheelfile.BuildConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -44,12 +45,16 @@ private class FakeGateway : BillingGateway {
         return true
     }
 
-    override suspend fun queryProduct() = product
+    var removeAdsProduct: ProductResult = ProductResult.Loaded("$2.99")
+    override suspend fun queryProducts(): Map<String, ProductResult> = mapOf(
+        BuildConfig.PRO_PRODUCT_ID to product,
+        BuildConfig.REMOVE_ADS_PRODUCT_ID to removeAdsProduct,
+    )
     override suspend fun queryPurchases(): List<OwnedPurchase>? {
         queryPurchasesCalls++
         return owned
     }
-    override fun launchPurchase(activity: Activity) = launchResult
+    override fun launchPurchase(activity: Activity, productId: String) = launchResult
     var launchResult = true
     override suspend fun acknowledge(token: String): Boolean {
         acknowledged += token
@@ -79,7 +84,8 @@ class BillingRepositoryTest {
         )
     }
 
-    private val purchased = OwnedPurchase("tok", PurchaseStatus.PURCHASED, acknowledged = false)
+    private val pro = listOf(BuildConfig.PRO_PRODUCT_ID)
+    private val purchased = OwnedPurchase("tok", PurchaseStatus.PURCHASED, acknowledged = false, productIds = pro)
 
     @Test fun purchased_grantsProAndAcknowledges() = runTest {
         val repo = repo()
@@ -105,7 +111,7 @@ class BillingRepositoryTest {
         repo.start()
         advanceUntilIdle()
         gateway.updatesFlow.emit(
-            PurchaseUpdate.Purchases(listOf(OwnedPurchase("tok", PurchaseStatus.PENDING, false))),
+            PurchaseUpdate.Purchases(listOf(OwnedPurchase("tok", PurchaseStatus.PENDING, false, pro))),
         )
         advanceUntilIdle()
         assertFalse(repo.isPro.value)
@@ -115,7 +121,7 @@ class BillingRepositoryTest {
 
     @Test fun pending_thenPurchased_grantsPro() = runTest {
         val repo = repo()
-        gateway.owned = listOf(OwnedPurchase("tok", PurchaseStatus.PENDING, false))
+        gateway.owned = listOf(OwnedPurchase("tok", PurchaseStatus.PENDING, false, pro))
         repo.start()
         advanceUntilIdle()
         assertFalse(repo.isPro.value)
@@ -214,7 +220,7 @@ class BillingRepositoryTest {
 
     @Test fun unspecifiedState_doesNotGrantPro() = runTest {
         val repo = repo()
-        gateway.owned = listOf(OwnedPurchase("tok", PurchaseStatus.UNSPECIFIED, false))
+        gateway.owned = listOf(OwnedPurchase("tok", PurchaseStatus.UNSPECIFIED, false, pro))
         repo.start()
         advanceUntilIdle()
         assertFalse(repo.isPro.value)

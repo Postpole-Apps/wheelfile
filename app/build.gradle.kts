@@ -64,6 +64,13 @@ android {
         // One-time in-app product id for the Pro unlock. Override with -PproProductId=... if needed.
         val proProductId = providers.gradleProperty("proProductId").getOrElse("lifetime_full_access")
         buildConfigField("String", "PRO_PRODUCT_ID", "\"$proProductId\"")
+        // One-time "Remove ads" product. Override with -PremoveAdsProductId=... if needed.
+        val removeAdsProductId = providers.gradleProperty("removeAdsProductId").getOrElse("remove_ads")
+        buildConfigField("String", "REMOVE_ADS_PRODUCT_ID", "\"$removeAdsProductId\"")
+
+        // AdMob App ID (public identifier, see docs/admob.md). Same in every build type.
+        manifestPlaceholders["admobAppId"] =
+            providers.gradleProperty("admobAppId").getOrElse("ca-app-pub-2007361247232604~9674014227")
     }
 
     signingConfigs {
@@ -78,7 +85,63 @@ android {
     }
 
     buildTypes {
+        // Ad unit IDs per build type (docs/admob.md). Each can be overridden with a Gradle property of the
+        // same name (-PAD_UNIT_BANNER_GARAGE=...). Debug uses only Google's official test units.
+        fun adUnit(name: String, default: String): String =
+            providers.gradleProperty(name).getOrElse(default)
+
+        debug {
+            val banner = "ca-app-pub-3940256099942544/9214589741"
+            val interstitial = "ca-app-pub-3940256099942544/1033173712"
+            val rewarded = "ca-app-pub-3940256099942544/5224354917"
+            buildConfigField("String", "AD_UNIT_BANNER_GARAGE", "\"${adUnit("AD_UNIT_BANNER_GARAGE", banner)}\"")
+            buildConfigField("String", "AD_UNIT_BANNER_HISTORY", "\"${adUnit("AD_UNIT_BANNER_HISTORY", banner)}\"")
+            buildConfigField("String", "AD_UNIT_BANNER_DOCUMENTS", "\"${adUnit("AD_UNIT_BANNER_DOCUMENTS", banner)}\"")
+            buildConfigField("String", "AD_UNIT_BANNER_REPORTS", "\"${adUnit("AD_UNIT_BANNER_REPORTS", banner)}\"")
+            buildConfigField(
+                "String", "AD_UNIT_INTERSTITIAL_AFTER_REVIEW",
+                "\"${adUnit("AD_UNIT_INTERSTITIAL_AFTER_REVIEW", interstitial)}\"",
+            )
+            buildConfigField("String", "AD_UNIT_REWARDED", "\"${adUnit("AD_UNIT_REWARDED", rewarded)}\"")
+            // Optional local UMP testing (never committed): -PUMP_DEBUG_GEOGRAPHY=EEA|REGULATED_US_STATE|OTHER,
+            // -PUMP_TEST_DEVICE_ID=<hashed id from logcat>. Only read when BuildConfig.DEBUG is true.
+            buildConfigField(
+                "String", "UMP_DEBUG_GEOGRAPHY",
+                "\"${providers.gradleProperty("UMP_DEBUG_GEOGRAPHY").getOrElse("")}\"",
+            )
+            buildConfigField(
+                "String", "UMP_TEST_DEVICE_ID",
+                "\"${providers.gradleProperty("UMP_TEST_DEVICE_ID").getOrElse("")}\"",
+            )
+        }
         release {
+            buildConfigField(
+                "String", "AD_UNIT_BANNER_GARAGE",
+                "\"${adUnit("AD_UNIT_BANNER_GARAGE", "ca-app-pub-2007361247232604/7125861609")}\"",
+            )
+            buildConfigField(
+                "String", "AD_UNIT_BANNER_HISTORY",
+                "\"${adUnit("AD_UNIT_BANNER_HISTORY", "ca-app-pub-2007361247232604/9041578502")}\"",
+            )
+            buildConfigField(
+                "String", "AD_UNIT_BANNER_DOCUMENTS",
+                "\"${adUnit("AD_UNIT_BANNER_DOCUMENTS", "ca-app-pub-2007361247232604/3312232966")}\"",
+            )
+            buildConfigField(
+                "String", "AD_UNIT_BANNER_REPORTS",
+                "\"${adUnit("AD_UNIT_BANNER_REPORTS", "ca-app-pub-2007361247232604/7566725638")}\"",
+            )
+            buildConfigField(
+                "String", "AD_UNIT_INTERSTITIAL_AFTER_REVIEW",
+                "\"${adUnit("AD_UNIT_INTERSTITIAL_AFTER_REVIEW", "ca-app-pub-2007361247232604/8372987954")}\"",
+            )
+            buildConfigField(
+                "String", "AD_UNIT_REWARDED",
+                "\"${adUnit("AD_UNIT_REWARDED", "ca-app-pub-2007361247232604/4715320686")}\"",
+            )
+            buildConfigField("String", "UMP_DEBUG_GEOGRAPHY", "\"\"")
+            buildConfigField("String", "UMP_TEST_DEVICE_ID", "\"\"")
+
             if (signingComplete) signingConfig = signingConfigs.getByName("release")
             // Native symbols for Crashlytics / Play Console (no-op when the app has no native code).
             ndk.debugSymbolLevel = "FULL"
@@ -158,6 +221,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.config)
+    implementation(libs.play.services.ads)
+    implementation(libs.ump)
     implementation(libs.play.review)
     implementation(libs.play.app.update)
     debugImplementation(libs.androidx.compose.ui.tooling)

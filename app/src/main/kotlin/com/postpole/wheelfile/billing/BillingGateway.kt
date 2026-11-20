@@ -9,6 +9,8 @@ data class OwnedPurchase(
     val token: String,
     val status: PurchaseStatus,
     val acknowledged: Boolean,
+    /** Product ids this purchase covers. */
+    val productIds: List<String>,
 )
 
 /** Result of loading the Pro product from Play. */
@@ -52,13 +54,14 @@ interface BillingGateway {
     /** Returns true when connected (no-op if already connected). */
     suspend fun connect(): Boolean
 
-    suspend fun queryProduct(): ProductResult
+    /** Loads every product the app sells, keyed by product id. */
+    suspend fun queryProducts(): Map<String, ProductResult>
 
-    /** Purchases of the Pro product currently owned, or null if the query failed. */
+    /** Purchases of the app's products currently owned, or null if the query failed. */
     suspend fun queryPurchases(): List<OwnedPurchase>?
 
-    /** Launches the Play purchase sheet. Returns false if it could not be launched. */
-    fun launchPurchase(activity: Activity): Boolean
+    /** Launches the Play purchase sheet for [productId]. Returns false if it could not be launched. */
+    fun launchPurchase(activity: Activity, productId: String): Boolean
 
     suspend fun acknowledge(token: String): Boolean
 }

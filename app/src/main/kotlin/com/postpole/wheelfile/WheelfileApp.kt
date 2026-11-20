@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.postpole.wheelfile.ads.RemoteAdsConfig
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.billing.BillingRepository
@@ -23,10 +24,13 @@ class WheelfileApp : Application() {
     @Inject lateinit var billing: BillingRepository
     @Inject lateinit var analytics: Analytics
     @Inject lateinit var dataStore: DataStore<Preferences>
+    @Inject lateinit var remoteAdsConfig: RemoteAdsConfig
 
     override fun onCreate() {
         super.onCreate()
         billing.start()
+        // Fetch-and-activate runs in the background; the bundled defaults apply until it completes.
+        remoteAdsConfig.refresh()
         logLaunch()
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {

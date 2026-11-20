@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 class PlayBillingGateway(
     context: Context,
-    private val productId: String = BuildConfig.PRO_PRODUCT_ID,
+    private val productIds: List<String> = listOf(BuildConfig.PRO_PRODUCT_ID, BuildConfig.REMOVE_ADS_PRODUCT_ID),
 ) : BillingGateway {
 
     private val _updates = MutableSharedFlow<PurchaseUpdate>(extraBufferCapacity = 16)
@@ -37,7 +37,7 @@ class PlayBillingGateway(
     private class LaunchableProduct(val details: ProductDetails, val offerToken: String)
 
     @Volatile
-    private var launchable: LaunchableProduct? = null
+    private var launchable: Map<String, LaunchableProduct> = emptyMap()
 
     private val client: BillingClient = BillingClient.newBuilder(context.applicationContext)
         .setListener(
@@ -47,7 +47,7 @@ class PlayBillingGateway(
                         BillingClient.BillingResponseCode.OK ->
                             PurchaseUpdate.Purchases(
                                 purchases.orEmpty()
-                                    .filter { productId in it.products }
+                                    .filter { p -> p.products.any { it in productIds } }
                                     .map { it.toOwned() },
                             )
                         BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> PurchaseUpdate.AlreadyOwned
@@ -79,15 +79,15 @@ class PlayBillingGateway(
         return done.await()
     }
 
-    override suspend fun queryProduct(): ProductResult {
+    override suspend fun queryProducts(): Map<String, ProductResult> {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
-                listOf(
+                productIds.map { id ->
                     QueryProductDetailsParams.Product.newBuilder()
-                        .setProductId(productId)
+                        .setProductId(id)
                         .setProductType(BillingClient.ProductType.INAPP)
-                        .build(),
-                ),
+                        .build()
+                },
             )
             .build()
         // The ktx wrapper drops unfetchedProductList, so use the callback API to see status codes.
@@ -98,28 +98,33 @@ class PlayBillingGateway(
         val (billingResult, result) = done.await()
         if (billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
             Log.w(TAG, "queryProductDetails failed: ${billingResult.responseCode}")
-            return ProductResult.Failed
+            return productIds.associateWith { ProductResult.Failed }
         }
         result.unfetchedProductList.forEach {
             Log.w(TAG, "Product ${it.productId} not fetched, status code ${it.statusCode}")
         }
-        val details = result.productDetailsList.firstOrNull()
-        val offers = details?.oneTimePurchaseOfferDetailsList.orEmpty()
-            .mapNotNull { o -> o.offerToken?.takeIf { it.isNotEmpty() }?.let { o to it } }
-        // The legacy single-offer getter returns the legacy-compatible purchase option; prefer it.
-        @Suppress("DEPRECATION")
-        val legacyToken = details?.oneTimePurchaseOfferDetails?.offerToken
-        val chosen = offers.firstOrNull { it.second == legacyToken } ?: offers.firstOrNull()
-        if (details == null || chosen == null) {
-            launchable = null
-            return ProductResult.Unavailable
+        val launchables = mutableMapOf<String, LaunchableProduct>()
+        val results = productIds.associateWith { id ->
+            val details = result.productDetailsList.firstOrNull { it.productId == id }
+            val offers = details?.oneTimePurchaseOfferDetailsList.orEmpty()
+                .mapNotNull { o -> o.offerToken?.takeIf { it.isNotEmpty() }?.let { o to it } }
+            // The legacy single-offer getter returns the legacy-compatible purchase option; prefer it.
+            @Suppress("DEPRECATION")
+            val legacyToken = details?.oneTimePurchaseOfferDetails?.offerToken
+            val chosen = offers.firstOrNull { it.second == legacyToken } ?: offers.firstOrNull()
+            if (details == null || chosen == null) {
+                ProductResult.Unavailable
+            } else {
+                launchables[id] = LaunchableProduct(details, chosen.second)
+                ProductResult.Loaded(
+                    formattedPrice = chosen.first.formattedPrice,
+                    priceMicros = chosen.first.priceAmountMicros,
+                    currencyCode = chosen.first.priceCurrencyCode,
+                )
+            }
         }
-        launchable = LaunchableProduct(details, chosen.second)
-        return ProductResult.Loaded(
-            formattedPrice = chosen.first.formattedPrice,
-            priceMicros = chosen.first.priceAmountMicros,
-            currencyCode = chosen.first.priceCurrencyCode,
-        )
+        launchable = launchables
+        return results
     }
 
     override suspend fun queryPurchases(): List<OwnedPurchase>? {
@@ -128,12 +133,12 @@ class PlayBillingGateway(
         )
         if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) return null
         return result.purchasesList
-            .filter { productId in it.products }
+            .filter { p -> p.products.any { it in productIds } }
             .map { it.toOwned() }
     }
 
-    override fun launchPurchase(activity: Activity): Boolean {
-        val product = launchable ?: return false
+    override fun launchPurchase(activity: Activity, productId: String): Boolean {
+        val product = launchable[productId] ?: return false
         val params = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
                 listOf(
@@ -167,5 +172,6 @@ class PlayBillingGateway(
             else -> PurchaseStatus.UNSPECIFIED
         },
         acknowledged = isAcknowledged,
+        productIds = products,
     )
 }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.postpole.wheelfile.ads.ConsentManager
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.data.ThemeMode
 import com.postpole.wheelfile.ui.AppNavHost
@@ -29,12 +30,16 @@ class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     @Inject lateinit var analytics: Analytics
+    @Inject lateinit var consent: ConsentManager
 
     private lateinit var update: InAppUpdate
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        // Consent info update + form (if required) first; MobileAds.initialize only runs after that,
+        // and only when consent allows ad requests. Never blocks app use.
+        consent.gatherConsent(this)
         update = InAppUpdate(this, onError = analytics::recordNonFatal)
         if (savedInstanceState == null) update.check()
         setContent {

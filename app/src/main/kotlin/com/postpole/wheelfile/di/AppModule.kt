@@ -6,6 +6,13 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.postpole.wheelfile.ads.AdsSdk
+import com.postpole.wheelfile.ads.ConsentManager
+import com.postpole.wheelfile.ads.ConsentSdk
+import com.postpole.wheelfile.ads.FirebaseRemoteAdsConfig
+import com.postpole.wheelfile.ads.GmsAdsSdk
+import com.postpole.wheelfile.ads.RemoteAdsConfig
+import com.postpole.wheelfile.ads.UmpConsentSdk
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.createAnalytics
 import com.postpole.wheelfile.review.ReviewPolicy
@@ -71,6 +78,28 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAnalytics(@ApplicationContext context: Context): Analytics = createAnalytics(context)
+
+    @Provides
+    @Singleton
+    fun provideRemoteAdsConfig(@ApplicationContext context: Context, analytics: Analytics): RemoteAdsConfig =
+        FirebaseRemoteAdsConfig.create(context, analytics)
+
+    @Provides
+    @Singleton
+    fun provideConsentSdk(@ApplicationContext context: Context): ConsentSdk = UmpConsentSdk(context)
+
+    @Provides
+    @Singleton
+    fun provideAdsSdk(@ApplicationContext context: Context): AdsSdk = GmsAdsSdk(context)
+
+    @Provides
+    @Singleton
+    fun provideConsentManager(
+        sdk: ConsentSdk,
+        ads: AdsSdk,
+        analytics: Analytics,
+        remoteConfig: RemoteAdsConfig,
+    ): ConsentManager = ConsentManager(sdk, ads, analytics) { remoteConfig.config.value.maxContentRating }
 
     @Provides
     fun provideReviewPrompter(policy: ReviewPolicy): ReviewPrompter = policy

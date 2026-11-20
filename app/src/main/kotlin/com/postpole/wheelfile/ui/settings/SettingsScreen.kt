@@ -1,7 +1,9 @@
 package com.postpole.wheelfile.ui.settings
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -54,6 +58,8 @@ fun SettingsScreen(
     val isPro by viewModel.isPro.collectAsStateWithLifecycle()
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currency by viewModel.defaultCurrency.collectAsStateWithLifecycle()
+    val restoring by viewModel.restoring.collectAsStateWithLifecycle()
+    val privacyOptionsRequired by viewModel.privacyOptionsRequired.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -99,9 +105,25 @@ fun SettingsScreen(
             }
             ListItem(
                 headlineContent = { Text(stringResource(R.string.pro_restore)) },
-                modifier = Modifier.clickable(onClick = viewModel::restore),
+                trailingContent = {
+                    if (restoring) CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp)
+                },
+                modifier = Modifier.clickable(enabled = !restoring, onClick = viewModel::restore),
             )
             HorizontalDivider()
+
+            if (privacyOptionsRequired) {
+                SectionHeader(R.string.settings_section_privacy)
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_privacy_options)) },
+                    modifier = Modifier.clickable {
+                        // The form needs the current Activity (not just any Context): unwrap it.
+                        val activity = context.findActivity()
+                        if (activity != null) viewModel.openPrivacyOptions(activity) else viewModel.onPrivacyOptionsUnavailable()
+                    },
+                )
+                HorizontalDivider()
+            }
 
             SectionHeader(R.string.settings_section_about)
             ListItem(
@@ -214,6 +236,12 @@ private fun ThemeMode.label(): Int = when (this) {
 private fun currencyLabel(code: String): String =
     runCatching { "$code — ${Currency.getInstance(code).displayName}" }.getOrDefault(code)
 
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
+}
+
 private fun Context.openLink(intent: Intent) {
     try {
         startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
@@ -225,12 +253,16 @@ private fun Context.openLink(intent: Intent) {
 /** Resolves [SettingsEvent]s to localized text. */
 @Composable
 private fun rememberEventMessages(): (SettingsEvent) -> String {
-    val restoreChecked = stringResource(R.string.restore_checked)
+    val restored = stringResource(R.string.restore_done)
+    val none = stringResource(R.string.restore_none)
     val restoreFailed = stringResource(R.string.restore_failed)
+    val privacyFailed = stringResource(R.string.privacy_options_unavailable)
     return { event ->
         when (event) {
-            SettingsEvent.RestoreChecked -> restoreChecked
+            SettingsEvent.PurchasesRestored -> restored
+            SettingsEvent.NoPurchasesFound -> none
             SettingsEvent.RestoreFailed -> restoreFailed
+            SettingsEvent.PrivacyOptionsFailed -> privacyFailed
         }
     }
 }
