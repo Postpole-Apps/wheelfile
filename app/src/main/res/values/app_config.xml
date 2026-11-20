@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Per-app values: replace these when creating an app from the template. -->
+<!-- Per-app values. -->
 <resources>
-    <string name="privacy_policy_url" translatable="false">https://example.com/privacy</string>
-    <string name="support_email" translatable="false">support@example.com</string>
+    <string name="privacy_policy_url" translatable="false">https://pocket-ledger-postpole.web.app/wheelfile/privacy</string>
+    <string name="support_email" translatable="false">admin@postpole.com</string>
 </resources>
