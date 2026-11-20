@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Data backup is user-driven: Settings > "Back up to file" writes a JSON file via the Storage
+  Access Framework and "Restore from backup file" reads it back. Android Auto Backup and
+  device-to-device transfer are therefore excluded, so the Room database and the cached Pro flag
+  are never copied behind the user's back (Pro is re-verified with Google Play on every launch).
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>

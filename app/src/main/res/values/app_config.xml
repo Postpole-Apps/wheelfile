@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Per-app values: replace these when creating an app from the template. -->
+<resources>
+    <string name="privacy_policy_url" translatable="false">https://example.com/privacy</string>
+    <string name="support_email" translatable="false">support@example.com</string>
+</resources>
