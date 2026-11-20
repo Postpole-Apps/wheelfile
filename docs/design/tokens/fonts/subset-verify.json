@@ -1,0 +1,44 @@
+{
+ "full_loaded": true,
+ "subset_loaded": true,
+ "pixels_differing": 16,
+ "pixels_total": 1530816,
+ "max_diff": 46,
+ "differing_fraction": 1.05e-05,
+ "missing_chars": [],
+ "axes": [
+  [
+   "opsz",
+   8.0,
+   14.0,
+   144.0
+  ],
+  [
+   "wght",
+   100.0,
+   400.0,
+   1000.0
+  ],
+  [
+   "wdth",
+   25.0,
+   100.0,
+   151.0
+  ]
+ ],
+ "glyphs": 626,
+ "digit_advances": [
+  1156
+ ],
+ "gsub_features": [
+  "liga",
+  "locl",
+  "pnum",
+  "rvrn"
+ ],
+ "bytes": {
+  "full": 1787292,
+  "subset": 577916
+ },
+ "pass": true
+}
