@@ -7,4 +7,4 @@
 -dontwarn com.google.android.gms.common.annotation.NoNullnessRewrite
 
 # Keep Room entities (reflection-free, but keep names stable for schema/debugging).
--keep class com.postpole.template.data.Item { *; }
+-keep class com.postpole.wheelfile.data.Item { *; }

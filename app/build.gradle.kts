@@ -50,11 +50,11 @@ if (signingAnySet && !signingComplete) {
 }
 
 android {
-    namespace = "com.postpole.template"
+    namespace = "com.postpole.wheelfile"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.postpole.template"
+        applicationId = "com.postpole.wheelfile"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
@@ -104,6 +104,10 @@ android {
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
+
+    // Exported Room schemas as assets for MigrationTestHelper. Robolectric unit tests only see the app's
+    // merged assets, so they go on the debug source set (never shipped in release builds).
+    sourceSets.getByName("debug").assets.srcDir("$projectDir/schemas")
 }
 
 kotlin {
@@ -160,6 +164,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.room.testing)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.androidx.test.ext.junit)
