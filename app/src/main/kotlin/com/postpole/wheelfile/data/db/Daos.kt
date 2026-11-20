@@ -12,6 +12,9 @@ interface VehicleDao {
     @Query("SELECT * FROM Vehicle ORDER BY archived ASC, name COLLATE NOCASE ASC")
     fun observeAll(): Flow<List<Vehicle>>
 
+    @Query("SELECT * FROM Vehicle ORDER BY archived ASC, name COLLATE NOCASE ASC")
+    suspend fun getAll(): List<Vehicle>
+
     @Query("SELECT * FROM Vehicle WHERE id = :id")
     fun observe(id: Long): Flow<Vehicle?>
 
@@ -43,6 +46,9 @@ interface EnergyLogDao {
     /** Oldest first, the order the economy engine expects (odometer, then date). */
     @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId AND stream = :stream ORDER BY odometer ASC, dateTime ASC, id ASC")
     suspend fun getForStream(vehicleId: Long, stream: EnergyStream): List<EnergyLog>
+
+    @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId ORDER BY odometer ASC, dateTime ASC, id ASC")
+    suspend fun getAll(vehicleId: Long): List<EnergyLog>
 
     @Query("SELECT * FROM EnergyLog WHERE id = :id")
     suspend fun get(id: Long): EnergyLog?
