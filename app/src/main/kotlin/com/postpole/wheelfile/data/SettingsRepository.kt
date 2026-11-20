@@ -2,6 +2,7 @@ package com.postpole.wheelfile.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
@@ -36,6 +37,13 @@ class SettingsRepository @Inject constructor(
         it[DEFAULT_CURRENCY] ?: defaultCurrencyFor(Locale.getDefault())
     }
 
+    /** True once the first-run Welcome / Add vehicle flow has been completed. */
+    val onboardingDone: Flow<Boolean> = dataStore.data.map { it[ONBOARDING_DONE] ?: false }
+
+    suspend fun setOnboardingDone() {
+        dataStore.edit { it[ONBOARDING_DONE] = true }
+    }
+
     suspend fun setThemeMode(mode: ThemeMode) {
         dataStore.edit { it[THEME_MODE] = mode.name }
     }
@@ -47,5 +55,6 @@ class SettingsRepository @Inject constructor(
     private companion object {
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val DEFAULT_CURRENCY = stringPreferencesKey("default_currency")
+        val ONBOARDING_DONE = booleanPreferencesKey("onboarding_done")
     }
 }

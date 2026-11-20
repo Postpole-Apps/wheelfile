@@ -6,7 +6,6 @@
     <string name="back">Back</string>
     <string name="cancel">Cancel</string>
     <string name="garage_title">Garage</string>
-    <string name="garage_empty">No vehicles yet. Your vehicle logs are stored on your device.</string>
     <string name="pro_features_title">Unlock everything</string>
     <string name="pro_feature_1">Feature one (placeholder)</string>
     <string name="pro_feature_2">Feature two (placeholder)</string>
@@ -46,4 +45,171 @@
     <string name="update_ready_message">A new version has been downloaded. Restart to finish installing it.</string>
     <string name="update_restart">Restart</string>
     <string name="update_later">Later</string>
+
+    <!-- Common -->
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+    <string name="next">Next</string>
+    <string name="done">Done</string>
+    <string name="retry">Retry</string>
+    <string name="optional">Optional</string>
+
+    <!-- Welcome / onboarding -->
+    <string name="welcome_headline">Track fuel, charging, service and costs for your car or bike.</string>
+    <string name="welcome_body">Your vehicle logs are stored on your device.</string>
+    <string name="welcome_feature_log">Log fill-ups and charges in seconds</string>
+    <string name="welcome_feature_economy">See fuel economy worked out full tank to full tank</string>
+    <string name="welcome_feature_private">No account, no sign-in</string>
+    <string name="welcome_add_vehicle">Add a vehicle</string>
+
+    <!-- Add vehicle -->
+    <string name="add_vehicle_title">Add a vehicle</string>
+    <string name="add_vehicle_step">Step %1$d of %2$d</string>
+    <string name="vehicle_name">Name</string>
+    <string name="vehicle_name_error">Enter a name for this vehicle</string>
+    <string name="vehicle_type">Type</string>
+    <string name="vehicle_type_car">Car</string>
+    <string name="vehicle_type_motorbike">Motorbike</string>
+    <string name="vehicle_type_van">Van</string>
+    <string name="vehicle_type_other">Other</string>
+    <string name="vehicle_powertrain">Powertrain</string>
+    <string name="powertrain_petrol">Petrol / Gasoline</string>
+    <string name="powertrain_diesel">Diesel</string>
+    <string name="powertrain_lpg">LPG</string>
+    <string name="powertrain_cng">CNG</string>
+    <string name="powertrain_electric">Electric</string>
+    <string name="powertrain_phev">Plug-in hybrid</string>
+    <string name="powertrain_hybrid">Hybrid</string>
+    <string name="powertrain_hydrogen">Hydrogen</string>
+    <string name="vehicle_make">Make</string>
+    <string name="vehicle_model">Model</string>
+    <string name="vehicle_year">Year</string>
+    <string name="vehicle_year_error">Enter a valid year</string>
+    <string name="vehicle_plate">Plate</string>
+    <string name="vehicle_vin">VIN</string>
+    <string name="vehicle_vin_hint">A VIN usually has 17 characters</string>
+    <string name="units_title">Units</string>
+    <string name="units_distance">Distance</string>
+    <string name="units_volume">Fuel volume</string>
+    <string name="units_economy">Economy</string>
+    <string name="units_currency">Currency</string>
+    <string name="units_currency_hint">ISO 4217 code, for example EUR or USD</string>
+    <string name="unit_km">Kilometres</string>
+    <string name="unit_mi">Miles</string>
+    <string name="unit_litres">Litres</string>
+    <string name="unit_us_gal">US gal</string>
+    <string name="unit_uk_gal">UK gal</string>
+    <string name="unit_kg">Kilograms</string>
+    <string name="units_electric_note">Electric economy follows your distance unit.</string>
+
+    <!-- Garage -->
+    <string name="garage_empty_title">Your garage is empty</string>
+    <string name="garage_empty_body">Add your first vehicle to start logging. Your vehicle logs are stored on your device.</string>
+    <string name="garage_loading">Loading your garage</string>
+    <string name="garage_add_vehicle">Add vehicle</string>
+    <string name="garage_odometer">Odometer</string>
+    <string name="garage_no_economy">Economy appears after your second full fill-up</string>
+    <string name="garage_archived_section">Archived (%1$d)</string>
+    <string name="garage_archived_note">Archived vehicles are read-only and don\'t count towards the free limit.</string>
+    <string name="garage_restore">Restore</string>
+    <string name="quick_fillup">Fill-up</string>
+    <string name="quick_charge">Charge</string>
+    <string name="quick_history">History</string>
+    <string name="delta_better">%1$s%% better than your average</string>
+    <string name="delta_worse">%1$s%% worse than your average</string>
+    <string name="economy_last">Last</string>
+    <string name="economy_average">Average</string>
+
+    <!-- Free limit -->
+    <string name="free_limit_title">Free limit reached</string>
+    <string name="free_limit_body">The free plan includes 2 active vehicles. Archive one to keep it read-only, or see what Pro adds.</string>
+    <string name="free_limit_see_pro">See Pro</string>
+    <string name="free_limit_archive">Archive a vehicle</string>
+    <string name="archive_pick_title">Archive which vehicle?</string>
+    <string name="archive_pick_body">An archived vehicle keeps its data but becomes read-only.</string>
+
+    <!-- Fill-up / charge forms -->
+    <string name="fillup_title">Add fill-up</string>
+    <string name="charge_title">Add charge</string>
+    <string name="form_total">Total</string>
+    <string name="form_total_hero">Total cost</string>
+    <string name="form_auto_total">Calculated from price and volume</string>
+    <string name="form_auto_price">Price per unit calculated from total and volume</string>
+    <string name="form_auto_volume">Volume calculated from total and price</string>
+    <string name="form_enter_two">Enter any two of total, price per unit and volume</string>
+    <string name="form_date">Date</string>
+    <string name="form_odometer">Odometer (%1$s)</string>
+    <string name="form_odometer_hint">Last reading: %1$s %2$s</string>
+    <string name="form_odometer_error">Enter the odometer reading</string>
+    <string name="form_odometer_warning">Lower than your last entry (%1$s %2$s). You can still save.</string>
+    <string name="form_odometer_warning_generic">This doesn\'t fit the order of your other entries. You can still save.</string>
+    <string name="form_volume">Volume (%1$s)</string>
+    <string name="form_energy">Energy (%1$s)</string>
+    <string name="form_quantity_error">Enter an amount greater than zero</string>
+    <string name="form_price_per_unit">Price per %1$s</string>
+    <string name="form_full_tank">Full tank</string>
+    <string name="form_full_tank_summary">Filled up to the top</string>
+    <string name="form_charged_full">Charged to my usual target</string>
+    <string name="form_charged_full_summary">Used to work out economy between charges</string>
+    <string name="form_missed">I missed logging a fill-up before this</string>
+    <string name="form_missed_summary">Skips economy for this stretch</string>
+    <string name="form_fuel_grade">Fuel grade</string>
+    <string name="form_station">Station</string>
+    <string name="form_note">Note</string>
+    <string name="form_charger">Charger</string>
+    <string name="charger_home">Home</string>
+    <string name="charger_ac">AC public</string>
+    <string name="charger_dc">DC fast</string>
+    <string name="form_soc">State of charge</string>
+    <string name="form_soc_start">Before</string>
+    <string name="form_soc_end">After</string>
+    <string name="form_soc_error">Enter a value from 0 to 100</string>
+    <string name="form_read_only">This vehicle is archived and read-only.</string>
+    <string name="save_failed">Couldn\'t save. Your entry is still here.</string>
+
+    <!-- Vehicle detail -->
+    <string name="tab_overview">Overview</string>
+    <string name="tab_history">History</string>
+    <string name="tab_documents">Documents</string>
+    <string name="tab_reports">Reports</string>
+    <string name="documents_empty">No documents yet</string>
+    <string name="reports_empty">No reports yet</string>
+    <string name="reminders_bell">Reminders</string>
+    <string name="switch_vehicle">Switch vehicle</string>
+    <string name="overview_economy">Fuel economy</string>
+    <string name="overview_economy_electric">Electric economy</string>
+    <string name="overview_economy_gas">Gas economy</string>
+    <string name="overview_how_calculated">How calculated?</string>
+    <string name="overview_no_economy">Log two full fill-ups to see your economy.</string>
+    <string name="overview_costs">Costs, last 12 months</string>
+    <string name="overview_cost_per_distance">Per %1$s</string>
+    <string name="overview_cost_per_month">Per month</string>
+    <string name="overview_cost_total">Total</string>
+    <string name="overview_recent">Recent entries</string>
+    <string name="overview_recent_empty">No entries yet. Add your first fill-up to get started.</string>
+    <string name="overview_archived_banner">Archived: read-only</string>
+    <string name="how_title">How your economy is calculated</string>
+    <string name="how_body">Economy is measured from one full tank to the next full tank. Every fill-up after the first full one, up to and including the next full one, counts towards the energy used over the distance driven.</string>
+    <string name="how_window">Latest window: %1$s to %2$s %3$s (%4$s %3$s driven)</string>
+    <string name="how_quantity">Energy added in that window: %1$s %2$s</string>
+    <string name="how_result">Result: %1$s</string>
+    <string name="how_average">The average adds up energy and distance over all valid windows, not an average of averages.</string>
+    <string name="how_skipped">Windows with a missed fill-up or an odometer that did not increase are left out.</string>
+    <string name="how_none">No full-to-full window yet. Mark two fill-ups as full tank to see one.</string>
+    <string name="how_close">Got it</string>
+
+    <!-- History -->
+    <string name="filter_all">All</string>
+    <string name="filter_fillups">Fill-ups</string>
+    <string name="filter_charges">Charges</string>
+    <string name="filter_service">Service</string>
+    <string name="filter_expenses">Expenses</string>
+    <string name="history_empty">No entries here yet</string>
+    <string name="history_check_odometer">Check odometer</string>
+    <string name="history_missed">Missed fill-up before this</string>
+    <string name="history_partial">Partial</string>
+    <string name="entry_service">Service</string>
+    <string name="entry_expense">Expense</string>
+    <string name="entry_fillup">Fill-up</string>
+    <string name="entry_charge">Charge</string>
 </resources>

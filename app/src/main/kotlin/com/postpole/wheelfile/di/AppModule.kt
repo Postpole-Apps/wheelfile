@@ -59,6 +59,19 @@ object AppModule {
     @Provides fun provideCustomCategoryDao(db: AppDatabase): CustomCategoryDao = db.customCategoryDao()
 
     @Provides
+    fun provideProStatus(billing: BillingRepository): com.postpole.wheelfile.billing.ProStatus =
+        object : com.postpole.wheelfile.billing.ProStatus {
+            override val isPro = billing.isPro
+        }
+
+    @Provides
+    fun provideLocaleProvider(): com.postpole.wheelfile.data.LocaleProvider =
+        com.postpole.wheelfile.data.LocaleProvider { java.util.Locale.getDefault() }
+
+    @Provides
+    fun provideClock():com.postpole.wheelfile.data.Clock = com.postpole.wheelfile.data.Clock.System
+
+    @Provides
     @Singleton
     fun provideBillingGateway(@ApplicationContext context: Context): BillingGateway =
         PlayBillingGateway(context)

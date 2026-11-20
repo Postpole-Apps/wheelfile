@@ -40,6 +40,9 @@ interface EnergyLogDao {
     @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId ORDER BY odometer DESC, dateTime DESC, id DESC")
     fun observeForVehicle(vehicleId: Long): Flow<List<EnergyLog>>
 
+    @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId ORDER BY odometer DESC, dateTime DESC, id DESC")
+    suspend fun getAllForVehicle(vehicleId: Long): List<EnergyLog>
+
     /** Oldest first, the order the economy engine expects (odometer, then date). */
     @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId AND stream = :stream ORDER BY odometer ASC, dateTime ASC, id ASC")
     suspend fun getForStream(vehicleId: Long, stream: EnergyStream): List<EnergyLog>
