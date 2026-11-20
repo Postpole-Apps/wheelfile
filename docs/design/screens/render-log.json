@@ -1,0 +1,4406 @@
+{
+ "s01-welcome-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nWheelfile\nTrack fuel, charging, service and costs for your car or bike. Your vehicle logs are stored on your device.\nlocal_gas_station\nFuel and charging\nEconomy from full-to-full fills\nbuild\nService and reminders\nBy date, distance or whichever first\nfolder_open\nDocuments\nInsurance, registration and expiry alerts\nadd\nAdd a vehicle\nupload_file\nImport from another app\nNo account needed.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "App icon · Hub Tab · 96dp",
+    "x": 132,
+    "y": 88,
+    "w": 96,
+    "h": 96
+   },
+   {
+    "label": "Wordmark · headlineLarge · onSurface",
+    "x": 110,
+    "y": 200,
+    "w": 140,
+    "h": 40
+   },
+   {
+    "label": "Welcome copy (spec §2.1) · bodyLarge · onSurfaceVariant",
+    "x": 24,
+    "y": 248,
+    "w": 312,
+    "h": 72
+   },
+   {
+    "label": "Primary CTA · 56dp · primary · labelLarge 16sp",
+    "x": 24,
+    "y": 620,
+    "w": 312,
+    "h": 56
+   },
+   {
+    "label": "Secondary CTA · outlined 48dp · primary text",
+    "x": 24,
+    "y": 684,
+    "w": 312,
+    "h": 48
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01-welcome-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nWheelfile\nTrack fuel, charging, service and costs for your car or bike. Your vehicle logs are stored on your device.\nlocal_gas_station\nFuel and charging\nEconomy from full-to-full fills\nbuild\nService and reminders\nBy date, distance or whichever first\nfolder_open\nDocuments\nInsurance, registration and expiry alerts\nadd\nAdd a vehicle\nupload_file\nImport from another app\nNo account needed.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "App icon · Hub Tab · 96dp",
+    "x": 132,
+    "y": 88,
+    "w": 96,
+    "h": 96
+   },
+   {
+    "label": "Wordmark · headlineLarge · onSurface",
+    "x": 110,
+    "y": 200,
+    "w": 140,
+    "h": 40
+   },
+   {
+    "label": "Welcome copy (spec §2.1) · bodyLarge · onSurfaceVariant",
+    "x": 24,
+    "y": 248,
+    "w": 312,
+    "h": 72
+   },
+   {
+    "label": "Primary CTA · 56dp · primary · labelLarge 16sp",
+    "x": 24,
+    "y": 620,
+    "w": 312,
+    "h": 56
+   },
+   {
+    "label": "Secondary CTA · outlined 48dp · primary text",
+    "x": 24,
+    "y": 684,
+    "w": 312,
+    "h": 48
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01b-add-vehicle-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nAdd vehicle\nbadge\nName\nMazda CX-5\nType\ndirections_car\nCar\ntwo_wheeler\nMotorbike\nairport_shuttle\nVan\nOther\nPowertrain\ncheck\nPetrol\nDiesel\nElectric\nPlug-in hybrid\nHybrid\nLPG\nCNG\nHydrogen\nMake\nMazda\nModel\nCX-5\nYear\n2021\nPlate (optional)\nGH-482-KM\nVIN (optional)\nJM3KFBDM0M1••••••\nphoto_camera\n17 characters · stays with this vehicle\narrow_forward\nNext: units",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Full-screen sheet bar · close · titleLarge · step 1 of 3",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Filled text field · min 56dp · surfaceContainerHigh · label bodySmall · value bodyLarge",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Segmented selector · 40dp + 48dp touch · secondaryContainer when selected",
+    "x": 16,
+    "y": 194,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Filter chips · 40dp (48dp touch) · outline / secondaryContainer",
+    "x": 16,
+    "y": 276,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01b-add-vehicle-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nAdd vehicle\nbadge\nName\nMazda CX-5\nType\ndirections_car\nCar\ntwo_wheeler\nMotorbike\nairport_shuttle\nVan\nOther\nPowertrain\ncheck\nPetrol\nDiesel\nElectric\nPlug-in hybrid\nHybrid\nLPG\nCNG\nHydrogen\nMake\nMazda\nModel\nCX-5\nYear\n2021\nPlate (optional)\nGH-482-KM\nVIN (optional)\nJM3KFBDM0M1••••••\nphoto_camera\n17 characters · stays with this vehicle\narrow_forward\nNext: units",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Full-screen sheet bar · close · titleLarge · step 1 of 3",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Filled text field · min 56dp · surfaceContainerHigh · label bodySmall · value bodyLarge",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Segmented selector · 40dp + 48dp touch · secondaryContainer when selected",
+    "x": 16,
+    "y": 194,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Filter chips · 40dp (48dp touch) · outline / secondaryContainer",
+    "x": 16,
+    "y": 276,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01c-units-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nUnits\nlanguage\nPrefilled from your device region (France). You can change units per vehicle at any time.\nDistance\nkm\nmi\nFuel volume\nL\nUS gal\nUK gal\nFuel economy\nL/100km\nkm/L\nMPG US\nMPG UK\nElectric economy\nkWh/100km\nkm/kWh\nmi/kWh\npayments\nCurrency\nEUR · €\narrow_drop_down\nAmounts are recorded as entered; nothing is converted.\narrow_forward\nNext",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Distance · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 222,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Fuel volume · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 306,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Fuel economy · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 390,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Electric economy · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 474,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Currency picker · dropdown field 56dp",
+    "x": 16,
+    "y": 538,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01c-units-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nUnits\nlanguage\nPrefilled from your device region (France). You can change units per vehicle at any time.\nDistance\nkm\nmi\nFuel volume\nL\nUS gal\nUK gal\nFuel economy\nL/100km\nkm/L\nMPG US\nMPG UK\nElectric economy\nkWh/100km\nkm/kWh\nmi/kWh\npayments\nCurrency\nEUR · €\narrow_drop_down\nAmounts are recorded as entered; nothing is converted.\narrow_forward\nNext",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 2,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Distance · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 222,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Fuel volume · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 306,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Fuel economy · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 390,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Electric economy · segmented 40dp · labelLarge",
+    "x": 16,
+    "y": 474,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Currency picker · dropdown field 56dp",
+    "x": 16,
+    "y": 538,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01d-region-presets-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nReminders\nAdd common reminders for France?\nBased on your region. Turn off anything that doesn’t apply to Mazda CX-5.\ncheck\nContrôle technique\nFirst at 4 years, then every 2 years\ncheck\nInsurance renewal\nYearly · you set the date\ncheck\nOil & filter\nEvery 15,000 km or 12 months, whichever first\nDriving licence expiry\nAdd the date from your licence\ninfo\nSuggested schedule. Rules vary; check your local authority.\nSkip\ncheck\nAdd 3 reminders",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 7,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Preset list · card large 20dp · rows ≥56dp · checkbox 24dp in 48dp target",
+    "x": 16,
+    "y": 224,
+    "w": 328,
+    "h": 271
+   },
+   {
+    "label": "Disclaimer · bodySmall · dashed outline (spec §2.6)",
+    "x": 16,
+    "y": 507,
+    "w": 328,
+    "h": 54
+   },
+   {
+    "label": "Primary · 56dp · primary",
+    "x": 153.7,
+    "y": 704,
+    "w": 190.3,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s01d-region-presets-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nReminders\nAdd common reminders for France?\nBased on your region. Turn off anything that doesn’t apply to Mazda CX-5.\ncheck\nContrôle technique\nFirst at 4 years, then every 2 years\ncheck\nInsurance renewal\nYearly · you set the date\ncheck\nOil & filter\nEvery 15,000 km or 12 months, whichever first\nDriving licence expiry\nAdd the date from your licence\ninfo\nSuggested schedule. Rules vary; check your local authority.\nSkip\ncheck\nAdd 3 reminders",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 7,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Preset list · card large 20dp · rows ≥56dp · checkbox 24dp in 48dp target",
+    "x": 16,
+    "y": 224,
+    "w": 328,
+    "h": 271
+   },
+   {
+    "label": "Disclaimer · bodySmall · dashed outline (spec §2.6)",
+    "x": 16,
+    "y": 507,
+    "w": 328,
+    "h": 54
+   },
+   {
+    "label": "Primary · 56dp · primary",
+    "x": 153.7,
+    "y": 704,
+    "w": 190.3,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s02-garage-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 42
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 162,
+    "w": 328,
+    "h": 176
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 194,
+    "w": 296,
+    "h": 46
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 244,
+    "w": 85.8,
+    "h": 26
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 282,
+    "w": 296,
+    "h": 40
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 350,
+    "w": 328,
+    "h": 68
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 430,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_garage · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s02-garage-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 42
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 162,
+    "w": 328,
+    "h": 176
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 194,
+    "w": 296,
+    "h": 46
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 244,
+    "w": 85.8,
+    "h": 26
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 282,
+    "w": 296,
+    "h": 40
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 350,
+    "w": 328,
+    "h": 68
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 430,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_garage · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s02-garage-ads-hidden-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 704,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 42
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 162,
+    "w": 328,
+    "h": 176
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 194,
+    "w": 296,
+    "h": 46
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 244,
+    "w": 85.8,
+    "h": 26
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 282,
+    "w": 296,
+    "h": 40
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 350,
+    "w": 328,
+    "h": 68
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 430,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 288,
+    "y": 704,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s02-garage-ads-hidden-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 704,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 42
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 162,
+    "w": 328,
+    "h": 176
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 194,
+    "w": 296,
+    "h": 46
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 244,
+    "w": 85.8,
+    "h": 26
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 282,
+    "w": 296,
+    "h": 40
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 350,
+    "w": 328,
+    "h": 68
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 430,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 288,
+    "y": 704,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s04-vehicle-overview-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\nFuel economy\ninfo\nHow calculated?\n7.4L/100km\narrow_downward\n0.2 vs avg\nLast full-to-full · 12-month average 7.6 L/100km\nCosts · last 12 months\n€2,231\nTotal\n€186\nPer month\n€0.14\nPer km\nNext reminders\nSee all\nverified\nContrôle technique\nWed 9 Dec · in 19 days\noil_barrel\nOil & filter\nAbout 1,800 km left or 13 Nov 2027\nRecent entries\nlocal_gas_station\nFill-up · 41.3 L\n20 Nov · 62,400 km\n€75.12\nadd\nFill-up",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 233,
+    "y": 704,
+    "w": 111,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 9,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Overview selected (0 ads)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Economy card · surfaceContainer · radius 20",
+    "x": 16,
+    "y": 156,
+    "w": 328,
+    "h": 118
+   },
+   {
+    "label": "How calculated? link · 48dp row · opens sheet (0 ads)",
+    "x": 196.9,
+    "y": 172,
+    "w": 131.1,
+    "h": 32
+   },
+   {
+    "label": "Cost card · 3 stats · numberMedium tabular",
+    "x": 16,
+    "y": 286,
+    "w": 328,
+    "h": 102
+   },
+   {
+    "label": "See all · text button 48dp → Reminders list (same destination as the bell)",
+    "x": 284.5,
+    "y": 396,
+    "w": 59.5,
+    "h": 48
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 233,
+    "y": 704,
+    "w": 111,
+    "h": 56
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    true
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s04-vehicle-overview-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\nFuel economy\ninfo\nHow calculated?\n7.4L/100km\narrow_downward\n0.2 vs avg\nLast full-to-full · 12-month average 7.6 L/100km\nCosts · last 12 months\n€2,231\nTotal\n€186\nPer month\n€0.14\nPer km\nNext reminders\nSee all\nverified\nContrôle technique\nWed 9 Dec · in 19 days\noil_barrel\nOil & filter\nAbout 1,800 km left or 13 Nov 2027\nRecent entries\nlocal_gas_station\nFill-up · 41.3 L\n20 Nov · 62,400 km\n€75.12\nadd\nFill-up",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 233,
+    "y": 704,
+    "w": 111,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 9,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Overview selected (0 ads)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Economy card · surfaceContainer · radius 20",
+    "x": 16,
+    "y": 156,
+    "w": 328,
+    "h": 118
+   },
+   {
+    "label": "How calculated? link · 48dp row · opens sheet (0 ads)",
+    "x": 196.9,
+    "y": 172,
+    "w": 131.1,
+    "h": 32
+   },
+   {
+    "label": "Cost card · 3 stats · numberMedium tabular",
+    "x": 16,
+    "y": 286,
+    "w": 328,
+    "h": 102
+   },
+   {
+    "label": "See all · text button 48dp → Reminders list (same destination as the bell)",
+    "x": 284.5,
+    "y": 396,
+    "w": 59.5,
+    "h": 48
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 233,
+    "y": 704,
+    "w": 111,
+    "h": 56
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    true
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s06-add-fillup-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nMazda CX-5\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n62,400 km\nLast: 61,842 km · +558 km\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 190,
+    "w": 177,
+    "h": 24
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 238,
+    "w": 220,
+    "h": 56
+   },
+   {
+    "label": "Focused field · 2dp primary underline · bodySmall support",
+    "x": 16,
+    "y": 304,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 498,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s06-add-fillup-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nMazda CX-5\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n62,400 km\nLast: 61,842 km · +558 km\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 190,
+    "w": 177,
+    "h": 24
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 238,
+    "w": 220,
+    "h": 56
+   },
+   {
+    "label": "Focused field · 2dp primary underline · bodySmall support",
+    "x": 16,
+    "y": 304,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 498,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s06b-add-charge-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nCharge\nelectric_car\nMegane E-Tech\nexpand_more\nTotal\n€8.70\ncalculate\nAuto · 34.8 kWh × €0.25/kWh\ncalendar_today\nDate\nFri 20 Nov\nTime\n21:30\nspeed\nOdometer\n24,600 km\nLast: 24,371 km · +229 km\nEnergy\n34.8 kWh\nPrice / kWh\n€0.25\nhome\nHome\nev_station\nAC public\nbolt\nDC fast\nCharge\n22%\n80%\nCharged to usual target (80%)\nCounts as “full” for economy\nphoto_camera\nReceipt\nev_station\nStation\ncheck\nSave charge",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 4,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · tertiaryContainer (EV) · numberHero 52sp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Charge type · segmented 40dp",
+    "x": 16,
+    "y": 452,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "State of charge · start/end % · tertiary bar",
+    "x": 16,
+    "y": 501,
+    "w": 328,
+    "h": 20
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s06b-add-charge-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nCharge\nelectric_car\nMegane E-Tech\nexpand_more\nTotal\n€8.70\ncalculate\nAuto · 34.8 kWh × €0.25/kWh\ncalendar_today\nDate\nFri 20 Nov\nTime\n21:30\nspeed\nOdometer\n24,600 km\nLast: 24,371 km · +229 km\nEnergy\n34.8 kWh\nPrice / kWh\n€0.25\nhome\nHome\nev_station\nAC public\nbolt\nDC fast\nCharge\n22%\n80%\nCharged to usual target (80%)\nCounts as “full” for economy\nphoto_camera\nReceipt\nev_station\nStation\ncheck\nSave charge",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 4,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · tertiaryContainer (EV) · numberHero 52sp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Charge type · segmented 40dp",
+    "x": 16,
+    "y": 452,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "State of charge · start/end % · tertiary bar",
+    "x": 16,
+    "y": 501,
+    "w": 328,
+    "h": 20
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s07-add-service-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nService\ndirections_car\nMazda CX-5\nexpand_more\ncalendar_today\nDate\nFri 13 Nov\nOdometer\n62,050 km\nService items\ncheck\nOil & filter\ncheck\nCabin filter\nAir filter\nTyres\nBrakes\nBattery\nWipers\nadd\nCustom\nCost\n€ 212.40\nstorefront\nWorkshop\nGarage Martin\nNotes (optional)\nOil 5W-30 · 4.8 L\nreceipt_long\nReceipt.pdf\nphoto_camera\nAdd photo\nCreate next reminder from this\nOil & filter in 15,000 km or 12 months, whichever first\ncheck\nSave service",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 10,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 12,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Multi-select chips · 40dp · secondaryContainer + check when selected",
+    "x": 16,
+    "y": 190,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Create-next-reminder switch row · surfaceContainer card",
+    "x": 16,
+    "y": 514,
+    "w": 328,
+    "h": 64
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s07-add-service-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nService\ndirections_car\nMazda CX-5\nexpand_more\ncalendar_today\nDate\nFri 13 Nov\nOdometer\n62,050 km\nService items\ncheck\nOil & filter\ncheck\nCabin filter\nAir filter\nTyres\nBrakes\nBattery\nWipers\nadd\nCustom\nCost\n€ 212.40\nstorefront\nWorkshop\nGarage Martin\nNotes (optional)\nOil 5W-30 · 4.8 L\nreceipt_long\nReceipt.pdf\nphoto_camera\nAdd photo\nCreate next reminder from this\nOil & filter in 15,000 km or 12 months, whichever first\ncheck\nSave service",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 10,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 12,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Multi-select chips · 40dp · secondaryContainer + check when selected",
+    "x": 16,
+    "y": 190,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Create-next-reminder switch row · surfaceContainer card",
+    "x": 16,
+    "y": 514,
+    "w": 328,
+    "h": 64
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s09-reminders-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nReminders\nmore_vert\ncheck\nAll vehicles\nMazda CX-5\nMegane E-Tech\nDue soon\nverified\nContrôle technique\nMazda CX-5 · Wed 9 Dec\nRepeats every 2 years\n19 days\ntire_repair\nTyre rotation\nMegane E-Tech · odometer\nRepeats every 10,000 km\n~450 km\nUpcoming\noil_barrel\nOil & filter\nMazda CX-5 · 64,200 km or 13 Nov 2027\nWhichever first · repeats\n~1,800 km\nshield\nInsurance renewal\nMazda CX-5 · 1 Sep 2027\nRepeats yearly\n9 months\nbattery_charging_full\n12 V battery check\nMegane E-Tech · 2 Mar 2027\nRepeats yearly\n3 months\nadd\nReminder",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 211.4,
+    "y": 704,
+    "w": 132.6,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 8,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 12,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Reminder rows · ≥56dp · titleSmall + 2× bodySmall · status pill labelMedium",
+    "x": 16,
+    "y": 204,
+    "w": 328,
+    "h": 161
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 211.4,
+    "y": 704,
+    "w": 132.6,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s09-reminders-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nReminders\nmore_vert\ncheck\nAll vehicles\nMazda CX-5\nMegane E-Tech\nDue soon\nverified\nContrôle technique\nMazda CX-5 · Wed 9 Dec\nRepeats every 2 years\n19 days\ntire_repair\nTyre rotation\nMegane E-Tech · odometer\nRepeats every 10,000 km\n~450 km\nUpcoming\noil_barrel\nOil & filter\nMazda CX-5 · 64,200 km or 13 Nov 2027\nWhichever first · repeats\n~1,800 km\nshield\nInsurance renewal\nMazda CX-5 · 1 Sep 2027\nRepeats yearly\n9 months\nbattery_charging_full\n12 V battery check\nMegane E-Tech · 2 Mar 2027\nRepeats yearly\n3 months\nadd\nReminder",
+  "ads": [],
+  "fabs": [
+   {
+    "x": 211.4,
+    "y": 704,
+    "w": 132.6,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 8,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 12,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Reminder rows · ≥56dp · titleSmall + 2× bodySmall · status pill labelMedium",
+    "x": 16,
+    "y": 204,
+    "w": 328,
+    "h": 161
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 40dp (16dp above gesture inset · no banner slot)",
+    "x": 211.4,
+    "y": 704,
+    "w": 132.6,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s10-reminder-form-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nNew reminder\noil_barrel\nTitle\nOil & filter\ndirections_car\nVehicle\nMazda CX-5\narrow_drop_down\nDue by\nDate\nOdometer\nWhichever first\ncalendar_today\nDate\n13 Nov 2027\nOdometer\n64,200 km\nAbout 1,800 km left · around 3 months at your recent pace (estimate)\nRepeat\nEvery 12 months or 15,000 km\nAlert me\ncheck\n30 d\ncheck\n14 d\ncheck\n7 d\ncheck\n1 d\n~500 km left\ncheck\nSave reminder",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 8,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 9,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Title field · 56dp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Trigger · segmented 40dp: Date | Odometer | Whichever first",
+    "x": 16,
+    "y": 255,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s10-reminder-form-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nNew reminder\noil_barrel\nTitle\nOil & filter\ndirections_car\nVehicle\nMazda CX-5\narrow_drop_down\nDue by\nDate\nOdometer\nWhichever first\ncalendar_today\nDate\n13 Nov 2027\nOdometer\n64,200 km\nAbout 1,800 km left · around 3 months at your recent pace (estimate)\nRepeat\nEvery 12 months or 15,000 km\nAlert me\ncheck\n30 d\ncheck\n14 d\ncheck\n7 d\ncheck\n1 d\n~500 km left\ncheck\nSave reminder",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 8,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 9,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Title field · 56dp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Trigger · segmented 40dp: Date | Odometer | Whichever first",
+    "x": 16,
+    "y": 255,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s05-vehicle-history-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\ncheck\nAll\nFuel\nCharge\nService\nExpense\nNovember 2026\n3 · €318.72\nlocal_gas_station\nFill-up · 41.3 L\n€75.12\n20 Nov · 62,400 km · +558 km\n7.4 L/100km\narrow_downward\n0.2 vs avg\ninfo\nHow calculated?\nbuild\nService · Garage Martin\n€212.40\n13 Nov · 62,050 km\nOil & filter\nCabin filter\nreceipt_long\nReceipt\nadd_road\nExpense · Tolls\n€31.20\n8 Nov · A6 motorway\nOctober 2026\n4 · €264.05\nlocal_gas_station\nFill-up · 42.0 L\n€77.03\n30 Oct · 61,842 km · +571 km\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_history",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 16,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · History selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Filter chips · 40dp · single-select row",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Month card · radius 24 · surfaceContainer · header titleLarge + total numberMedium",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 339
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_history · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    true
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s05-vehicle-history-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\ncheck\nAll\nFuel\nCharge\nService\nExpense\nNovember 2026\n3 · €318.72\nlocal_gas_station\nFill-up · 41.3 L\n€75.12\n20 Nov · 62,400 km · +558 km\n7.4 L/100km\narrow_downward\n0.2 vs avg\ninfo\nHow calculated?\nbuild\nService · Garage Martin\n€212.40\n13 Nov · 62,050 km\nOil & filter\nCabin filter\nreceipt_long\nReceipt\nadd_road\nExpense · Tolls\n€31.20\n8 Nov · A6 motorway\nOctober 2026\n4 · €264.05\nlocal_gas_station\nFill-up · 42.0 L\n€77.03\n30 Oct · 61,842 km · +571 km\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_history",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 16,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · History selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Filter chips · 40dp · single-select row",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Month card · radius 24 · surfaceContainer · header titleLarge + total numberMedium",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 339
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_history · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    true
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s11-vehicle-documents-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\nfolder_open\nVEHICLE PAPERS · 3\nverified\nContrôle technique\npicture_as_pdf\nPDF · 1 file\nschedule\nExpires in 19 d\nshield\nAssurance / Insurance\npicture_as_pdf\nPDF · 2 files\ncheck_circle\nValid · Sep 2027\nbadge\nCarte grise / Registration\nimage\nPhoto\ncheck_circle\nNo expiry\nreceipt_long\nRECEIPTS · 9\nbuild\nGarage Martin · service\npicture_as_pdf\nPDF · 13 Nov 2026\ncheck_circle\nLinked\nlocal_gas_station\nFill-up receipts\nimage\n8 photos · 2026\ncheck_circle\nLinked\n13 of 30 free attachments used\ninfo\nContrôle technique: first at 4 years, then every 2 years (FR preset). Suggested schedule. Rules vary; check your local authority.\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_documents",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 21,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Documents selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Folder-tab doc card · FolderTabShape (tab 12dp top radius, body 0/20/20/20) · primaryContainer",
+    "x": 16,
+    "y": 188,
+    "w": 328,
+    "h": 192
+   },
+   {
+    "label": "Folder-tab doc card · tertiaryContainer · receipts linked to entries",
+    "x": 16,
+    "y": 418,
+    "w": 328,
+    "h": 120
+   },
+   {
+    "label": "Attachment counter · bodySmall · free cap 30 (paywall at the 31st)",
+    "x": 16,
+    "y": 550,
+    "w": 328,
+    "h": 16
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_documents · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    true
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s11-vehicle-documents-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\nfolder_open\nVEHICLE PAPERS · 3\nverified\nContrôle technique\npicture_as_pdf\nPDF · 1 file\nschedule\nExpires in 19 d\nshield\nAssurance / Insurance\npicture_as_pdf\nPDF · 2 files\ncheck_circle\nValid · Sep 2027\nbadge\nCarte grise / Registration\nimage\nPhoto\ncheck_circle\nNo expiry\nreceipt_long\nRECEIPTS · 9\nbuild\nGarage Martin · service\npicture_as_pdf\nPDF · 13 Nov 2026\ncheck_circle\nLinked\nlocal_gas_station\nFill-up receipts\nimage\n8 photos · 2026\ncheck_circle\nLinked\n13 of 30 free attachments used\ninfo\nContrôle technique: first at 4 years, then every 2 years (FR preset). Suggested schedule. Rules vary; check your local authority.\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_documents",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 21,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Documents selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Folder-tab doc card · FolderTabShape (tab 12dp top radius, body 0/20/20/20) · primaryContainer",
+    "x": 16,
+    "y": 188,
+    "w": 328,
+    "h": 192
+   },
+   {
+    "label": "Folder-tab doc card · tertiaryContainer · receipts linked to entries",
+    "x": 16,
+    "y": 418,
+    "w": 328,
+    "h": 120
+   },
+   {
+    "label": "Attachment counter · bodySmall · free cap 30 (paywall at the 31st)",
+    "x": 16,
+    "y": 550,
+    "w": 328,
+    "h": 16
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_documents · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    true
+   ],
+   [
+    "Reports",
+    false
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s12-document-detail-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nDocument\nedit\nmore_vert\nContrôle technique\nInspection · 2021 Mazda CX-5\nschedule\nExpires in 19 days\nWed 9 Dec 2026 · alerts 30 · 14 · 7 · 1 days before\nPDF\nCT_2024_Mazda.pdf\n1 page · 412 KB · added 9 Dec 2024\nopen_in_full\nOpen\nNumber\nCT-2024-118-552\nIssued\n9 Dec 2024\nExpires\n9 Dec 2026\ninfo\nSuggested schedule. Rules vary; check your local authority.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 7,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 9,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Document title · headlineSmall",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 52
+   },
+   {
+    "label": "Expiry banner card · warningContainer · titleMedium",
+    "x": 16,
+    "y": 172,
+    "w": 328,
+    "h": 80
+   },
+   {
+    "label": "Attachment preview card · tap opens viewer (0 ads)",
+    "x": 16,
+    "y": 264,
+    "w": 328,
+    "h": 128
+   },
+   {
+    "label": "Detail rows · ≥56dp · bodySmall label / bodyLarge value",
+    "x": 16,
+    "y": 404,
+    "w": 328,
+    "h": 180
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s12-document-detail-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nDocument\nedit\nmore_vert\nContrôle technique\nInspection · 2021 Mazda CX-5\nschedule\nExpires in 19 days\nWed 9 Dec 2026 · alerts 30 · 14 · 7 · 1 days before\nPDF\nCT_2024_Mazda.pdf\n1 page · 412 KB · added 9 Dec 2024\nopen_in_full\nOpen\nNumber\nCT-2024-118-552\nIssued\n9 Dec 2024\nExpires\n9 Dec 2026\ninfo\nSuggested schedule. Rules vary; check your local authority.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 7,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 9,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Document title · headlineSmall",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 52
+   },
+   {
+    "label": "Expiry banner card · warningContainer · titleMedium",
+    "x": 16,
+    "y": 172,
+    "w": 328,
+    "h": 80
+   },
+   {
+    "label": "Attachment preview card · tap opens viewer (0 ads)",
+    "x": 16,
+    "y": 264,
+    "w": 328,
+    "h": 128
+   },
+   {
+    "label": "Detail rows · ≥56dp · bodySmall label / bodyLarge value",
+    "x": 16,
+    "y": 404,
+    "w": 328,
+    "h": 180
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s13-vehicle-reports-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\ncheck\n12 months\nlock\nAll time\nlock\nCompare\nlock\nCustom\nEconomy\n7.4 L/100km\nEconomy ranged 7.1–8.0 L/100km over 12 months; latest 7.4, average 7.6.\nMonthly cost\n€186 avg\nD\nJ\nF\nM\nA\nM\nJ\nJ\nA\nS\nO\nN\nFuel\nService\nExpenses\nHighest month: November, €318.72 (service at Garage Martin).\nPrice per litre\n€1.819\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_reports",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 4,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 10,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 4,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Reports selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Range chips · 40dp · Pro chips show lock icon",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Chart card · surfaceContainer · titleMedium + line 2.5dp primary · TalkBack summary text bodySmall",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 184
+   },
+   {
+    "label": "Chart summary (also the TalkBack description)",
+    "x": 32,
+    "y": 352,
+    "w": 296,
+    "h": 32
+   },
+   {
+    "label": "Stacked bar chart · primary fuel / tertiary service / secondary expenses",
+    "x": 16,
+    "y": 412,
+    "w": 328,
+    "h": 212
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_reports · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    true
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s13-vehicle-reports-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\ncheck\n12 months\nlock\nAll time\nlock\nCompare\nlock\nCustom\nEconomy\n7.4 L/100km\nEconomy ranged 7.1–8.0 L/100km over 12 months; latest 7.4, average 7.6.\nMonthly cost\n€186 avg\nD\nJ\nF\nM\nA\nM\nJ\nJ\nA\nS\nO\nN\nFuel\nService\nExpenses\nHighest month: November, €318.72 (service at Garage Martin).\nPrice per litre\n€1.819\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_reports",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 4,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 10,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 4,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Reports selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Range chips · 40dp · Pro chips show lock icon",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Chart card · surfaceContainer · titleMedium + line 2.5dp primary · TalkBack summary text bodySmall",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 184
+   },
+   {
+    "label": "Chart summary (also the TalkBack description)",
+    "x": 32,
+    "y": 352,
+    "w": 296,
+    "h": 32
+   },
+   {
+    "label": "Stacked bar chart · primary fuel / tertiary service / secondary expenses",
+    "x": 16,
+    "y": 412,
+    "w": 328,
+    "h": 212
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_reports · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    true
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18-settings-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nSettings\nGeneral\nstraighten\nUnits & currency\nkm · L/100km · kWh/100km · EUR\nchevron_right\npalette\nTheme\nFollow system\nchevron_right\ntranslate\nLanguage\nSystem default (per-app language)\nchevron_right\nReminders\nnotifications\nReminders\nAll vehicles · 5 active\nchevron_right\nnotification_add\nAlerts before due dates\n30 · 14 · 7 · 1 days\nchevron_right\nYour data\nupload_file\nImport from another app\nCSV or backup file\nchevron_right\ntable_view\nExport CSV\nOne file per vehicle\nchevron_right\nsettings_backup_restore\nBackup & restore\nSave a .wheelfile backup file\nchevron_right",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 9,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · 0 ads on Settings",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Settings row · ≥56dp · bodyLarge + bodyMedium · 40dp leading icon",
+    "x": 16,
+    "y": 136,
+    "w": 328,
+    "h": 60
+   },
+   {
+    "label": "Reminders list entry (also reachable from the bell in Vehicle detail)",
+    "x": 16,
+    "y": 358,
+    "w": 328,
+    "h": 60
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18-settings-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nSettings\nGeneral\nstraighten\nUnits & currency\nkm · L/100km · kWh/100km · EUR\nchevron_right\npalette\nTheme\nFollow system\nchevron_right\ntranslate\nLanguage\nSystem default (per-app language)\nchevron_right\nReminders\nnotifications\nReminders\nAll vehicles · 5 active\nchevron_right\nnotification_add\nAlerts before due dates\n30 · 14 · 7 · 1 days\nchevron_right\nYour data\nupload_file\nImport from another app\nCSV or backup file\nchevron_right\ntable_view\nExport CSV\nOne file per vehicle\nchevron_right\nsettings_backup_restore\nBackup & restore\nSave a .wheelfile backup file\nchevron_right",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 9,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · 0 ads on Settings",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Settings row · ≥56dp · bodyLarge + bodyMedium · 40dp leading icon",
+    "x": 16,
+    "y": 136,
+    "w": 328,
+    "h": 60
+   },
+   {
+    "label": "Reminders list entry (also reachable from the bell in Vehicle detail)",
+    "x": 16,
+    "y": 358,
+    "w": 328,
+    "h": 60
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18b-settings-more-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nSettings\nphone_android\nMoving to a new phone? Android’s phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case.\nPurchases\nworkspace_premium\nWheelfile Pro\nOne-time · unlimited vehicles\nchevron_right\nblock\nRemove ads\nOne-time purchase\nchevron_right\nrestore\nRestore purchases\nPrivacy\nprivacy_tip\nPrivacy options\nAd consent choices\nchevron_right\npolicy\nPrivacy policy\nopen_in_new\nAbout\ninfo\nAbout Wheelfile\nVersion 1.0.0 · licences\nchevron_right\nmail\nSupport\nadmin@postpole.com\nopen_in_new",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 8,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Transfer note (spec §2.8) · bodyMedium · surfaceContainerLow",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 102
+   },
+   {
+    "label": "Support row · email (spec §2.10)",
+    "x": 16,
+    "y": 685,
+    "w": 328,
+    "h": 61
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18b-settings-more-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nSettings\nphone_android\nMoving to a new phone? Android’s phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case.\nPurchases\nworkspace_premium\nWheelfile Pro\nOne-time · unlimited vehicles\nchevron_right\nblock\nRemove ads\nOne-time purchase\nchevron_right\nrestore\nRestore purchases\nPrivacy\nprivacy_tip\nPrivacy options\nAd consent choices\nchevron_right\npolicy\nPrivacy policy\nopen_in_new\nAbout\ninfo\nAbout Wheelfile\nVersion 1.0.0 · licences\nchevron_right\nmail\nSupport\nadmin@postpole.com\nopen_in_new",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 8,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Transfer note (spec §2.8) · bodyMedium · surfaceContainerLow",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 102
+   },
+   {
+    "label": "Support row · email (spec §2.10)",
+    "x": 16,
+    "y": 685,
+    "w": 328,
+    "h": 61
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18c-units-currency-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nUnits & currency\nDefaults for new vehicles\nDistance\nkm\nmi\nFuel volume\nL\nUS gal\nUK gal\nFuel economy\nL/100km\nkm/L\nMPG US\nMPG UK\npayments\nCurrency\nEUR · €\narrow_drop_down\nEach vehicle keeps its own currency. Amounts are not converted.\nPreview · last fill-up\nNow\n62,400 km · 41.3 L · 7.4 L/100km\nUS\n38,773 mi · 10.9 gal · 31.8 MPG\nA US vehicle shows mi, US gal and MPG US with amounts in US$.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 1,
+  "n40": 9,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 3,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Units preview card · same entry in two unit sets · numberMedium tabular",
+    "x": 16,
+    "y": 484,
+    "w": 328,
+    "h": 156
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s18c-units-currency-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\nUnits & currency\nDefaults for new vehicles\nDistance\nkm\nmi\nFuel volume\nL\nUS gal\nUK gal\nFuel economy\nL/100km\nkm/L\nMPG US\nMPG UK\npayments\nCurrency\nEUR · €\narrow_drop_down\nEach vehicle keeps its own currency. Amounts are not converted.\nPreview · last fill-up\nNow\n62,400 km · 41.3 L · 7.4 L/100km\nUS\n38,773 mi · 10.9 gal · 31.8 MPG\nA US vehicle shows mi, US gal and MPG US with amounts in US$.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 1,
+  "n40": 9,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 3,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Units preview card · same entry in two unit sets · numberMedium tabular",
+    "x": 16,
+    "y": 484,
+    "w": 328,
+    "h": 156
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s17-paywall-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nRestore purchases\nGet more from Wheelfile\nTwo one-time purchases. Pick either.\nRemove ads\n{price}\nOne-time\ncheck\nBanners removed on every screen\ncheck\nFree features stay: 2 active vehicles, 12-month charts, 30 attachments\nPro\nLifetime\n{price}\nOne-time\ncheck\nUnlimited vehicles\ncheck\nAll-time, comparison and custom charts\ncheck\nPDF vehicle history report\ncheck\nUnlimited attachments\ncheck\nCustom categories\ncheck\nBanners removed\nsell\n{price} is filled in from Google Play in your currency. Import, CSV export and backup are free for everyone.\nworkspace_premium\nGet Pro · {price}\nRemove ads · {price}",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 7,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 3,
+  "reds": [
+   {
+    "label": "Two option cards side by side (spec §5.4) · radius 24 · Pro highlighted 2dp primary",
+    "x": 16,
+    "y": 212,
+    "w": 328,
+    "h": 324
+   },
+   {
+    "label": "{price} token · filled from Google Play at runtime",
+    "x": 30,
+    "y": 256,
+    "w": 132,
+    "h": 26
+   },
+   {
+    "label": "Primary · 56dp · Get Pro",
+    "x": 16,
+    "y": 648,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Tonal · 48dp · Remove ads",
+    "x": 16,
+    "y": 712,
+    "w": 328,
+    "h": 48
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "s17-paywall-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nRestore purchases\nGet more from Wheelfile\nTwo one-time purchases. Pick either.\nRemove ads\n{price}\nOne-time\ncheck\nBanners removed on every screen\ncheck\nFree features stay: 2 active vehicles, 12-month charts, 30 attachments\nPro\nLifetime\n{price}\nOne-time\ncheck\nUnlimited vehicles\ncheck\nAll-time, comparison and custom charts\ncheck\nPDF vehicle history report\ncheck\nUnlimited attachments\ncheck\nCustom categories\ncheck\nBanners removed\nsell\n{price} is filled in from Google Play in your currency. Import, CSV export and backup are free for everyone.\nworkspace_premium\nGet Pro · {price}\nRemove ads · {price}",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 7,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 3,
+  "reds": [
+   {
+    "label": "Two option cards side by side (spec §5.4) · radius 24 · Pro highlighted 2dp primary",
+    "x": 16,
+    "y": 212,
+    "w": 328,
+    "h": 324
+   },
+   {
+    "label": "{price} token · filled from Google Play at runtime",
+    "x": 30,
+    "y": 256,
+    "w": 132,
+    "h": 26
+   },
+   {
+    "label": "Primary · 56dp · Get Pro",
+    "x": 16,
+    "y": 648,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Tonal · 48dp · Remove ads",
+    "x": 16,
+    "y": 712,
+    "w": 328,
+    "h": 48
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-empty-garage-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ngarage_home\nNo vehicles yet\nAdd your first car or bike to start logging fuel, charging and service.\nadd\nAdd a vehicle\nupload_file\nImport from another app",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 7,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Empty state · 120dp illustration · headlineSmall + bodyMedium · CTA 48dp",
+    "x": 24,
+    "y": 170,
+    "w": 312,
+    "h": 332
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-empty-garage-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ngarage_home\nNo vehicles yet\nAdd your first car or bike to start logging fuel, charging and service.\nadd\nAdd a vehicle\nupload_file\nImport from another app",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 4,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 7,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Empty state · 120dp illustration · headlineSmall + bodyMedium · CTA 48dp",
+    "x": 24,
+    "y": 170,
+    "w": 312,
+    "h": 332
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-loading-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\nOpening your garage…\nadd",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": true,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Skeleton · surfaceContainerHighest blocks at final sizes (no layout shift)",
+    "x": 16,
+    "y": 160,
+    "w": 328,
+    "h": 178
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Ad slot wf_banner_garage reserved while loading · 360×50dp + 1dp · collapses to 0 if load fails / no fill",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-loading-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\nOpening your garage…\nadd",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": true,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 6,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Skeleton · surfaceContainerHighest blocks at final sizes (no layout shift)",
+    "x": 16,
+    "y": 160,
+    "w": 328,
+    "h": 178
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Ad slot wf_banner_garage reserved while loading · 360×50dp + 1dp · collapses to 0 if load fails / no fill",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-error-import-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nImport complete\ntask_alt\nMazda CX-5 imported\nImported 312 fill-ups, 41 services; skipped 3 duplicates; 2 rows couldn’t be read (view)\n2 rows couldn’t be read\nerror\nLine 214\nDate “31/02/2024” isn’t a real date\nerror\nLine 377\nVolume and total are both empty\nThese rows were left out. Fix them in the file and import again — duplicates are skipped.\ninventory_2\nPeugeot 208 imported as archived\nFree keeps 2 vehicles active. Its logs are readable in Garage › Archived.\ncontent_copy\nCopy error report\nDone",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Result card · surfaceContainer · headlineSmall · counts numberMedium",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Row errors · errorContainer icon · titleSmall + bodySmall",
+    "x": 16,
+    "y": 260,
+    "w": 328,
+    "h": 123
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-error-import-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nImport complete\ntask_alt\nMazda CX-5 imported\nImported 312 fill-ups, 41 services; skipped 3 duplicates; 2 rows couldn’t be read (view)\n2 rows couldn’t be read\nerror\nLine 214\nDate “31/02/2024” isn’t a real date\nerror\nLine 377\nVolume and total are both empty\nThese rows were left out. Fix them in the file and import again — duplicates are skipped.\ninventory_2\nPeugeot 208 imported as archived\nFree keeps 2 vehicles active. Its logs are readable in Garage › Archived.\ncontent_copy\nCopy error report\nDone",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 0,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 8,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Top app bar · 64dp · titleLarge · onSurface",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Result card · surfaceContainer · headlineSmall · counts numberMedium",
+    "x": 16,
+    "y": 108,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Row errors · errorContainer icon · titleSmall + bodySmall",
+    "x": 16,
+    "y": 260,
+    "w": 328,
+    "h": 123
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-error-save-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nMazda CX-5\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n61,240 km\nLower than your last entry (61,842 km). Save anyway?\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up\nCouldn’t save. Storage is full — free up space and try again.\nRetry",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 6,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 190,
+    "w": 177,
+    "h": 24
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 238,
+    "w": 220,
+    "h": 56
+   },
+   {
+    "label": "Soft warning · 2dp warning underline · onWarningContainer support text",
+    "x": 16,
+    "y": 304,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 514,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Snackbar · inverseSurface · action inversePrimary 48dp",
+    "x": 12,
+    "y": 632,
+    "w": 336,
+    "h": 60
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-error-save-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nMazda CX-5\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n61,240 km\nLower than your last entry (61,842 km). Save anyway?\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up\nCouldn’t save. Storage is full — free up space and try again.\nRetry",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 6,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 132
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 190,
+    "w": 177,
+    "h": 24
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 238,
+    "w": 220,
+    "h": 56
+   },
+   {
+    "label": "Soft warning · 2dp warning underline · onWarningContainer support text",
+    "x": 16,
+    "y": 304,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 514,
+    "w": 328,
+    "h": 112
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Snackbar · inverseSurface · action inversePrimary 48dp",
+    "x": 12,
+    "y": 632,
+    "w": 336,
+    "h": 60
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-free-limit-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nAdd vehicle\nbadge\nName\nPeugeot 208\nType\ndirections_car\nCar\ntwo_wheeler\nMotorbike\nairport_shuttle\nVan\nOther\nPowertrain\ncheck\nPetrol\nDiesel\nElectric\nPlug-in hybrid\nHybrid\nLPG\nCNG\nHydrogen\nMake\nPeugeot\nModel\n208\nYear\n2022\nPlate (optional)\nFT-310-LB\nVIN (optional)\nJM3KFBDM0M1••••••\nphoto_camera\n17 characters · stays with this vehicle\narrow_forward\nNext: units\ngarage_home\nYou have 2 active vehicles\nThe free version keeps 2 vehicles active. Archive one to add Peugeot 208 — its logs stay readable — or get Pro for unlimited vehicles and attachments (free: 30).\nworkspace_premium\nSee Pro\ninventory_2\nArchive a vehicle\nCancel",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Full-screen sheet bar · close · titleLarge · step 1 of 3",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Filled text field · min 56dp · surfaceContainerHigh · label bodySmall · value bodyLarge",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Segmented selector · 40dp + 48dp touch · secondaryContainer when selected",
+    "x": 16,
+    "y": 194,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Filter chips · 40dp (48dp touch) · outline / secondaryContainer",
+    "x": 16,
+    "y": 276,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Dialog · extraLarge 28dp · surfaceContainerHigh · headlineSmall + bodyMedium · 3 actions (48dp)",
+    "x": 24,
+    "y": 208,
+    "w": 312,
+    "h": 440
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-free-limit-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nAdd vehicle\nbadge\nName\nPeugeot 208\nType\ndirections_car\nCar\ntwo_wheeler\nMotorbike\nairport_shuttle\nVan\nOther\nPowertrain\ncheck\nPetrol\nDiesel\nElectric\nPlug-in hybrid\nHybrid\nLPG\nCNG\nHydrogen\nMake\nPeugeot\nModel\n208\nYear\n2022\nPlate (optional)\nFT-310-LB\nVIN (optional)\nJM3KFBDM0M1••••••\nphoto_camera\n17 characters · stays with this vehicle\narrow_forward\nNext: units\ngarage_home\nYou have 2 active vehicles\nThe free version keeps 2 vehicles active. Archive one to add Peugeot 208 — its logs stay readable — or get Pro for unlimited vehicles and attachments (free: 30).\nworkspace_premium\nSee Pro\ninventory_2\nArchive a vehicle\nCancel",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 12,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 14,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Full-screen sheet bar · close · titleLarge · step 1 of 3",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Filled text field · min 56dp · surfaceContainerHigh · label bodySmall · value bodyLarge",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Segmented selector · 40dp + 48dp touch · secondaryContainer when selected",
+    "x": 16,
+    "y": 194,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Filter chips · 40dp (48dp touch) · outline / secondaryContainer",
+    "x": 16,
+    "y": 276,
+    "w": 328,
+    "h": 136
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Dialog · extraLarge 28dp · surfaceContainerHigh · headlineSmall + bodyMedium · 3 actions (48dp)",
+    "x": 24,
+    "y": 208,
+    "w": 312,
+    "h": 440
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-pro-upsell-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\n12 months\nlock\nAll time\nlock\nCompare\nlock\nCustom\nEconomy · all time\nlock\nAll-time charts are part of Pro\nFree shows the last 12 months. Pro adds all time, vehicle comparison, custom ranges and the PDF report.\nworkspace_premium\nSee Pro\nMonthly cost\n12 months\nD\nJ\nF\nM\nA\nM\nJ\nJ\nA\nS\nO\nN\nFuel\nService\nExpenses\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_reports",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 4,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 10,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Reports selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Range chips · 40dp · Pro chips show lock icon",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Pro upsell · inline locked card · blurred preview + scrim · Pro CTA 48dp (banner stays: list screen)",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 256
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_reports · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    true
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-pro-upsell-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\narrow_back\ndirections_car\nMazda CX-5\nexpand_more\nnotifications\n2\nmore_vert\nOverview\nHistory\nDocuments\nReports\n12 months\nlock\nAll time\nlock\nCompare\nlock\nCustom\nEconomy · all time\nlock\nAll-time charts are part of Pro\nFree shows the last 12 months. Pro adds all time, vehicle comparison, custom ranges and the PDF report.\nworkspace_premium\nSee Pro\nMonthly cost\n12 months\nD\nJ\nF\nM\nA\nM\nJ\nJ\nA\nS\nO\nN\nFuel\nService\nExpenses\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_reports",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 4,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 10,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Vehicle top app bar · 64dp · back 48dp · vehicle switcher · Reminders bell 48dp · overflow",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle switcher · 48dp pill · surfaceContainer · titleSmall",
+    "x": 56,
+    "y": 40,
+    "w": 168.8,
+    "h": 48
+   },
+   {
+    "label": "Reminders bell · 48dp · contentDescription “Reminders” · badge = due count (error/onError, labelSmall)",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   },
+   {
+    "label": "Vehicle tabs · 48dp · titleSmall · Reports selected (banner)",
+    "x": 0,
+    "y": 96,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Range chips · 40dp · Pro chips show lock icon",
+    "x": 0,
+    "y": 156,
+    "w": 360,
+    "h": 48
+   },
+   {
+    "label": "Pro upsell · inline locked card · blurred preview + scrim · Pro CTA 48dp (banner stays: list screen)",
+    "x": 16,
+    "y": 216,
+    "w": 328,
+    "h": 256
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_reports · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [
+   [
+    "Overview",
+    false
+   ],
+   [
+    "History",
+    false
+   ],
+   [
+    "Documents",
+    false
+   ],
+   [
+    "Reports",
+    true
+   ]
+  ],
+  "bell": [
+   {
+    "role": "button",
+    "icon": "notifications",
+    "x": 256,
+    "y": 40,
+    "w": 48,
+    "h": 48
+   }
+  ],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-notification-prompt-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nNew reminder\noil_barrel\nTitle\nOil & filter\ndirections_car\nVehicle\nMazda CX-5\narrow_drop_down\nDue by\nDate\nOdometer\nWhichever first\ncalendar_today\nDate\n13 Nov 2027\nOdometer\n64,200 km\nAbout 1,800 km left · around 3 months at your recent pace (estimate)\nRepeat\nEvery 12 months or 15,000 km\nAlert me\ncheck\n30 d\ncheck\n14 d\ncheck\n7 d\ncheck\n1 d\n~500 km left\ncheck\nSave reminder\nnotifications_active\nGet reminder alerts?\nWheelfile uses notifications to tell you when Contrôle technique, oil changes and documents are due. You can change this any time in Settings.\nNot now\nnotifications\nAllow notifications\nNext, Android will ask you to confirm.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 8,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Title field · 56dp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Trigger · segmented 40dp: Date | Odometer | Whichever first",
+    "x": 16,
+    "y": 255,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "In-context permission rationale · modal bottom sheet · surfaceContainerLow · extraLarge top 28dp",
+    "x": 0,
+    "y": 432,
+    "w": 360,
+    "h": 368
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "st-notification-prompt-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nNew reminder\noil_barrel\nTitle\nOil & filter\ndirections_car\nVehicle\nMazda CX-5\narrow_drop_down\nDue by\nDate\nOdometer\nWhichever first\ncalendar_today\nDate\n13 Nov 2027\nOdometer\n64,200 km\nAbout 1,800 km left · around 3 months at your recent pace (estimate)\nRepeat\nEvery 12 months or 15,000 km\nAlert me\ncheck\n30 d\ncheck\n14 d\ncheck\n7 d\ncheck\n1 d\n~500 km left\ncheck\nSave reminder\nnotifications_active\nGet reminder alerts?\nWheelfile uses notifications to tell you when Contrôle technique, oil changes and documents are due. You can change this any time in Settings.\nNot now\nnotifications\nAllow notifications\nNext, Android will ask you to confirm.",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 8,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 1,
+  "reds": [
+   {
+    "label": "Title field · 56dp",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "Trigger · segmented 40dp: Date | Odometer | Whichever first",
+    "x": 16,
+    "y": 255,
+    "w": 328,
+    "h": 40
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   },
+   {
+    "label": "In-context permission rationale · modal bottom sheet · surfaceContainerLow · extraLarge top 28dp",
+    "x": 0,
+    "y": 432,
+    "w": 360,
+    "h": 368
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 0,
+  "scale": 1
+ },
+ "lt-garage-200-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 0,
+    "y": 108,
+    "w": 360,
+    "h": 52
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 172,
+    "w": 328,
+    "h": 325.2
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 244,
+    "w": 296,
+    "h": 52.2
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 300.2,
+    "w": 151.5,
+    "h": 39
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 393.2,
+    "w": 296,
+    "h": 88
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 509.2,
+    "w": 328,
+    "h": 124
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 645.2,
+    "w": 328,
+    "h": 252
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_garage · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 42,
+  "scale": 2.0
+ },
+ "lt-garage-200-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nGarage\nupload_file\nsettings\ndirections_car\nMazda CX-5\nelectric_car\nMegane E-Tech\n2021 Mazda CX-5 · Petrol · odometer\n62,400km\n7.4L/100km\narrow_downward\n0.2 vs avg\navg 7.6\nadd\nFill-up\nadd\nService\nadd\nExpense\nevent\nContrôle technique\nDue Wed, 9 Dec\n19\nDAYS\nelectric_car\n2023 Renault Megane E-Tech\n24,600 km · 15.2 kWh/100km\narrow_downward\n0.5 vs avg\ntire_repair\nTyre rotation · ~450 km left\nadd\nAd\nAdaptive banner · 320×50 dp",
+  "ads": [
+   {
+    "unit": "wf_banner_garage",
+    "empty": false,
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "fabs": [
+   {
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   }
+  ],
+  "small48": [],
+  "small40": [],
+  "n48": 3,
+  "n40": 5,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 11,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 7,
+  "reds": [
+   {
+    "label": "Garage top app bar · 64dp · headlineSmall · Import + Settings 48dp · no tab row (Garage is the only home)",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Vehicle chips · 40dp (48dp touch) · secondaryContainer when selected",
+    "x": 0,
+    "y": 108,
+    "w": 360,
+    "h": 52
+   },
+   {
+    "label": "Vehicle hero card · radius 24 · surfaceContainer · padding 16",
+    "x": 16,
+    "y": 172,
+    "w": 328,
+    "h": 325.2
+   },
+   {
+    "label": "numberOdometer 40sp · tabular",
+    "x": 32,
+    "y": 244,
+    "w": 296,
+    "h": 52.2
+   },
+   {
+    "label": "numberLarge 20sp · economy",
+    "x": 32,
+    "y": 300.2,
+    "w": 151.5,
+    "h": 39
+   },
+   {
+    "label": "Quick actions · 40dp chips (48dp touch) · primaryContainer / outlined",
+    "x": 32,
+    "y": 393.2,
+    "w": 296,
+    "h": 88
+   },
+   {
+    "label": "Due card · warningContainer/onWarningContainer · min 64dp",
+    "x": 16,
+    "y": 509.2,
+    "w": 328,
+    "h": 124
+   },
+   {
+    "label": "Vehicle card · outlined · radius 20 · tap → Vehicle detail",
+    "x": 16,
+    "y": 645.2,
+    "w": 328,
+    "h": 252
+   },
+   {
+    "label": "FAB · 56dp · primaryContainer · bottom 91dp (16dp above banner)",
+    "x": 288,
+    "y": 653,
+    "w": 56,
+    "h": 56
+   },
+   {
+    "label": "Anchored adaptive banner wf_banner_garage · 360×50dp + 1dp outlineVariant · adSlotContainer · 24dp gesture inset below",
+    "x": 0,
+    "y": 725,
+    "w": 360,
+    "h": 51
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 42,
+  "scale": 2.0
+ },
+ "lt-add-fillup-200-light": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n62,400 km\nLast: 61,842 km · +558 km\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 190
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 208,
+    "w": 288,
+    "h": 64
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 296,
+    "w": 220,
+    "h": 80
+   },
+   {
+    "label": "Focused field · 2dp primary underline · bodySmall support",
+    "x": 16,
+    "y": 386,
+    "w": 328,
+    "h": 80
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 692,
+    "w": 328,
+    "h": 164
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 63,
+  "scale": 2.0
+ },
+ "lt-add-fillup-200-dark": {
+  "text": "9:30\nsignal_cellular_4_bar\nwifi\nbattery_full\nclose\nFill-up\ndirections_car\nexpand_more\nTotal\n€75.12\ncalculate\nAuto · 41.3 L × €1.819/L\ncalendar_today\nDate\nFri 20 Nov\nTime\n08:42\nspeed\nOdometer\n62,400 km\nLast: 61,842 km · +558 km\nVolume\n41.3 L\nPrice / L\n€1.819\ncalculate\nAny two of volume, price and total · the third is calculated\nFull tank\nUsed for full-to-full economy\nI missed a previous fill-up\nlocal_gas_station\nSP95-E10\nstore\nStation\nphoto_camera\nReceipt\ncheck\nSave fill-up",
+  "ads": [],
+  "fabs": [],
+  "small48": [],
+  "small40": [],
+  "n48": 5,
+  "n40": 3,
+  "overflow": [],
+  "clipped": [],
+  "glyphs": 13,
+  "bad_glyphs": [],
+  "fonts": {
+   "roboto_flex": true,
+   "symbols": true
+  },
+  "rf_vs_serif": [
+   148.8671875,
+   136.421875
+  ],
+  "tabular": 2,
+  "reds": [
+   {
+    "label": "Form top bar · close 48dp · titleLarge · vehicle pill",
+    "x": 0,
+    "y": 32,
+    "w": 360,
+    "h": 64
+   },
+   {
+    "label": "Total hero · extraLarge 28dp · primaryContainer · numberHero 52sp tabular",
+    "x": 16,
+    "y": 96,
+    "w": 328,
+    "h": 190
+   },
+   {
+    "label": "Auto-calc chip · labelMedium · surface",
+    "x": 36,
+    "y": 208,
+    "w": 288,
+    "h": 64
+   },
+   {
+    "label": "Date field · 56dp min",
+    "x": 16,
+    "y": 296,
+    "w": 220,
+    "h": 80
+   },
+   {
+    "label": "Focused field · 2dp primary underline · bodySmall support",
+    "x": 16,
+    "y": 386,
+    "w": 328,
+    "h": 80
+   },
+   {
+    "label": "Switch rows · 56dp · titleMedium/bodySmall · switch 52×32",
+    "x": 16,
+    "y": 692,
+    "w": 328,
+    "h": 164
+   },
+   {
+    "label": "Save button · 56dp full-width pill · primary/onPrimary · labelLarge 16sp · 40dp from bottom (0 ads)",
+    "x": 16,
+    "y": 704,
+    "w": 328,
+    "h": 56
+   }
+  ],
+  "tabs": [],
+  "bell": [],
+  "scaled_elements": 63,
+  "scale": 2.0
+ }
+}
