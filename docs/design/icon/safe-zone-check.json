@@ -1,0 +1,28 @@
+{
+ "icon": "Wheelfile \u00b7 Concept 3 Hub Tab",
+ "canvas_dp": 108,
+ "visible_dp": 72,
+ "safe_zone": "circle r=33dp centred (54,54)",
+ "method": "Chrome getPointAtLength outline sampling + 20 px/dp raster (alpha>0)",
+ "layers": {
+  "foreground": {
+   "path_samples": 10945,
+   "max_outline_radius_dp": 31.465,
+   "raster_px_per_dp": 20,
+   "opaque_px": 930980,
+   "px_outside_r33": 0,
+   "max_opaque_radius_dp": 31.467,
+   "pass_": true
+  },
+  "monochrome": {
+   "path_samples": 11849,
+   "max_outline_radius_dp": 29.698,
+   "raster_px_per_dp": 20,
+   "opaque_px": 460243,
+   "px_outside_r33": 0,
+   "max_opaque_radius_dp": 29.7,
+   "pass_": true
+  }
+ },
+ "result": "PASS"
+}
