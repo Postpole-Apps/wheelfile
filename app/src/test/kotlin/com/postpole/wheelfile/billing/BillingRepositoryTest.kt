@@ -44,12 +44,12 @@ private class FakeGateway : BillingGateway {
         return true
     }
 
-    override suspend fun queryProduct() = product
+    override suspend fun queryProduct(productId: String) = product
     override suspend fun queryPurchases(): List<OwnedPurchase>? {
         queryPurchasesCalls++
         return owned
     }
-    override fun launchPurchase(activity: Activity) = launchResult
+    override fun launchPurchase(activity: Activity, productId: String) = launchResult
     var launchResult = true
     override suspend fun acknowledge(token: String): Boolean {
         acknowledged += token
@@ -314,6 +314,77 @@ class BillingRepositoryTest {
         gateway.updatesFlow.emit(PurchaseUpdate.Error(6))
         advanceUntilIdle()
         assertTrue(analytics.nonFatals.single() is BillingException)
+    }
+
+    private val removeAds = OwnedPurchase("tok2", PurchaseStatus.PURCHASED, true, ProductIds.REMOVE_ADS)
+    private val pro = purchased.copy(acknowledged = true)
+
+    @Test fun removeAds_hidesAdsWithoutPro() = runTest {
+        val repo = repo()
+        gateway.owned = listOf(removeAds)
+        repo.start()
+        advanceUntilIdle()
+        assertTrue(repo.adsHidden.value)
+        assertFalse(repo.isPro.value)
+    }
+
+    @Test fun pro_alsoHidesAds() = runTest {
+        val repo = repo()
+        gateway.owned = listOf(pro)
+        repo.start()
+        advanceUntilIdle()
+        assertTrue(repo.adsHidden.value)
+        assertTrue(repo.isPro.value)
+    }
+
+    @Test fun refundOfRemoveAds_leavesPro() = runTest {
+        val repo = repo()
+        gateway.owned = listOf(pro, removeAds)
+        repo.start()
+        advanceUntilIdle()
+        gateway.owned = listOf(pro)
+        repo.restore()
+        advanceUntilIdle()
+        assertTrue(repo.isPro.value)
+        assertTrue(repo.adsHidden.value)
+    }
+
+    @Test fun refundOfPro_leavesRemoveAds() = runTest {
+        val repo = repo()
+        gateway.owned = listOf(pro, removeAds)
+        repo.start()
+        advanceUntilIdle()
+        gateway.owned = listOf(removeAds)
+        repo.restore()
+        advanceUntilIdle()
+        assertFalse(repo.isPro.value)
+        assertTrue(repo.adsHidden.value)
+    }
+
+    @Test fun refundOfBoth_showsAdsAgain() = runTest {
+        val repo = repo()
+        gateway.owned = listOf(pro, removeAds)
+        repo.start()
+        advanceUntilIdle()
+        gateway.owned = emptyList()
+        repo.restore()
+        advanceUntilIdle()
+        assertFalse(repo.adsHidden.value)
+    }
+
+    @Test fun restore_reportsFoundNothingAndFailure() = runTest {
+        val repo = repo()
+        repo.start()
+        advanceUntilIdle()
+        assertEquals(RestoreResult.NOTHING_FOUND, repo.restore())
+
+        gateway.owned = listOf(removeAds)
+        assertEquals(RestoreResult.RESTORED, repo.restore())
+
+        gateway.owned = null
+        assertEquals(RestoreResult.FAILED, repo.restore())
+        gateway.connectFailures = 10
+        assertEquals(RestoreResult.FAILED, repo.restore())
     }
 
     @Test fun connect_givesUpAfterMaxAttempts() = runTest {

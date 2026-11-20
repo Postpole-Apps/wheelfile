@@ -10,6 +10,7 @@ import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.analytics.AnalyticsParams
 import com.postpole.wheelfile.analytics.NoOpAnalytics
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -43,17 +44,29 @@ class BillingRepository(
 ) {
     private enum class Source { PURCHASE_FLOW, REFRESH }
 
-    @Volatile
-    private var loadedProduct: ProductResult.Loaded? = null
+    private val loadedProducts = java.util.concurrent.ConcurrentHashMap<String, ProductResult.Loaded>()
 
-    val isPro: StateFlow<Boolean> = dataStore.data
-        .map { it[IS_PRO] ?: false }
+    /** What the user owns, cached in DataStore and reconciled with Play on every refresh. */
+    val entitlements: StateFlow<Entitlements> = dataStore.data
+        .map { Entitlements(ownsPro = it[IS_PRO] ?: false, ownsRemoveAds = it[OWNS_REMOVE_ADS] ?: false) }
+        .stateIn(scope, SharingStarted.Eagerly, Entitlements())
+
+    val isPro: StateFlow<Boolean> = entitlements.map { it.isPro }
+        .stateIn(scope, SharingStarted.Eagerly, false)
+
+    /** True when Remove ads or Pro is owned: every ad is hidden. */
+    val adsHidden: StateFlow<Boolean> = entitlements.map { it.adsHidden }
         .stateIn(scope, SharingStarted.Eagerly, false)
 
     private val _price = MutableStateFlow<String?>(null)
 
-    /** Localized price from ProductDetails, null until loaded. */
+    /** Localized Pro price from ProductDetails, null until loaded. */
     val price: StateFlow<String?> = _price.asStateFlow()
+
+    private val _removeAdsPrice = MutableStateFlow<String?>(null)
+
+    /** Localized Remove ads price from ProductDetails, null until loaded. */
+    val removeAdsPrice: StateFlow<String?> = _removeAdsPrice.asStateFlow()
 
     private val _pending = MutableStateFlow(false)
 
@@ -85,17 +98,22 @@ class BillingRepository(
     /** Reconnects if needed, then re-queries product details and owned purchases. */
     suspend fun refresh(): Boolean = refreshLock.withLock {
         if (!connectWithRetry()) return false
-        when (val product = gateway.queryProduct()) {
-            is ProductResult.Loaded -> {
-                loadedProduct = product
-                _price.value = product.formattedPrice
-                _productUnavailable.value = false
+        for (productId in ProductIds.ALL) {
+            val priceFlow = if (productId == ProductIds.PRO) _price else _removeAdsPrice
+            when (val product = gateway.queryProduct(productId)) {
+                is ProductResult.Loaded -> {
+                    loadedProducts[productId] = product
+                    priceFlow.value = product.formattedPrice
+                    if (productId == ProductIds.PRO) _productUnavailable.value = false
+                }
+                ProductResult.Unavailable -> {
+                    loadedProducts.remove(productId)
+                    priceFlow.value = null
+                    if (productId == ProductIds.PRO) _productUnavailable.value = true
+                }
+                ProductResult.Failed ->
+                    analytics.recordNonFatal(BillingException("Product details query failed for $productId"))
             }
-            ProductResult.Unavailable -> {
-                _price.value = null
-                _productUnavailable.value = true
-            }
-            ProductResult.Failed -> analytics.recordNonFatal(BillingException("Product details query failed"))
         }
         val owned = gateway.queryPurchases()
         if (owned == null) {
@@ -106,16 +124,30 @@ class BillingRepository(
         true
     }
 
-    /** User-initiated restore. */
-    suspend fun restore(): Boolean = refresh()
+    /** User-initiated restore. Queries both products; always returns a result the UI can show. */
+    suspend fun restore(): RestoreResult {
+        val ok = try {
+            refresh()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            analytics.recordNonFatal(e)
+            false
+        }
+        return when {
+            !ok -> RestoreResult.FAILED
+            readEntitlements().ownsAnything -> RestoreResult.RESTORED
+            else -> RestoreResult.NOTHING_FOUND
+        }
+    }
 
     /** Call when the app comes to the foreground to pick up pending completions and refunds. */
     fun onForeground() {
         if (started) scope.launch { refresh() }
     }
 
-    fun launchPurchase(activity: Activity): Boolean {
-        val launched = gateway.launchPurchase(activity)
+    fun launchPurchase(activity: Activity, productId: String = ProductIds.PRO): Boolean {
+        val launched = gateway.launchPurchase(activity, productId)
         if (launched) {
             analytics.logEvent(AnalyticsEvents.PURCHASE_STARTED)
         } else {
@@ -142,22 +174,25 @@ class BillingRepository(
     private suspend fun applyPurchases(purchases: List<OwnedPurchase>, revokeIfAbsent: Boolean, source: Source) {
         val purchased = purchases.filter { it.status == PurchaseStatus.PURCHASED }
         _pending.value = purchased.isEmpty() && purchases.any { it.status == PurchaseStatus.PENDING }
-        if (purchased.isNotEmpty()) {
-            val wasPro = dataStore.data.first()[IS_PRO] ?: false
-            setPro(true)
-            if (!wasPro) logPurchaseEvent(source)
-            purchased.filter { !it.acknowledged }.forEach { acknowledgeWithRetry(it.token) }
-        } else if (revokeIfAbsent) {
-            setPro(false)
-        }
+        val before = readEntitlements()
+        val owned = purchased.map { it.productId }.toSet()
+        // Each product is granted or (on a full refresh) revoked on its own, so a refund of one leaves the other.
+        val ownsPro = ProductIds.PRO in owned || (before.ownsPro && !revokeIfAbsent)
+        val ownsRemoveAds = ProductIds.REMOVE_ADS in owned || (before.ownsRemoveAds && !revokeIfAbsent)
+        setEntitlements(Entitlements(ownsPro = ownsPro, ownsRemoveAds = ownsRemoveAds))
+        // One event per product that was not owned before (rather than one per refresh).
+        if (ownsPro && !before.ownsPro) logPurchaseEvent(source, ProductIds.PRO)
+        if (ownsRemoveAds && !before.ownsRemoveAds) logPurchaseEvent(source, ProductIds.REMOVE_ADS)
+        purchased.filter { !it.acknowledged }.map { it.token }.distinct().forEach { acknowledgeWithRetry(it) }
     }
 
     /** `purchase` (with value + currency) for a fresh buy, `purchase_restored` when found on refresh/restore. */
-    private fun logPurchaseEvent(source: Source) {
+    private fun logPurchaseEvent(source: Source, productId: String) {
         when (source) {
             Source.PURCHASE_FLOW -> {
-                val product = loadedProduct
+                val product = loadedProducts[productId]
                 val params = buildMap<String, Any> {
+                    put(AnalyticsParams.ITEM_ID, productId)
                     if (product != null && product.priceMicros > 0 && product.currencyCode.isNotEmpty()) {
                         put(AnalyticsParams.VALUE, product.priceMicros / 1_000_000.0)
                         put(AnalyticsParams.CURRENCY, product.currencyCode)
@@ -195,12 +230,20 @@ class BillingRepository(
         return false
     }
 
-    private suspend fun setPro(value: Boolean) {
-        dataStore.edit { it[IS_PRO] = value }
+    private suspend fun readEntitlements(): Entitlements = dataStore.data.first().let {
+        Entitlements(ownsPro = it[IS_PRO] ?: false, ownsRemoveAds = it[OWNS_REMOVE_ADS] ?: false)
+    }
+
+    private suspend fun setEntitlements(value: Entitlements) {
+        dataStore.edit {
+            it[IS_PRO] = value.ownsPro
+            it[OWNS_REMOVE_ADS] = value.ownsRemoveAds
+        }
     }
 
     private companion object {
         val IS_PRO = booleanPreferencesKey("is_pro")
+        val OWNS_REMOVE_ADS = booleanPreferencesKey("owns_remove_ads")
         const val MAX_BACKOFF_MS = 15_000L
     }
 }

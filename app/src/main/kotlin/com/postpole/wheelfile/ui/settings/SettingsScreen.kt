@@ -1,7 +1,9 @@
 package com.postpole.wheelfile.ui.settings
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.clickable
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -49,9 +53,12 @@ import java.util.Currency
 fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPro: () -> Unit,
+    onOpenAdPreview: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val isPro by viewModel.isPro.collectAsStateWithLifecycle()
+    val restoring by viewModel.restoring.collectAsStateWithLifecycle()
+    val privacyOptionsRequired by viewModel.privacyOptionsRequired.collectAsStateWithLifecycle()
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currency by viewModel.defaultCurrency.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -99,7 +106,34 @@ fun SettingsScreen(
             }
             ListItem(
                 headlineContent = { Text(stringResource(R.string.pro_restore)) },
-                modifier = Modifier.clickable(onClick = viewModel::restore),
+                supportingContent = if (restoring) {
+                    { Text(stringResource(R.string.restore_in_progress)) }
+                } else {
+                    null
+                },
+                trailingContent = if (restoring) {
+                    { CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp) }
+                } else {
+                    null
+                },
+                modifier = Modifier.clickable(enabled = !restoring, onClick = viewModel::restore),
+            )
+            HorizontalDivider()
+
+            SectionHeader(R.string.settings_section_privacy)
+            if (privacyOptionsRequired) {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_privacy_options)) },
+                    supportingContent = { Text(stringResource(R.string.settings_privacy_options_summary)) },
+                    // Needs the current Activity to host the UMP form (Spoonfile #43: the tap did nothing).
+                    modifier = Modifier.clickable { viewModel.openPrivacyOptions(context.findActivity()) },
+                )
+            }
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_privacy_policy)) },
+                modifier = Modifier.clickable {
+                    context.openLink(Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.privacy_policy_url))))
+                },
             )
             HorizontalDivider()
 
@@ -108,12 +142,12 @@ fun SettingsScreen(
                 headlineContent = { Text(stringResource(R.string.settings_version)) },
                 supportingContent = { Text(BuildConfig.VERSION_NAME) },
             )
-            ListItem(
-                headlineContent = { Text(stringResource(R.string.settings_privacy_policy)) },
-                modifier = Modifier.clickable {
-                    context.openLink(Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.privacy_policy_url))))
-                },
-            )
+            if (BuildConfig.DEBUG) {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_debug_ad_preview)) },
+                    modifier = Modifier.clickable(onClick = onOpenAdPreview),
+                )
+            }
             ListItem(
                 headlineContent = { Text(stringResource(R.string.settings_feedback)) },
                 supportingContent = { Text(stringResource(R.string.support_email)) },
@@ -225,12 +259,23 @@ private fun Context.openLink(intent: Intent) {
 /** Resolves [SettingsEvent]s to localized text. */
 @Composable
 private fun rememberEventMessages(): (SettingsEvent) -> String {
-    val restoreChecked = stringResource(R.string.restore_checked)
+    val restored = stringResource(R.string.restore_done)
+    val nothing = stringResource(R.string.restore_none)
     val restoreFailed = stringResource(R.string.restore_failed)
+    val privacyUnavailable = stringResource(R.string.privacy_options_unavailable)
     return { event ->
         when (event) {
-            SettingsEvent.RestoreChecked -> restoreChecked
+            SettingsEvent.Restored -> restored
+            SettingsEvent.NothingToRestore -> nothing
             SettingsEvent.RestoreFailed -> restoreFailed
+            SettingsEvent.PrivacyOptionsUnavailable -> privacyUnavailable
         }
     }
+}
+
+/** The hosting Activity, unwrapping any [ContextWrapper]s. Null if the context isn't backed by one. */
+private tailrec fun Context.findActivity(): Activity? = when (this) {
+    is Activity -> this
+    is ContextWrapper -> baseContext.findActivity()
+    else -> null
 }
