@@ -130,7 +130,7 @@ class VehicleUiTest {
             WheelfileTheme(darkTheme = false) {
                 VehicleDetailScreen(
                     state = com.postpole.wheelfile.ui.vehicle.VehicleDetailUiState(data = vehicleData(), switcher = listOf(vehicle()), loaded = true),
-                    actions = VehicleDetailActions({}, {}, {}, {}, {}, {}, {}, {}),
+                    actions = VehicleDetailActions({}, {}, {}, {}, {}, {}, {}, {}, {}, {}),
                     historyAdSlot = { Box(Modifier.testTag("AdSlot")) },
                 )
             }
@@ -170,7 +170,7 @@ class VehicleUiTest {
                     val state by vm.state.collectAsState()
                     VehicleDetailScreen(
                         state = state,
-                        actions = VehicleDetailActions({}, {}, { screen = Screen.Entry(s.id) }, vm::setFilter, {}, {}, {}, {}),
+                        actions = VehicleDetailActions({}, {}, { screen = Screen.Entry(s.id) }, vm::setFilter, {}, {}, {}, {}, {}, {}),
                         historyAdSlot = {},
                     )
                 }

@@ -28,6 +28,7 @@ data class VehicleDetailUiState(
     val switcher: List<Vehicle> = emptyList(),
     val historyFilter: HistoryFilter = HistoryFilter.ALL,
     val showFreeLimit: Boolean = false,
+    val showArchivePicker: Boolean = false,
     val loaded: Boolean = false,
 ) {
     val vehicle: Vehicle? get() = data?.vehicle
@@ -52,16 +53,18 @@ class VehicleDetailViewModel internal constructor(
 
     private val filter = MutableStateFlow(HistoryFilter.ALL)
     private val freeLimit = MutableStateFlow(false)
+    private val picker = MutableStateFlow(false)
 
     val state: StateFlow<VehicleDetailUiState> = repo.vehicles.observe(vehicleId)
         .flatMapLatest { v -> if (v == null) flowOf<VehicleData?>(null) else repo.observeData(v) }
         .let { data ->
-            combine(data, repo.vehicles.observeAll(), filter, freeLimit) { d, all, f, limit ->
+            combine(data, repo.vehicles.observeAll(), filter, freeLimit, picker) { d, all, f, limit, pick ->
                 VehicleDetailUiState(
                     data = d,
                     switcher = all.filter { !it.archived },
                     historyFilter = f,
                     showFreeLimit = limit,
+                    showArchivePicker = pick,
                     loaded = true,
                 )
             }
@@ -89,5 +92,23 @@ class VehicleDetailViewModel internal constructor(
 
     fun dismissFreeLimit() {
         freeLimit.value = false
+        picker.value = false
+    }
+
+    /** "Archive a vehicle" on the free-limit dialog: swap to the picker of active vehicles. */
+    fun openArchivePicker() {
+        freeLimit.value = false
+        picker.value = true
+    }
+
+    /** Archives the chosen active vehicle, then completes the restore of the vehicle being viewed. */
+    fun archiveAndRestore(chosenId: Long) {
+        viewModelScope.launch {
+            val now = clock()
+            repo.setArchived(chosenId, true, now)
+            repo.setArchived(vehicleId, false, now)
+            picker.value = false
+            freeLimit.value = false
+        }
     }
 }

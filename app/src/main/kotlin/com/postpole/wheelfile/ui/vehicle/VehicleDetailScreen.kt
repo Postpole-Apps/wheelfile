@@ -96,6 +96,8 @@ class VehicleDetailActions(
     val onRestore: () -> Unit,
     val onDismissFreeLimit: () -> Unit,
     val onSeePro: () -> Unit,
+    val onArchiveOpen: () -> Unit,
+    val onArchivePick: (Long) -> Unit,
 )
 
 @Composable
@@ -119,6 +121,8 @@ fun VehicleDetailRoute(
             onRestore = { viewModel.restore() },
             onDismissFreeLimit = viewModel::dismissFreeLimit,
             onSeePro = { viewModel.dismissFreeLimit(); onOpenPro() },
+            onArchiveOpen = viewModel::openArchivePicker,
+            onArchivePick = viewModel::archiveAndRestore,
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
     )
@@ -186,7 +190,10 @@ fun VehicleDetailScreen(
         }
     }
     if (state.showFreeLimit) {
-        FreeLimitDialog(onCancel = actions.onDismissFreeLimit, onSeePro = actions.onSeePro, onArchive = actions.onDismissFreeLimit)
+        FreeLimitDialog(onCancel = actions.onDismissFreeLimit, onSeePro = actions.onSeePro, onArchive = actions.onArchiveOpen)
+    }
+    if (state.showArchivePicker) {
+        ArchivePickerDialog(state.switcher, actions.onArchivePick, actions.onDismissFreeLimit)
     }
 }
 

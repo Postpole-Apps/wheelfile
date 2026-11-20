@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.postpole.wheelfile.R
 import com.postpole.wheelfile.data.db.DistanceUnit
 import com.postpole.wheelfile.data.db.Powertrain
+import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleType
 import com.postpole.wheelfile.data.db.VolumeUnit
 import com.postpole.wheelfile.domain.units.LocaleDefaults
@@ -236,24 +237,30 @@ fun AddVehicleScreen(state: AddVehicleState, actions: AddVehicleActions) {
     }
     if (state.showFreeLimit) FreeLimitDialog(actions.onDismissLimit, actions.onSeePro, actions.onArchiveOpen)
     if (state.showArchivePicker) {
-        AlertDialog(
-            onDismissRequest = actions.onDismissLimit,
-            title = { Text(stringResource(R.string.archive_pick_title)) },
-            text = {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    Text(stringResource(R.string.archive_pick_body), style = MaterialTheme.typography.bodyMedium)
-                    state.archiveCandidates.forEach { v ->
-                        TextButton(
-                            onClick = { actions.onArchive(v.id) },
-                            modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.touchTargetMin),
-                        ) { Text(v.name, Modifier.fillMaxWidth()) }
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = { TextButton(onClick = actions.onDismissLimit) { Text(stringResource(R.string.cancel)) } },
-        )
+        ArchivePickerDialog(state.archiveCandidates, actions.onArchive, actions.onDismissLimit)
     }
+}
+
+/** Lists active vehicles; picking one archives it to make room under the free cap. */
+@Composable
+fun ArchivePickerDialog(candidates: List<Vehicle>, onPick: (Long) -> Unit, onCancel: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onCancel,
+        title = { Text(stringResource(R.string.archive_pick_title)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Text(stringResource(R.string.archive_pick_body), style = MaterialTheme.typography.bodyMedium)
+                candidates.forEach { v ->
+                    TextButton(
+                        onClick = { onPick(v.id) },
+                        modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.touchTargetMin),
+                    ) { Text(v.name, Modifier.fillMaxWidth()) }
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = { TextButton(onClick = onCancel) { Text(stringResource(R.string.cancel)) } },
+    )
 }
 
 /** st-free-limit: adding a 3rd active vehicle. */

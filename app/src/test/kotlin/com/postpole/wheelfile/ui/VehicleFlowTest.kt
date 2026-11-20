@@ -215,6 +215,38 @@ class VehicleFlowTest {
         assertTrue(runBlocking { db.vehicleDao().get(archived) }!!.archived)
     }
 
+    @Test fun restoringAtTheCap_archiveFromTheDialogMakesRoomAndRestores() {
+        val a = insert(newVehicle("A")); val b = insert(newVehicle("B"))
+        val old = insert(newVehicle("Old", archived = true))
+        val vm = VehicleDetailViewModel(repo, old, { false }, { now })
+        await(vm.state) { it.loaded && it.vehicle != null }
+        vm.restore()
+        await(vm.state) { it.showFreeLimit }
+        vm.openArchivePicker()
+        val picker = await(vm.state) { it.showArchivePicker }
+        assertFalse(picker.showFreeLimit)
+        assertEquals(setOf(a, b), picker.switcher.map { it.id }.toSet())
+        vm.archiveAndRestore(a)
+        await(vm.state) { it.vehicle?.archived == false && !it.showArchivePicker }
+        assertTrue(runBlocking { db.vehicleDao().get(a) }!!.archived)
+        assertFalse(runBlocking { db.vehicleDao().get(old) }!!.archived)
+        assertFalse(runBlocking { db.vehicleDao().get(b) }!!.archived)
+    }
+
+    @Test fun restoringAtTheCap_cancelKeepsTheVehicleArchived() {
+        insert(newVehicle("A")); insert(newVehicle("B"))
+        val old = insert(newVehicle("Old", archived = true))
+        val vm = VehicleDetailViewModel(repo, old, { false }, { now })
+        await(vm.state) { it.loaded && it.vehicle != null }
+        vm.restore()
+        await(vm.state) { it.showFreeLimit }
+        vm.openArchivePicker()
+        await(vm.state) { it.showArchivePicker }
+        vm.dismissFreeLimit()
+        await(vm.state) { !it.showArchivePicker && !it.showFreeLimit }
+        assertTrue(runBlocking { db.vehicleDao().get(old) }!!.archived)
+    }
+
     @Test fun restoringWorksWhenThereIsRoom() {
         insert(newVehicle("A"))
         val archived = insert(newVehicle("Old", archived = true))
