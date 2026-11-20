@@ -6,6 +6,14 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.google.android.ump.UserMessagingPlatform
+import com.postpole.wheelfile.ads.AdsConfigSource
+import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ConsentManager
+import com.postpole.wheelfile.ads.FirebaseAdsConfigSource
+import com.postpole.wheelfile.ads.GoogleAdsSdk
+import com.postpole.wheelfile.ads.UmpConsentForms
+import com.postpole.wheelfile.ads.createAdsPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.createAnalytics
 import com.postpole.wheelfile.review.ReviewPolicy
@@ -66,6 +74,29 @@ object AppModule {
         dataStore = dataStore,
         scope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
         analytics = analytics,
+    )
+
+    @Provides
+    @Singleton
+    fun provideAdsConfigSource(@ApplicationContext context: Context, analytics: Analytics): AdsConfigSource =
+        FirebaseAdsConfigSource(context, analytics)
+
+    @Provides
+    @Singleton
+    fun provideAdsPolicy(@ApplicationContext context: Context): AdsPolicy = createAdsPolicy(context)
+
+    @Provides
+    @Singleton
+    fun provideConsentManager(
+        @ApplicationContext context: Context,
+        analytics: Analytics,
+        configSource: AdsConfigSource,
+    ): ConsentManager = ConsentManager(
+        info = UserMessagingPlatform.getConsentInformation(context),
+        forms = UmpConsentForms(),
+        ads = GoogleAdsSdk(context),
+        analytics = analytics,
+        maxContentRating = { configSource.config.value.maxContentRating },
     )
 
     @Provides

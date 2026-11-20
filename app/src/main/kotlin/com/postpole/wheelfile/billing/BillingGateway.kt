@@ -9,9 +9,10 @@ data class OwnedPurchase(
     val token: String,
     val status: PurchaseStatus,
     val acknowledged: Boolean,
+    val productId: String = ProductIds.PRO,
 )
 
-/** Result of loading the Pro product from Play. */
+/** Result of loading a product from Play. */
 sealed interface ProductResult {
     data class Loaded(
         val formattedPrice: String,
@@ -30,6 +31,9 @@ sealed interface ProductResult {
 
 /** Wraps a billing failure so Crashlytics groups them as one non-fatal type. */
 class BillingException(message: String) : Exception(message)
+
+/** Outcome of a user-initiated "Restore purchases". */
+enum class RestoreResult { RESTORED, NOTHING_FOUND, FAILED }
 
 /** One-shot, user-visible billing problems. */
 enum class BillingMessage { PURCHASE_ERROR, LAUNCH_FAILED }
@@ -52,13 +56,13 @@ interface BillingGateway {
     /** Returns true when connected (no-op if already connected). */
     suspend fun connect(): Boolean
 
-    suspend fun queryProduct(): ProductResult
+    suspend fun queryProduct(productId: String): ProductResult
 
-    /** Purchases of the Pro product currently owned, or null if the query failed. */
+    /** Purchases of Wheelfile's products ([ProductIds.ALL]) currently owned, or null if the query failed. */
     suspend fun queryPurchases(): List<OwnedPurchase>?
 
-    /** Launches the Play purchase sheet. Returns false if it could not be launched. */
-    fun launchPurchase(activity: Activity): Boolean
+    /** Launches the Play purchase sheet for [productId]. Returns false if it could not be launched. */
+    fun launchPurchase(activity: Activity, productId: String): Boolean
 
     suspend fun acknowledge(token: String): Boolean
 }

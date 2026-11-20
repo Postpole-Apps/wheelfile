@@ -17,7 +17,6 @@ import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.acknowledgePurchase
 import com.android.billingclient.api.QueryProductDetailsResult
 import com.android.billingclient.api.queryPurchasesAsync
-import com.postpole.wheelfile.BuildConfig
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -25,7 +24,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 
 class PlayBillingGateway(
     context: Context,
-    private val productId: String = BuildConfig.PRO_PRODUCT_ID,
+    private val productIds: List<String> = ProductIds.ALL,
 ) : BillingGateway {
 
     private val _updates = MutableSharedFlow<PurchaseUpdate>(extraBufferCapacity = 16)
@@ -36,8 +35,7 @@ class PlayBillingGateway(
 
     private class LaunchableProduct(val details: ProductDetails, val offerToken: String)
 
-    @Volatile
-    private var launchable: LaunchableProduct? = null
+    private val launchable = java.util.concurrent.ConcurrentHashMap<String, LaunchableProduct>()
 
     private val client: BillingClient = BillingClient.newBuilder(context.applicationContext)
         .setListener(
@@ -46,9 +44,7 @@ class PlayBillingGateway(
                     when (result.responseCode) {
                         BillingClient.BillingResponseCode.OK ->
                             PurchaseUpdate.Purchases(
-                                purchases.orEmpty()
-                                    .filter { productId in it.products }
-                                    .map { it.toOwned() },
+                                purchases.orEmpty().flatMap { it.toOwned() },
                             )
                         BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> PurchaseUpdate.AlreadyOwned
                         BillingClient.BillingResponseCode.USER_CANCELED -> PurchaseUpdate.Canceled
@@ -79,7 +75,7 @@ class PlayBillingGateway(
         return done.await()
     }
 
-    override suspend fun queryProduct(): ProductResult {
+    override suspend fun queryProduct(productId: String): ProductResult {
         val params = QueryProductDetailsParams.newBuilder()
             .setProductList(
                 listOf(
@@ -111,10 +107,10 @@ class PlayBillingGateway(
         val legacyToken = details?.oneTimePurchaseOfferDetails?.offerToken
         val chosen = offers.firstOrNull { it.second == legacyToken } ?: offers.firstOrNull()
         if (details == null || chosen == null) {
-            launchable = null
+            launchable.remove(productId)
             return ProductResult.Unavailable
         }
-        launchable = LaunchableProduct(details, chosen.second)
+        launchable[productId] = LaunchableProduct(details, chosen.second)
         return ProductResult.Loaded(
             formattedPrice = chosen.first.formattedPrice,
             priceMicros = chosen.first.priceAmountMicros,
@@ -127,13 +123,11 @@ class PlayBillingGateway(
             QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build(),
         )
         if (result.billingResult.responseCode != BillingClient.BillingResponseCode.OK) return null
-        return result.purchasesList
-            .filter { productId in it.products }
-            .map { it.toOwned() }
+        return result.purchasesList.flatMap { it.toOwned() }
     }
 
-    override fun launchPurchase(activity: Activity): Boolean {
-        val product = launchable ?: return false
+    override fun launchPurchase(activity: Activity, productId: String): Boolean {
+        val product = launchable[productId] ?: return false
         val params = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(
                 listOf(
@@ -159,13 +153,17 @@ class PlayBillingGateway(
         const val TAG = "PlayBillingGateway"
     }
 
-    private fun Purchase.toOwned() = OwnedPurchase(
-        token = purchaseToken,
-        status = when (purchaseState) {
-            Purchase.PurchaseState.PURCHASED -> PurchaseStatus.PURCHASED
-            Purchase.PurchaseState.PENDING -> PurchaseStatus.PENDING
-            else -> PurchaseStatus.UNSPECIFIED
-        },
-        acknowledged = isAcknowledged,
-    )
+    /** One [OwnedPurchase] per Wheelfile product in this Play purchase (others are ignored). */
+    private fun Purchase.toOwned(): List<OwnedPurchase> = products.filter { it in productIds }.map { id ->
+        OwnedPurchase(
+            token = purchaseToken,
+            status = when (purchaseState) {
+                Purchase.PurchaseState.PURCHASED -> PurchaseStatus.PURCHASED
+                Purchase.PurchaseState.PENDING -> PurchaseStatus.PENDING
+                else -> PurchaseStatus.UNSPECIFIED
+            },
+            acknowledged = isAcknowledged,
+            productId = id,
+        )
+    }
 }

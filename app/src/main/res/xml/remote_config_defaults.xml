@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Firebase Remote Config in-app defaults (docs/spec.md §5.2). The app behaves the same with no fetch. -->
+<defaultsMap>
+    <entry>
+        <key>ads_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_banner_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_rewarded_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ads_native_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ads_app_open_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_block_first_session</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_min_install_days</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_min_interval_sec</key>
+        <value>480</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_max_per_session</key>
+        <value>1</value>
+    </entry>
+    <entry>
+        <key>ads_interstitial_max_per_day</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>ads_max_content_rating</key>
+        <value>PG</value>
+    </entry>
+    <entry>
+        <key>ads_rewarded_daily_limit</key>
+        <value>1</value>
+    </entry>
+</defaultsMap>

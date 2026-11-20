@@ -33,8 +33,15 @@
     <string name="settings_privacy_policy">Privacy policy</string>
     <string name="settings_feedback">Send feedback</string>
     <string name="settings_feedback_subject">%1$s feedback</string>
-    <string name="restore_checked">Purchases checked.</string>
+    <string name="restore_done">Purchases restored</string>
+    <string name="restore_none">No purchases found</string>
     <string name="restore_failed">Couldn\'t reach Google Play. Please try again later.</string>
+    <string name="restore_in_progress">Checking Google Play…</string>
+    <string name="settings_section_privacy">Privacy</string>
+    <string name="settings_privacy_options">Privacy options</string>
+    <string name="settings_privacy_options_summary">Ad consent choices</string>
+    <string name="privacy_options_unavailable">Privacy options aren\'t available right now. Try again later.</string>
+    <string name="settings_debug_ad_preview">Ad slot preview (debug build only)</string>
     <string name="update_ready_title">Update ready</string>
     <string name="update_ready_message">A new version has been downloaded. Restart to finish installing it.</string>
     <string name="update_restart">Restart</string>

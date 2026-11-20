@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.postpole.wheelfile.ads.AdsConfigSource
+import com.postpole.wheelfile.ads.AdsPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.billing.BillingRepository
@@ -23,10 +25,15 @@ class WheelfileApp : Application() {
     @Inject lateinit var billing: BillingRepository
     @Inject lateinit var analytics: Analytics
     @Inject lateinit var dataStore: DataStore<Preferences>
+    @Inject lateinit var adsConfig: AdsConfigSource
+
+    // Created at launch so "first session" is decided once per process.
+    @Inject lateinit var adsPolicy: AdsPolicy
 
     override fun onCreate() {
         super.onCreate()
         billing.start()
+        adsConfig.start()
         logLaunch()
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {

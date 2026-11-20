@@ -49,6 +49,33 @@ if (signingAnySet && !signingComplete) {
     )
 }
 
+// Ad unit IDs (docs/admob.md). Debug = Google test units; release = production units. Release units can
+// be rotated with a Gradle property of the same name (-PAD_UNIT_BANNER_GARAGE=...). AdUnitsTest checks
+// these literals against AdUnits.kt.
+val debugAdUnits = mapOf(
+    "AD_UNIT_BANNER_GARAGE" to "ca-app-pub-3940256099942544/9214589741",
+    "AD_UNIT_BANNER_HISTORY" to "ca-app-pub-3940256099942544/9214589741",
+    "AD_UNIT_BANNER_DOCUMENTS" to "ca-app-pub-3940256099942544/9214589741",
+    "AD_UNIT_BANNER_REPORTS" to "ca-app-pub-3940256099942544/9214589741",
+    "AD_UNIT_INTERSTITIAL_AFTER_REVIEW" to "ca-app-pub-3940256099942544/1033173712",
+    "AD_UNIT_REWARDED" to "ca-app-pub-3940256099942544/5224354917",
+)
+val releaseAdUnits = mapOf(
+    "AD_UNIT_BANNER_GARAGE" to "ca-app-pub-2007361247232604/7125861609",
+    "AD_UNIT_BANNER_HISTORY" to "ca-app-pub-2007361247232604/9041578502",
+    "AD_UNIT_BANNER_DOCUMENTS" to "ca-app-pub-2007361247232604/3312232966",
+    "AD_UNIT_BANNER_REPORTS" to "ca-app-pub-2007361247232604/7566725638",
+    "AD_UNIT_INTERSTITIAL_AFTER_REVIEW" to "ca-app-pub-2007361247232604/8372987954",
+    "AD_UNIT_REWARDED" to "ca-app-pub-2007361247232604/4715320686",
+)
+
+fun com.android.build.api.dsl.BuildType.adUnits(units: Map<String, String>, allowOverride: Boolean) {
+    units.forEach { (name, default) ->
+        val value = if (allowOverride) providers.gradleProperty(name).getOrElse(default) else default
+        buildConfigField("String", name, "\"$value\"")
+    }
+}
+
 android {
     namespace = "com.postpole.wheelfile"
     compileSdk = 36
@@ -64,6 +91,12 @@ android {
         // One-time in-app product id for the Pro unlock. Override with -PproProductId=... if needed.
         val proProductId = providers.gradleProperty("proProductId").getOrElse("lifetime_full_access")
         buildConfigField("String", "PRO_PRODUCT_ID", "\"$proProductId\"")
+        val removeAdsProductId = providers.gradleProperty("removeAdsProductId").getOrElse("remove_ads")
+        buildConfigField("String", "REMOVE_ADS_PRODUCT_ID", "\"$removeAdsProductId\"")
+
+        // AdMob App ID (docs/admob.md). The App ID may stay the real one in every build type.
+        manifestPlaceholders["admobAppId"] =
+            providers.gradleProperty("admobAppId").getOrElse("ca-app-pub-2007361247232604~9674014227")
     }
 
     signingConfigs {
@@ -78,7 +111,25 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Debug always uses Google's official test units (never production), whatever -P says.
+            adUnits(debugAdUnits, allowOverride = false)
+            // UMP debug geography for local consent testing: -PUMP_DEBUG_GEOGRAPHY=EEA | REGULATED_US_STATE.
+            // Optional -PUMP_TEST_DEVICE_HASHED_ID=<hash from logcat>; pass it on the command line or in
+            // ~/.gradle/gradle.properties, never commit it. Emulators count as test devices automatically.
+            buildConfigField(
+                "String", "UMP_DEBUG_GEOGRAPHY",
+                "\"${providers.gradleProperty("UMP_DEBUG_GEOGRAPHY").getOrElse("DISABLED")}\"",
+            )
+            buildConfigField(
+                "String", "UMP_TEST_DEVICE_HASHED_ID",
+                "\"${providers.gradleProperty("UMP_TEST_DEVICE_HASHED_ID").getOrElse("")}\"",
+            )
+        }
         release {
+            adUnits(releaseAdUnits, allowOverride = true)
+            buildConfigField("String", "UMP_DEBUG_GEOGRAPHY", "\"DISABLED\"")
+            buildConfigField("String", "UMP_TEST_DEVICE_HASHED_ID", "\"\"")
             if (signingComplete) signingConfig = signingConfigs.getByName("release")
             // Native symbols for Crashlytics / Play Console (no-op when the app has no native code).
             ndk.debugSymbolLevel = "FULL"
@@ -158,6 +209,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.config)
+    implementation(libs.play.services.ads)
+    implementation(libs.ump)
     implementation(libs.play.review)
     implementation(libs.play.app.update)
     debugImplementation(libs.androidx.compose.ui.tooling)
