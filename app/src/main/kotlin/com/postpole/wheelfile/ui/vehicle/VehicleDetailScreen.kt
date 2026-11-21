@@ -1,5 +1,6 @@
 package com.postpole.wheelfile.ui.vehicle
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +40,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,7 +65,11 @@ import com.postpole.wheelfile.domain.history.HistoryBuilder
 import com.postpole.wheelfile.domain.history.HistoryFilter
 import com.postpole.wheelfile.domain.history.HistoryKind
 import com.postpole.wheelfile.domain.history.HistoryRow
+import com.postpole.wheelfile.domain.document.DocumentPreset
+import com.postpole.wheelfile.domain.report.ReportRange
 import com.postpole.wheelfile.domain.units.UnitConversion
+import com.postpole.wheelfile.ui.document.DocumentsTab
+import com.postpole.wheelfile.ui.report.ReportsTab
 import com.postpole.wheelfile.ui.common.EconomyDelta
 import com.postpole.wheelfile.ui.common.formatMoney
 import com.postpole.wheelfile.ui.common.formatNumber
@@ -107,6 +113,13 @@ class VehicleDetailActions(
     val onAddRecord: (expense: Boolean) -> Unit = {},
     /** The bell in the top app bar: this vehicle's Reminders. */
     val onOpenReminders: () -> Unit = {},
+    /** A tab was shown: History and Reports mark the vehicle as reviewed for the V7 interstitial rule. */
+    val onTabViewed: (VehicleTab) -> Unit = {},
+    val onOpenDocument: (Long) -> Unit = {},
+    val onAddDocument: () -> Unit = {},
+    val onApplyPresets: (List<DocumentPreset>) -> Unit = {},
+    val onRange: (ReportRange) -> Unit = {},
+    val onCustomRange: (Long?, Long?) -> Unit = { _, _ -> },
 )
 
 @Composable
@@ -117,14 +130,19 @@ fun VehicleDetailRoute(
     onAddRecord: (vehicleId: Long, expense: Boolean) -> Unit,
     onOpenReminders: (vehicleId: Long) -> Unit,
     onOpenPro: () -> Unit,
+    onOpenDocument: (documentId: Long) -> Unit,
+    onAddDocument: (vehicleId: Long) -> Unit,
     viewModel: VehicleDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val id = state.vehicle?.id
+    // Back to the Garage, by the bar or the system gesture, records whether History or Reports was viewed.
+    val leave = { viewModel.onLeaving(); onBack() }
+    BackHandler(onBack = leave)
     VehicleDetailScreen(
         state = state,
         actions = VehicleDetailActions(
-            onBack = onBack,
+            onBack = leave,
             onSwitch = onSwitch,
             onAddEntry = { charge -> id?.let { onAddEntry(it, charge) } },
             onFilter = viewModel::setFilter,
@@ -136,14 +154,22 @@ fun VehicleDetailRoute(
             onArchivePick = viewModel::archiveAndRestore,
             onAddRecord = { expense -> id?.let { onAddRecord(it, expense) } },
             onOpenReminders = { id?.let(onOpenReminders) },
+            onTabViewed = viewModel::onTabViewed,
+            onOpenDocument = onOpenDocument,
+            onAddDocument = { id?.let(onAddDocument) },
+            onApplyPresets = viewModel::applyPresets,
+            onRange = viewModel::setRange,
+            onCustomRange = viewModel::setCustomRange,
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
+        documentsAdSlot = { AdSlot(AdScreen.DOCUMENTS) },
+        reportsAdSlot = { AdSlot(AdScreen.REPORTS) },
     )
 }
 
 /**
- * s04-vehicle-overview and s05-history inside one Vehicle detail. Overview is ad-free; the History tab carries the
- * only banner. The bell in the top bar opens this vehicle's Reminders (badge = due soon or overdue).
+ * s04-vehicle-overview, s05-history, s11-documents and s13-reports inside one Vehicle detail. Overview is ad-free; the
+ * History, Documents and Reports tabs each carry a banner. The bell in the top bar opens this vehicle's Reminders (badge = due soon or overdue).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -152,10 +178,14 @@ fun VehicleDetailScreen(
     actions: VehicleDetailActions,
     historyAdSlot: @Composable () -> Unit,
     initialTab: VehicleTab = VehicleTab.OVERVIEW,
+    /** Banner of the Documents list. The Document detail screen has none. */
+    documentsAdSlot: @Composable () -> Unit = {},
+    reportsAdSlot: @Composable () -> Unit = {},
 ) {
     var tabIndex by rememberSaveable { mutableStateOf(initialTab.ordinal) }
     val tab = VehicleTab.entries[tabIndex]
     val vehicle = state.vehicle
+    LaunchedEffect(tab) { actions.onTabViewed(tab) }
     Scaffold(
         topBar = {
             Column {
@@ -176,9 +206,24 @@ fun VehicleDetailScreen(
                 VehicleTabs(tabIndex) { tabIndex = it }
             }
         },
-        bottomBar = { if (tab == VehicleTab.HISTORY && vehicle != null) historyAdSlot() },
+        bottomBar = {
+            if (vehicle != null) {
+                when (tab) {
+                    VehicleTab.HISTORY -> historyAdSlot()
+                    VehicleTab.DOCUMENTS -> documentsAdSlot()
+                    VehicleTab.REPORTS -> reportsAdSlot()
+                    VehicleTab.OVERVIEW -> Unit
+                }
+            }
+        },
         floatingActionButton = {
-            if (vehicle != null && !vehicle.archived && (tab == VehicleTab.OVERVIEW || tab == VehicleTab.HISTORY)) {
+            if (vehicle != null && !vehicle.archived && tab == VehicleTab.DOCUMENTS) {
+                ExtendedFloatingActionButton(
+                    onClick = actions.onAddDocument,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ) { Text(stringResource(R.string.documents_add)) }
+            } else if (vehicle != null && !vehicle.archived && (tab == VehicleTab.OVERVIEW || tab == VehicleTab.HISTORY)) {
                 Column(horizontalAlignment = Alignment.End, verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
                     if (vehicle.supportsCharge() && vehicle.supportsFillUp()) {
                         ExtendedFloatingActionButton(
@@ -202,8 +247,20 @@ fun VehicleDetailScreen(
             when (tab) {
                 VehicleTab.OVERVIEW -> OverviewTab(state.data, state.readOnly)
                 VehicleTab.HISTORY -> HistoryTab(state.data, state.historyFilter, actions.onFilter)
-                VehicleTab.DOCUMENTS -> EmptyTab(R.string.tab_empty_documents)
-                VehicleTab.REPORTS -> EmptyTab(R.string.tab_empty_reports)
+                VehicleTab.DOCUMENTS -> DocumentsTab(
+                    state = state.documents,
+                    now = state.now,
+                    onOpen = actions.onOpenDocument,
+                    onAdd = actions.onAddDocument,
+                    onApplyPresets = actions.onApplyPresets,
+                )
+                VehicleTab.REPORTS -> ReportsTab(
+                    vehicle = state.data.vehicle,
+                    state = state.reports,
+                    onRange = actions.onRange,
+                    onCustom = actions.onCustomRange,
+                    onSeePro = actions.onSeePro,
+                )
             }
         }
     }
@@ -302,13 +359,6 @@ private fun OverflowMenu(vehicle: Vehicle, actions: VehicleDetailActions) {
                 },
             )
         }
-    }
-}
-
-@Composable
-private fun EmptyTab(text: Int) {
-    Box(Modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
-        Text(stringResource(text), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

@@ -79,6 +79,22 @@ fun formatMoney(minor: Long, currencyCode: String, locale: Locale = Locale.getDe
     return fmt.format(PriceMath.fromMinor(minor, currency.defaultFractionDigits.coerceAtLeast(0)))
 }
 
+object PriceFormat {
+    /** A price per unit in major units with three decimals (1.859), in [currencyCode] for the device locale. */
+    fun unitPrice(value: Double, currencyCode: String, locale: Locale = Locale.getDefault()): String {
+        val currency = try {
+            Currency.getInstance(currencyCode)
+        } catch (_: IllegalArgumentException) {
+            Currency.getInstance("USD")
+        }
+        return NumberFormat.getCurrencyInstance(locale).apply {
+            this.currency = currency
+            minimumFractionDigits = 3
+            maximumFractionDigits = 3
+        }.format(value)
+    }
+}
+
 /** Plain number with at most [digits] decimals (never forced), grouped for the device locale. */
 fun formatNumber(value: Double, digits: Int = 1, locale: Locale = Locale.getDefault()): String =
     NumberFormat.getNumberInstance(locale).apply {

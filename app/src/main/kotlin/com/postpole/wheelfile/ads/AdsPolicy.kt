@@ -66,6 +66,24 @@ class AdsPolicy(
         if (kind.isPumpSession) pumpSession = true
     }
 
+    /**
+     * True once the user has gone back from Vehicle detail to the Garage after viewing the History or Reports tab
+     * (DECISIONS.md item 9). Only recorded for now: V7 reads it to decide on `wf_interstitial_after_review`, so no
+     * interstitial is shown yet.
+     */
+    var reviewedBeforeGarage = false
+        private set
+
+    /** Call when the user leaves Vehicle detail for the Garage. [viewedReview] is true if History or Reports was opened. */
+    fun onLeftVehicleDetail(viewedReview: Boolean) {
+        if (viewedReview) reviewedBeforeGarage = true
+    }
+
+    /** Call when V7 has acted on [reviewedBeforeGarage] (or the Garage was shown without it). */
+    fun clearReviewed() {
+        reviewedBeforeGarage = false
+    }
+
     /** Call after export, backup, restore or a PDF share. Blocks interstitials for the rest of the session. */
     fun onQuietAction(@Suppress("UNUSED_PARAMETER") action: QuietAction) {
         quietAction = true

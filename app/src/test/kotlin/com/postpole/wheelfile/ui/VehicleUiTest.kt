@@ -205,6 +205,9 @@ class VehicleUiTest {
 
         typeInto("Name", "Golf")
         rule.onNodeWithText("Continue").performClick()
+        // Step 2 (units), then step 3 (suggested documents, with the disclaimer), then save.
+        rule.waitUntil(5_000) { rule.onAllNodes(hasText("Step 2 of 3")).fetchSemanticsNodes().isNotEmpty() }
+        rule.onNodeWithText("Continue").performClick()
         rule.waitUntil(5_000) { rule.onAllNodes(hasText("Save vehicle")).fetchSemanticsNodes().isNotEmpty() }
         rule.onNodeWithText("Save vehicle").performClick()
 

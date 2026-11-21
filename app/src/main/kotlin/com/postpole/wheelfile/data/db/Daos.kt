@@ -119,6 +119,10 @@ interface ReminderDao {
     @Query("SELECT * FROM Reminder WHERE id = :id")
     suspend fun get(id: Long): Reminder?
 
+    /** The expiry reminder of a document (at most one). */
+    @Query("SELECT * FROM Reminder WHERE linkedDocumentId = :documentId")
+    suspend fun getForDocument(documentId: Long): List<Reminder>
+
     /** Every odometer reading across fill-ups, charges, services and expenses. Feeds the usage projection. */
     @Query(
         "SELECT vehicleId, dateTime, odometer FROM EnergyLog " +
@@ -149,6 +153,15 @@ interface VehicleDocumentDao {
     @Query("SELECT * FROM VehicleDocument WHERE vehicleId = :vehicleId ORDER BY expiryDate ASC, id ASC")
     fun observeForVehicle(vehicleId: Long): Flow<List<VehicleDocument>>
 
+    @Query("SELECT * FROM VehicleDocument WHERE id = :id")
+    fun observe(id: Long): Flow<VehicleDocument?>
+
+    @Query("SELECT * FROM VehicleDocument WHERE id = :id")
+    suspend fun get(id: Long): VehicleDocument?
+
+    @Query("SELECT * FROM VehicleDocument")
+    suspend fun getAll(): List<VehicleDocument>
+
     @Insert
     suspend fun insert(document: VehicleDocument): Long
 
@@ -173,6 +186,21 @@ interface AttachmentDao {
 
     @Query("SELECT * FROM Attachment WHERE ownerType = :ownerType AND ownerId = :ownerId ORDER BY createdAt ASC, id ASC")
     fun observeForOwner(ownerType: OwnerType, ownerId: Long): Flow<List<Attachment>>
+
+    @Query("SELECT * FROM Attachment WHERE ownerType = :ownerType AND ownerId = :ownerId ORDER BY createdAt ASC, id ASC")
+    suspend fun getForOwner(ownerType: OwnerType, ownerId: Long): List<Attachment>
+
+    @Query("SELECT * FROM Attachment WHERE ownerType = :ownerType")
+    fun observeForType(ownerType: OwnerType): Flow<List<Attachment>>
+
+    /** Receipts attached to this vehicle's fill-ups, charges, services and expenses (the Documents tab "Receipts" card). */
+    @Query(
+        "SELECT COUNT(*) FROM Attachment WHERE " +
+            "(ownerType = 'ENERGY' AND ownerId IN (SELECT id FROM EnergyLog WHERE vehicleId = :vehicleId)) OR " +
+            "(ownerType = 'SERVICE' AND ownerId IN (SELECT id FROM ServiceRecord WHERE vehicleId = :vehicleId)) OR " +
+            "(ownerType = 'EXPENSE' AND ownerId IN (SELECT id FROM Expense WHERE vehicleId = :vehicleId))",
+    )
+    fun observeReceiptCount(vehicleId: Long): Flow<Int>
 
     @Insert
     suspend fun insert(attachment: Attachment): Long
