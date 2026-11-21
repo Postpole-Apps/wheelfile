@@ -82,6 +82,7 @@ fun ReportsTab(
     onCustom: (from: Long?, to: Long?) -> Unit,
     onSeePro: () -> Unit,
     modifier: Modifier = Modifier,
+    onSharePdf: (() -> Unit)? = null,
 ) {
     Column(modifier.fillMaxSize().testTag(REPORTS_TAB_TAG)) {
         Row(
@@ -117,6 +118,15 @@ fun ReportsTab(
                 Text(stringResource(R.string.reports_free_window), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Charts(vehicle, state)
+            if (onSharePdf != null) {
+                androidx.compose.material3.OutlinedButton(onClick = onSharePdf, modifier = Modifier.fillMaxWidth()) {
+                    if (!state.isPro) {
+                        Icon(Icons.Default.Lock, contentDescription = null, Modifier.height(18.dp))
+                        Spacer(Modifier.padding(start = Spacing.s))
+                    }
+                    Text(stringResource(if (state.isPro) R.string.pdf_share else R.string.pdf_share_locked))
+                }
+            }
             Spacer(Modifier.height(Spacing.l))
         }
     }

@@ -69,6 +69,8 @@ import com.postpole.wheelfile.domain.document.DocumentPreset
 import com.postpole.wheelfile.domain.report.ReportRange
 import com.postpole.wheelfile.domain.units.UnitConversion
 import com.postpole.wheelfile.ui.document.DocumentsTab
+import com.postpole.wheelfile.ui.report.PdfEvent
+import com.postpole.wheelfile.ui.report.PdfReportViewModel
 import com.postpole.wheelfile.ui.report.ReportsTab
 import com.postpole.wheelfile.ui.common.EconomyDelta
 import com.postpole.wheelfile.ui.common.formatMoney
@@ -120,6 +122,8 @@ class VehicleDetailActions(
     val onApplyPresets: (List<DocumentPreset>) -> Unit = {},
     val onRange: (ReportRange) -> Unit = {},
     val onCustomRange: (Long?, Long?) -> Unit = { _, _ -> },
+    /** "Share history report (PDF)": Pro builds and shares it, free opens the Pro screen. */
+    val onSharePdf: () -> Unit = {},
 )
 
 @Composable
@@ -133,9 +137,32 @@ fun VehicleDetailRoute(
     onOpenDocument: (documentId: Long) -> Unit,
     onAddDocument: (vehicleId: Long) -> Unit,
     viewModel: VehicleDetailViewModel = hiltViewModel(),
+    pdfViewModel: PdfReportViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val id = state.vehicle?.id
+    val context = androidx.compose.ui.platform.LocalContext.current
+    androidx.compose.runtime.LaunchedEffect(pdfViewModel) {
+        pdfViewModel.events.collect { event ->
+            when (event) {
+                is PdfEvent.Ready -> {
+                    val send = android.content.Intent(android.content.Intent.ACTION_SEND).apply {
+                        type = "application/pdf"
+                        putExtra(android.content.Intent.EXTRA_STREAM, event.uri)
+                        addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    val chooser = android.content.Intent.createChooser(send, context.getString(R.string.pdf_share_title))
+                    try {
+                        context.startActivity(chooser)
+                    } catch (_: android.content.ActivityNotFoundException) {
+                        android.widget.Toast.makeText(context, R.string.pdf_failed, android.widget.Toast.LENGTH_SHORT).show()
+                    }
+                }
+                PdfEvent.Failed ->
+                    android.widget.Toast.makeText(context, R.string.pdf_failed, android.widget.Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     // Back to the Garage, by the bar or the system gesture, records whether History or Reports was viewed.
     val leave = { viewModel.onLeaving(); onBack() }
     BackHandler(onBack = leave)
@@ -160,6 +187,9 @@ fun VehicleDetailRoute(
             onApplyPresets = viewModel::applyPresets,
             onRange = viewModel::setRange,
             onCustomRange = viewModel::setCustomRange,
+            onSharePdf = {
+                if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro()
+            },
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
         documentsAdSlot = { AdSlot(AdScreen.DOCUMENTS) },
@@ -260,6 +290,7 @@ fun VehicleDetailScreen(
                     onRange = actions.onRange,
                     onCustom = actions.onCustomRange,
                     onSeePro = actions.onSeePro,
+                    onSharePdf = actions.onSharePdf,
                 )
             }
         }

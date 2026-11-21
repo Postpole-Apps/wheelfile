@@ -2,6 +2,8 @@
 <paths>
     <!-- Camera captures are written here first, then copied into attachments/. -->
     <cache-path name="camera" path="camera/" />
+    <!-- PDF history reports, built in the cache and handed to the share sheet. -->
+    <cache-path name="reports" path="reports/" />
     <!-- Private copies of receipts and documents. -->
     <files-path name="attachments" path="attachments/" />
 </paths>

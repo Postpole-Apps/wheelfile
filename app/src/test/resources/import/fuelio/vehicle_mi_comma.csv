@@ -1,0 +1,12 @@
+"## Vehicle"
+"Name","Description","DistUnit","FuelUnit","ConsumptionUnit","ImportCSVDateFormat","VIN","Insurance","Plate","Make","Model","Year","TankCount","Tank1Type","Tank2Type","Active","Tank1Capacity","Tank2Capacity"
+"Imperial Van","","1","2","2","dd/MM/yyyy HH:mm","","","IV-1","Foo","Van","2015","1","100","0","1","12","0"
+
+"## Log"
+"Data","Odo (mi)","Fuel (UK gallons)","Full","Price (optional)","l/100km (optional)","latitude (optional)","longitude (optional)","City (optional)","Notes (optional)","Missed","TankNumber","FuelType","VolumePrice","StationID (optional)","ExcludeDistance","UniqueId","TankCalc"
+"05/01/2024 10:30","12000,5","9,25","1","60,75","0","0","0","","","0","1","100","6,57","0","0","a1","0"
+"25/01/2024 09:00","12400","10,50","1","68,25","0","0","0","","","1","1","100","6,50","0","0","a2","0"
+
+"## Costs"
+"CostTitle","Date","Odo (mi)","CostTypeID","Notes (optional)","Cost","flag","idR","read","RemindOdo","RemindDate","isTemplate","RepeatOdo","RepeatMonths","isIncome","UniqueId"
+"Parking permit","28/01/2024","12450","3","","1.234,50","0","0","0","0","","0","0","0","0","b1"

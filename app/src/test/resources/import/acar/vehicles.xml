@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vehicles>
+  <vehicle>
+    <name>Test Wagon</name>
+    <make>Acme</make>
+    <model>W1</model>
+    <year>2017</year>
+    <license-plate>ACAR-1</license-plate>
+    <vin>VIN9</vin>
+    <distance-unit>mi</distance-unit>
+    <volume-unit>US Gallon</volume-unit>
+    <fillup-records>
+      <fillup-record>
+        <date>2024-01-05T10:30:00</date>
+        <volume>10.5</volume>
+        <total-cost>38.85</total-cost>
+        <odometer-reading>20000</odometer-reading>
+        <partial>false</partial>
+        <previous-missed-fillups>0</previous-missed-fillups>
+        <fuel-brand>Regular</fuel-brand>
+        <notes>first</notes>
+      </fillup-record>
+      <fillup-record>
+        <date>2024-01-25T18:00:00</date>
+        <volume>6.0</volume>
+        <total-cost>22.50</total-cost>
+        <odometer-reading>20180</odometer-reading>
+        <partial>true</partial>
+        <previous-missed-fillups>0</previous-missed-fillups>
+      </fillup-record>
+      <fillup-record>
+        <date>2024-02-10T08:00:00</date>
+        <volume>11.2</volume>
+        <total-cost>41.44</total-cost>
+        <odometer-reading>20400</odometer-reading>
+        <partial>false</partial>
+        <previous-missed-fillups>1</previous-missed-fillups>
+      </fillup-record>
+      <fillup-record>
+        <date>garbage</date>
+        <volume>5</volume>
+        <total-cost>10</total-cost>
+        <odometer-reading>20500</odometer-reading>
+        <partial>false</partial>
+      </fillup-record>
+    </fillup-records>
+    <service-records>
+      <service-record>
+        <date>2024-01-20</date>
+        <odometer-reading>20100</odometer-reading>
+        <total-cost>89.99</total-cost>
+        <type>Oil change</type>
+        <notes>synthetic</notes>
+      </service-record>
+    </service-records>
+    <expense-records>
+      <expense-record>
+        <date>2024-02-01</date>
+        <total-cost>25.00</total-cost>
+        <type>Parking</type>
+      </expense-record>
+    </expense-records>
+  </vehicle>
+  <vehicle>
+    <name>Second Car</name>
+    <distance-unit>km</distance-unit>
+    <volume-unit>Liter</volume-unit>
+    <fillup-records>
+      <fillup-record>
+        <date>2024-03-01T12:00:00</date>
+        <volume>40</volume>
+        <total-cost>64</total-cost>
+        <odometer-reading>5000</odometer-reading>
+        <partial>false</partial>
+      </fillup-record>
+    </fillup-records>
+  </vehicle>
+</vehicles>

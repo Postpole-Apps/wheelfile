@@ -1,0 +1,17 @@
+##Fahrzeug
+Name;Modell;Kennzeichen;Typ;Baujahr;Notizen
+Kombi;Passat;B-XY 123;Auto;2016;synthetisch
+
+##Tanken
+Kilometerstand;Datum;Kraftstoff;Preis;Gesamt;Menge;Voll;A7;A8;A9;A10;A11;A12;A13;A14;A15;A16;A17;Notizen
+15000;15.01.2024;Super;1,799;71,96;40,00;Ja;;;;;;;;;;;;erste
+15450;20.02.2024;Super;1,849;37,00;20,00;Nein;;;;;;;;;;;;
+15900;03.03.2024;Super;1,829;73,16;40,00;Ja;;;;;;;;;;;;
+
+##Wartung
+Kilometerstand;Datum;Kosten;Titel;Ort;Notizen
+15200;10.02.2024;1.250,00;Inspektion;Werkstatt;
+
+##Ausgabe
+Kilometerstand;Datum;Kosten;Titel;Ort;Typ;Notizen
+15300;05.03.2024;9,50;Parkplatz;;;

@@ -1,0 +1,22 @@
+Metadata
+"Key","Value"
+"Version","1"
+
+Vehicles
+"Name","Make","Model","Year","License Plate","VIN"
+"CSV Car","Acme","C1","2015","CSV-1","V1"
+
+Fill-Up Records
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Volume","Volume Unit","Price per Unit","Total Cost","Payment","Partial Fill-Up?","Previously Missed Fill-Ups?","Fuel Efficiency","Notes"
+"CSV Car","01/25/2014","10:30","134,417","Miles","12.5","Gallons (US)","$3.60","$45.00","Cash","No","No","28.1","first"
+"CSV Car","02/03/2014","18:00","134,700","Miles","6.0","Gallons (US)","$3.70","$22.20","Cash","Yes","No","","partial"
+"CSV Car","02/20/2014","08:15","135,000","Miles","11.0","Gallons (US)","$3.65","$40.15","Cash","No","Yes","","missed before"
+"CSV Car","03/01/2014","09:00","abc","Miles","10.0","Gallons (US)","$3.65","$36.50","Cash","No","No","","bad odometer"
+
+Service Records
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Type","Total Cost","Notes"
+"CSV Car","02/10/2014","12:00","134,800","Miles","Oil change","$79.99","synthetic"
+
+Expense Records
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Type","Total Cost","Notes"
+"CSV Car","02/15/2014","12:00","","Miles","Parking","$12.00",""

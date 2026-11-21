@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 9 to 11 (spec section 6.3): the database, attachments and DataStore are included only for a device-to-device
+  transfer (requireFlags). A cloud backup matches no include. Everything not listed (Firebase, ads and WorkManager caches)
+  stays behind.
+-->
+<full-backup-content>
+    <include domain="database" path="app.db" requireFlags="deviceToDeviceTransfer" />
+    <include domain="database" path="app.db-wal" requireFlags="deviceToDeviceTransfer" />
+    <include domain="database" path="app.db-shm" requireFlags="deviceToDeviceTransfer" />
+    <include domain="file" path="attachments" requireFlags="deviceToDeviceTransfer" />
+    <include domain="file" path="datastore" requireFlags="deviceToDeviceTransfer" />
+    <exclude domain="sharedpref" />
+    <exclude domain="external" />
+</full-backup-content>
