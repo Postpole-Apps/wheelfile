@@ -9,6 +9,10 @@ object AnalyticsEvents {
     const val PURCHASE_STARTED = "purchase_started"
     const val PURCHASE = "purchase"
     const val PURCHASE_RESTORED = "purchase_restored"
+    const val REMOVE_ADS_PAYWALL_VIEW = "remove_ads_paywall_view"
+    const val REMOVE_ADS_PURCHASE_START = "remove_ads_purchase_start"
+    const val REMOVE_ADS_PURCHASE_SUCCESS = "remove_ads_purchase_success"
+    const val REMOVE_ADS_PURCHASE_FAIL = "remove_ads_purchase_fail"
     const val BACKUP_EXPORTED = "backup_exported"
     const val BACKUP_IMPORTED = "backup_imported"
     const val VEHICLE_ADDED = "vehicle_added"
@@ -28,6 +32,9 @@ object AnalyticsParams {
     const val VALUE = "value"
     const val CURRENCY = "currency"
     const val ITEM_ID = "item_id"
+
+    /** Which entry point opened the paywall (an enum value such as `pdf_report`). */
+    const val TRIGGER = "trigger"
     const val ITEM_COUNT = "item_count"
     const val FORMAT = "format"
     const val POWERTRAIN = "powertrain"

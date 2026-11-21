@@ -3,6 +3,13 @@ package com.postpole.wheelfile.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.navigation.NavHostController
+import com.postpole.wheelfile.ui.adaptive.GarageListDetail
+import com.postpole.wheelfile.ui.adaptive.isListDetailWidth
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -21,6 +28,7 @@ import com.postpole.wheelfile.ui.reminder.RemindersRoute
 import com.postpole.wheelfile.ui.garage.GarageActions
 import com.postpole.wheelfile.ui.garage.GarageRoute
 import com.postpole.wheelfile.ui.importer.ImportRoute
+import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import com.postpole.wheelfile.ui.pro.ProScreen
 import com.postpole.wheelfile.ui.settings.AdPreviewScreen
 import com.postpole.wheelfile.ui.settings.SettingsScreen
@@ -41,9 +49,10 @@ object Routes {
     const val DOCUMENT_FORM = "document_form/{vehicleId}?documentId={documentId}"
     const val SETTINGS = "settings"
     const val IMPORT = "import"
-    const val PRO = "pro"
+    const val PRO = "pro?trigger={trigger}"
     const val AD_PREVIEW = "debug_ad_preview"
 
+    fun pro(trigger: PaywallTrigger) = "pro?trigger=${trigger.analyticsValue}"
     fun vehicle(id: Long) = "vehicle/$id"
     fun entry(vehicleId: Long, charge: Boolean) = "entry/$vehicleId/$charge"
     fun record(vehicleId: Long, expense: Boolean) = "record/$vehicleId/${if (expense) "expense" else "service"}"
@@ -78,16 +87,38 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
             )
         }
         composable(Routes.GARAGE) {
-            GarageRoute(
-                actions = GarageActions(
-                    onOpenSettings = { navController.navigate(Routes.SETTINGS) },
-                    onOpenPro = { navController.navigate(Routes.PRO) },
-                    onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) },
-                    onOpenVehicle = { navController.navigate(Routes.vehicle(it)) },
-                    onAddEntry = { id, charge -> navController.navigate(Routes.entry(id, charge)) },
-                    onSelect = {},
-                ),
+            val actions = GarageActions(
+                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.GARAGE)) },
+                onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) },
+                onOpenVehicle = { navController.navigate(Routes.vehicle(it)) },
+                onAddEntry = { id, charge -> navController.navigate(Routes.entry(id, charge)) },
+                onSelect = {},
             )
+            if (!isListDetailWidth()) {
+                GarageRoute(actions = actions)
+            } else {
+                // Medium and expanded widths and unfolded foldables: Garage | Vehicle side by side (spec §3.2).
+                var openVehicle by rememberSaveable { mutableStateOf<Long?>(null) }
+                GarageListDetail(
+                    selectedVehicleId = openVehicle,
+                    listPane = {
+                        GarageRoute(
+                            actions = GarageActions(
+                                actions.onOpenSettings, actions.onOpenPro, actions.onAddVehicle,
+                                onOpenVehicle = { openVehicle = it },
+                                onAddEntry = actions.onAddEntry,
+                                onSelect = actions.onSelect,
+                            ),
+                            // The open vehicle's tab carries its own banner; never two banners on one screen.
+                            showBanner = openVehicle == null,
+                        )
+                    },
+                    detailPane = { id ->
+                        VehiclePane(id, navController, onClose = { openVehicle = null }, onSwitch = { openVehicle = it })
+                    },
+                )
+            }
         }
         composable(Routes.ADD_VEHICLE) {
             AddVehicleRoute(
@@ -96,22 +127,17 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                     // Start over at the Garage so Back never returns to the Welcome or the form.
                     navController.navigate(Routes.GARAGE) { popUpTo(navController.graph.id) { inclusive = true } }
                 },
-                onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.VEHICLE_LIMIT)) },
             )
         }
         composable(
             Routes.VEHICLE,
             arguments = listOf(navArgument("vehicleId") { type = NavType.LongType }),
         ) {
-            VehicleDetailRoute(
+            VehicleDetail(
+                navController,
                 onBack = { navController.popBackStack() },
                 onSwitch = { navController.navigate(Routes.vehicle(it)) { popUpTo(Routes.GARAGE) } },
-                onAddEntry = { id, charge -> navController.navigate(Routes.entry(id, charge)) },
-                onAddRecord = { id, expense -> navController.navigate(Routes.record(id, expense)) },
-                onOpenReminders = { navController.navigate(Routes.reminders(it)) },
-                onOpenPro = { navController.navigate(Routes.PRO) },
-                onOpenDocument = { navController.navigate(Routes.document(it)) },
-                onAddDocument = { navController.navigate(Routes.documentForm(it)) },
             )
         }
         composable(
@@ -130,7 +156,10 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 navArgument("documentId") { type = NavType.LongType; defaultValue = -1L },
             ),
         ) {
-            DocumentFormRoute(onClose = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
+            DocumentFormRoute(
+                onClose = { navController.popBackStack() },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.ATTACHMENT_LIMIT)) },
+            )
         }
         composable(
             Routes.RECORD,
@@ -139,7 +168,10 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 navArgument("kind") { type = NavType.StringType },
             ),
         ) {
-            RecordFormRoute(onClose = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
+            RecordFormRoute(
+                onClose = { navController.popBackStack() },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.ATTACHMENT_LIMIT)) },
+            )
         }
         composable(
             Routes.REMINDERS,
@@ -168,7 +200,7 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
         composable(Routes.SETTINGS) {
             SettingsScreen(
                 onBack = { navController.popBackStack() },
-                onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.SETTINGS)) },
                 onOpenReminders = { navController.navigate(Routes.reminders()) },
                 onOpenAdPreview = { navController.navigate(Routes.AD_PREVIEW) },
                 onOpenImport = { navController.navigate(Routes.IMPORT) },
@@ -177,14 +209,54 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
         composable(Routes.IMPORT) {
             ImportRoute(
                 onBack = { navController.popBackStack() },
-                onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenPro = { navController.navigate(Routes.pro(PaywallTrigger.VEHICLE_LIMIT)) },
             )
         }
         if (BuildConfig.DEBUG) {
             composable(Routes.AD_PREVIEW) { AdPreviewScreen(onBack = { navController.popBackStack() }) }
         }
-        composable(Routes.PRO) {
-            ProScreen(onBack = { navController.popBackStack() })
+        composable(
+            Routes.PRO,
+            arguments = listOf(navArgument("trigger") { type = NavType.StringType; defaultValue = "settings" }),
+        ) { entry ->
+            ProScreen(
+                trigger = PaywallTrigger.fromRoute(entry.arguments?.getString("trigger")),
+                onBack = { navController.popBackStack() },
+            )
+        }
+    }
+}
+
+/** Vehicle detail with every outgoing navigation going through [nav] (the app's main controller). */
+@Composable
+private fun VehicleDetail(nav: NavHostController, onBack: () -> Unit, onSwitch: (Long) -> Unit) {
+    VehicleDetailRoute(
+        onBack = onBack,
+        onSwitch = onSwitch,
+        onAddEntry = { id, charge -> nav.navigate(Routes.entry(id, charge)) },
+        onAddRecord = { id, expense -> nav.navigate(Routes.record(id, expense)) },
+        onOpenReminders = { nav.navigate(Routes.reminders(it)) },
+        onOpenPro = { nav.navigate(Routes.pro(it)) },
+        onOpenDocument = { nav.navigate(Routes.document(it)) },
+        onAddDocument = { nav.navigate(Routes.documentForm(it)) },
+    )
+}
+
+/**
+ * The detail pane of the two-pane Garage. It hosts Vehicle detail in a small NavHost of its own so the screen and its
+ * ViewModel are exactly the ones the compact layout navigates to. Forms and other screens still open full screen.
+ */
+@Composable
+private fun VehiclePane(vehicleId: Long, nav: NavHostController, onClose: () -> Unit, onSwitch: (Long) -> Unit) {
+    key(vehicleId) {
+        val inner = rememberNavController()
+        NavHost(inner, startDestination = Routes.VEHICLE) {
+            composable(
+                Routes.VEHICLE,
+                arguments = listOf(navArgument("vehicleId") { type = NavType.LongType; defaultValue = vehicleId }),
+            ) {
+                VehicleDetail(nav, onBack = onClose, onSwitch = onSwitch)
+            }
         }
     }
 }

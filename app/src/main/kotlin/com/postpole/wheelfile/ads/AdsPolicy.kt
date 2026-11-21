@@ -68,8 +68,7 @@ class AdsPolicy(
 
     /**
      * True once the user has gone back from Vehicle detail to the Garage after viewing the History or Reports tab
-     * (DECISIONS.md item 9). Only recorded for now: V7 reads it to decide on `wf_interstitial_after_review`, so no
-     * interstitial is shown yet.
+     * (DECISIONS.md item 9). [InterstitialCoordinator] reads it to decide on `wf_interstitial_after_review`.
      */
     var reviewedBeforeGarage = false
         private set
@@ -79,7 +78,7 @@ class AdsPolicy(
         if (viewedReview) reviewedBeforeGarage = true
     }
 
-    /** Call when V7 has acted on [reviewedBeforeGarage] (or the Garage was shown without it). */
+    /** Call once [reviewedBeforeGarage] has been acted on (or the Garage was shown without it). */
     fun clearReviewed() {
         reviewedBeforeGarage = false
     }

@@ -9,6 +9,8 @@ import androidx.room.Room
 import com.google.android.ump.UserMessagingPlatform
 import com.postpole.wheelfile.ads.AdsConfigSource
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.GoogleInterstitialGateway
+import com.postpole.wheelfile.ads.InterstitialGateway
 import com.postpole.wheelfile.ads.ConsentManager
 import com.postpole.wheelfile.ads.FirebaseAdsConfigSource
 import com.postpole.wheelfile.ads.GoogleAdsSdk
@@ -80,6 +82,11 @@ object AppModule {
     @Singleton
     fun provideAdsConfigSource(@ApplicationContext context: Context, analytics: Analytics): AdsConfigSource =
         FirebaseAdsConfigSource(context, analytics)
+
+    @Provides
+    @Singleton
+    fun provideInterstitialGateway(@ApplicationContext context: Context): InterstitialGateway =
+        GoogleInterstitialGateway(context)
 
     @Provides
     @Singleton

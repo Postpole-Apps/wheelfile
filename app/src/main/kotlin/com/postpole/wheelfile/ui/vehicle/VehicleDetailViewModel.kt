@@ -1,9 +1,11 @@
 package com.postpole.wheelfile.ui.vehicle
 
+import android.app.Activity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.InterstitialCoordinator
 import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.data.DocumentRepository
 import com.postpole.wheelfile.data.ReminderRepository
@@ -68,6 +70,7 @@ class VehicleDetailViewModel internal constructor(
     private val proFlow: Flow<Boolean> = flowOf(false),
     private val attachmentTotal: Flow<Int> = flowOf(0),
     private val adsPolicy: AdsPolicy? = null,
+    private val interstitials: InterstitialCoordinator? = null,
 ) : ViewModel() {
 
     @Inject
@@ -79,10 +82,11 @@ class VehicleDetailViewModel internal constructor(
         documents: DocumentRepository,
         attachments: AttachmentDao,
         adsPolicy: AdsPolicy,
+        interstitials: InterstitialCoordinator,
     ) : this(
         repo, checkNotNull(savedState.get<Long>("vehicleId")), { billing.isPro.value }, System::currentTimeMillis,
         reminders.observeDueCount(checkNotNull(savedState.get<Long>("vehicleId"))),
-        documents, billing.isPro, attachments.observeCount(), adsPolicy,
+        documents, billing.isPro, attachments.observeCount(), adsPolicy, interstitials,
     )
 
     private val filter = MutableStateFlow(HistoryFilter.ALL)
@@ -145,12 +149,19 @@ class VehicleDetailViewModel internal constructor(
 
     /** The user opened [tab]. History and Reports count as having reviewed the vehicle (DECISIONS.md item 9). */
     fun onTabViewed(tab: VehicleTab) {
-        if (tab == VehicleTab.HISTORY || tab == VehicleTab.REPORTS) viewedReview = true
+        if (tab == VehicleTab.HISTORY || tab == VehicleTab.REPORTS) {
+            viewedReview = true
+            interstitials?.preloadIfEligible()
+        }
     }
 
-    /** Leaving Vehicle detail for the Garage. Only records the flag for V7; nothing is shown. */
-    fun onLeaving() {
+    /**
+     * Leaving Vehicle detail for the Garage. Records whether History or Reports was viewed and, when [activity] is
+     * given, lets the policy decide on `wf_interstitial_after_review`. Call it after the Garage navigation was started.
+     */
+    fun onLeaving(activity: Activity? = null) {
         adsPolicy?.onLeftVehicleDetail(viewedReview)
+        if (activity != null) interstitials?.onBackToGarage(activity)
     }
 
     fun setRange(r: ReportRange) {

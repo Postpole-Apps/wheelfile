@@ -149,13 +149,22 @@ class BillingRepository(
     fun launchPurchase(activity: Activity, productId: String = ProductIds.PRO): Boolean {
         val launched = gateway.launchPurchase(activity, productId)
         if (launched) {
-            analytics.logEvent(AnalyticsEvents.PURCHASE_STARTED)
+            lastLaunchedProduct = productId
+            if (productId == ProductIds.REMOVE_ADS) {
+                analytics.logEvent(AnalyticsEvents.REMOVE_ADS_PURCHASE_START)
+            } else {
+                analytics.logEvent(AnalyticsEvents.PURCHASE_STARTED, mapOf(AnalyticsParams.ITEM_ID to productId))
+            }
         } else {
             analytics.recordNonFatal(BillingException("Could not launch purchase flow"))
+            if (productId == ProductIds.REMOVE_ADS) analytics.logEvent(AnalyticsEvents.REMOVE_ADS_PURCHASE_FAIL)
             _messages.trySend(BillingMessage.LAUNCH_FAILED)
         }
         return launched
     }
+
+    /** The product whose purchase sheet was opened last, so a failed result can be attributed to it. */
+    @Volatile private var lastLaunchedProduct: String? = null
 
     private suspend fun onUpdate(update: PurchaseUpdate) {
         when (update) {
@@ -166,6 +175,9 @@ class BillingRepository(
             is PurchaseUpdate.Error -> {
                 log("Purchase failed with code ${update.code}")
                 analytics.recordNonFatal(BillingException("Purchase failed with code ${update.code}"))
+                if (lastLaunchedProduct == ProductIds.REMOVE_ADS) {
+                    analytics.logEvent(AnalyticsEvents.REMOVE_ADS_PURCHASE_FAIL)
+                }
                 _messages.trySend(BillingMessage.PURCHASE_ERROR)
             }
         }
@@ -199,8 +211,13 @@ class BillingRepository(
                     }
                 }
                 analytics.logEvent(AnalyticsEvents.PURCHASE, params)
+                // No success event on restore: only a fresh buy reaches this branch.
+                if (productId == ProductIds.REMOVE_ADS) analytics.logEvent(AnalyticsEvents.REMOVE_ADS_PURCHASE_SUCCESS)
             }
-            Source.REFRESH -> analytics.logEvent(AnalyticsEvents.PURCHASE_RESTORED)
+            Source.REFRESH -> analytics.logEvent(
+                AnalyticsEvents.PURCHASE_RESTORED,
+                mapOf(AnalyticsParams.ITEM_ID to productId),
+            )
         }
     }
 

@@ -1,10 +1,9 @@
 package com.postpole.wheelfile.ui.settings
 
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
+import com.postpole.wheelfile.ui.common.findActivity
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -185,7 +184,7 @@ fun SettingsScreen(
                 ListItem(headlineContent = { Text(stringResource(R.string.pro_active)) })
             } else {
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.upgrade_to_pro)) },
+                    headlineContent = { Text(stringResource(R.string.settings_pro_entry)) },
                     modifier = Modifier.clickable(onClick = onOpenPro),
                 )
             }
@@ -424,11 +423,4 @@ private fun rememberDataMessages(): (DataTransferEvent) -> String {
             DataTransferEvent.RestoreFailed -> restoreFailed
         }
     }
-}
-
-/** The hosting Activity, unwrapping any [ContextWrapper]s. Null if the context isn't backed by one. */
-private tailrec fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }

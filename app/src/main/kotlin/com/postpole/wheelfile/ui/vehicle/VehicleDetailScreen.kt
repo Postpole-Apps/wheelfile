@@ -68,7 +68,9 @@ import com.postpole.wheelfile.domain.history.HistoryRow
 import com.postpole.wheelfile.domain.document.DocumentPreset
 import com.postpole.wheelfile.domain.report.ReportRange
 import com.postpole.wheelfile.domain.units.UnitConversion
+import com.postpole.wheelfile.ui.common.findActivity
 import com.postpole.wheelfile.ui.document.DocumentsTab
+import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import com.postpole.wheelfile.ui.report.PdfEvent
 import com.postpole.wheelfile.ui.report.PdfReportViewModel
 import com.postpole.wheelfile.ui.report.ReportsTab
@@ -124,6 +126,8 @@ class VehicleDetailActions(
     val onCustomRange: (Long?, Long?) -> Unit = { _, _ -> },
     /** "Share history report (PDF)": Pro builds and shares it, free opens the Pro screen. */
     val onSharePdf: () -> Unit = {},
+    /** The locked all-time chart range on Reports. Defaults to [onSeePro]. */
+    val onSeeProCharts: () -> Unit = onSeePro,
 )
 
 @Composable
@@ -133,7 +137,7 @@ fun VehicleDetailRoute(
     onAddEntry: (vehicleId: Long, charge: Boolean) -> Unit,
     onAddRecord: (vehicleId: Long, expense: Boolean) -> Unit,
     onOpenReminders: (vehicleId: Long) -> Unit,
-    onOpenPro: () -> Unit,
+    onOpenPro: (PaywallTrigger) -> Unit,
     onOpenDocument: (documentId: Long) -> Unit,
     onAddDocument: (vehicleId: Long) -> Unit,
     viewModel: VehicleDetailViewModel = hiltViewModel(),
@@ -164,7 +168,9 @@ fun VehicleDetailRoute(
         }
     }
     // Back to the Garage, by the bar or the system gesture, records whether History or Reports was viewed.
-    val leave = { viewModel.onLeaving(); onBack() }
+    // After the Garage navigation starts, the ads policy may show `wf_interstitial_after_review` (spec §5.2).
+    val activity = context.findActivity()
+    val leave = { onBack(); viewModel.onLeaving(activity) }
     BackHandler(onBack = leave)
     VehicleDetailScreen(
         state = state,
@@ -176,7 +182,8 @@ fun VehicleDetailRoute(
             onArchive = { viewModel.archive() },
             onRestore = { viewModel.restore() },
             onDismissFreeLimit = viewModel::dismissFreeLimit,
-            onSeePro = { viewModel.dismissFreeLimit(); onOpenPro() },
+            onSeePro = { viewModel.dismissFreeLimit(); onOpenPro(PaywallTrigger.VEHICLE_LIMIT) },
+            onSeeProCharts = { onOpenPro(PaywallTrigger.ALL_TIME_CHARTS) },
             onArchiveOpen = viewModel::openArchivePicker,
             onArchivePick = viewModel::archiveAndRestore,
             onAddRecord = { expense -> id?.let { onAddRecord(it, expense) } },
@@ -188,7 +195,7 @@ fun VehicleDetailRoute(
             onRange = viewModel::setRange,
             onCustomRange = viewModel::setCustomRange,
             onSharePdf = {
-                if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro()
+                if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro(PaywallTrigger.PDF_REPORT)
             },
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
@@ -289,7 +296,7 @@ fun VehicleDetailScreen(
                     state = state.reports,
                     onRange = actions.onRange,
                     onCustom = actions.onCustomRange,
-                    onSeePro = actions.onSeePro,
+                    onSeePro = actions.onSeeProCharts,
                     onSharePdf = actions.onSharePdf,
                 )
             }
