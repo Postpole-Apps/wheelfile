@@ -1,0 +1,8 @@
+"Vehicles"
+"Name";"Make";"Model";"Year"
+"Stadtauto";"Muster";"Kompakt";"2014"
+
+"Fill-Up Records"
+"Vehicle";"Date";"Time";"Odometer Reading";"Distance Unit";"Volume";"Volume Unit";"Price per Unit";"Total Cost";"Partial Fill-Up?";"Previously Missed Fill-Ups?";"Notes"
+"Stadtauto";"05/03/2024";"07:30";"88.250";"km";"41,25";"l";"1,759";"72,56";"Nein";"Nein";""
+"Stadtauto";"25/03/2024";"18:10";"88.900";"km";"39,80";"l";"1,779";"70,80";"Ja";"Nein";""

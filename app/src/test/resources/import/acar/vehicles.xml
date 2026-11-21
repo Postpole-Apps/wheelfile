@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vehicles>
+  <vehicle>
+    <name>Blue Van</name>
+    <make>Example</make>
+    <model>Cargo</model>
+    <year>2019</year>
+    <license-plate>VAN-1</license-plate>
+    <vin>VINBBB</vin>
+    <distance-unit>km</distance-unit>
+    <volume-unit>l</volume-unit>
+    <fillup-records>
+      <fillup-record>
+        <date>2024-04-01 08:00:00</date>
+        <volume>50.0</volume>
+        <total-cost>85.50</total-cost>
+        <odometer-reading>20000</odometer-reading>
+        <partial>false</partial>
+        <previous-missed-fillups>0</previous-missed-fillups>
+        <fuel-brand>BrandB</fuel-brand>
+        <notes>one</notes>
+      </fillup-record>
+      <fillup-record>
+        <date>2024-04-15 08:00:00 +0000</date>
+        <volume>48.5</volume>
+        <total-cost>83.00</total-cost>
+        <odometer-reading>20700</odometer-reading>
+        <partial>true</partial>
+        <previous-missed-fillups>1</previous-missed-fillups>
+      </fillup-record>
+      <fillup-record>
+        <date>garbage</date>
+        <volume>10</volume>
+        <odometer-reading>20800</odometer-reading>
+      </fillup-record>
+    </fillup-records>
+    <service-records>
+      <service-record>
+        <date>2024-04-10 10:00:00</date>
+        <odometer-reading>20300</odometer-reading>
+        <total-cost>120.00</total-cost>
+        <service-type-id>3</service-type-id>
+        <notes>Front pads</notes>
+      </service-record>
+    </service-records>
+    <expense-records>
+      <expense-record>
+        <date>2024-04-12 10:00:00</date>
+        <total-cost>14.00</total-cost>
+        <expense-type-id>4</expense-type-id>
+      </expense-record>
+    </expense-records>
+  </vehicle>
+</vehicles>

@@ -1,0 +1,7 @@
+## Vehicle
+Name,Description,DistUnit,FuelUnit,ConsumptionUnit,ImportCSVDateFormat,VIN,Insurance,Plate,Make,Model,Year,TankCount,Tank1Type,Tank2Type,Active,Tank1Capacity,Tank2Capacity
+Road Wagon,,1,1,1,yyyy-MM-dd,,,,Sample,Wagon,2012,1,100,0,1,15,0
+## Log
+Data,Odo (mi),Fuel (US gallons),Full,Price (optional),l/100km (optional),latitude (optional),longitude (optional),City (optional),Notes (optional),Missed,TankNumber,FuelType,VolumePrice,StationID (optional),ExcludeDistance,UniqueId,TankCalc
+2024-03-01 09:00,"12.345","10,5",1,"35,70",0,,,,,0,1,100,"3,40",0,0,1,0
+2024-03-12 17:45,"12.690","9,25",1,"31,45",0,,,,,1,1,100,"3,40",0,0,2,0

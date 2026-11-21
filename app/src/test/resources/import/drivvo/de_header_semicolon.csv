@@ -1,0 +1,10 @@
+##Vehicle
+Name;Modell;Kennzeichen;Marke;Baujahr;Notiz
+Testwagen;M;B-XY 1;;2018;
+##Tankvorgang
+Kilometerstand;Datum;Kraftstoff;Preis;Gesamt;Menge;Voller Tank;;;;;;;;;;;;Notiz
+15000;03.04.2024;Super;1,799;53,97;30,0;Ja;;;;;;;;;;;;erste
+15600;25.04.2024;Super;1,819;50,93;28,0;Nein;;;;;;;;;;;;
+##Wartung
+Kilometerstand;Datum;Kosten;Titel;;Notiz
+15300;10.04.2024;120,50;Inspektion;;jaehrlich

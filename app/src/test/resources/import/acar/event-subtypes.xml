@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<event-subtypes>
+  <event-subtype>
+    <id>3</id>
+    <name>Brake service</name>
+  </event-subtype>
+  <event-subtype>
+    <id>4</id>
+    <name>Car wash</name>
+  </event-subtype>
+</event-subtypes>

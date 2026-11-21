@@ -1,0 +1,21 @@
+"Metadata"
+"Key","Value"
+"Type","CSV"
+
+"Vehicles"
+"Name","Make","Model","Year","License Plate","VIN"
+"Family Car","Example","Estate","2016","ZZ-111","VINAAA"
+
+"Fill-Up Records"
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Volume","Volume Unit","Price per Unit","Total Cost","Payment","Partial Fill-Up?","Previously Missed Fill-Ups?","Fuel Efficiency","Notes"
+"Family Car","2024-03-01","08:00","134,417","mi","10.500","gal","$3.499","$36.74","Cash","No","No","30.1","first"
+"Family Car","2024-03-15","09:30","134,717","mi","9.8","gal","$3.55","$34.79","Cash","Yes","No","","partial"
+"Family Car","not a date","09:30","134,900","mi","9.8","gal","$3.55","$34.79","Cash","No","No","",""
+
+"Service Records"
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Service Type","Total Cost","Notes"
+"Family Car","2024-03-10","10:00","134,500","mi","Oil Change","$55.00",""
+
+"Expense Records"
+"Vehicle","Date","Time","Odometer Reading","Distance Unit","Expense Type","Total Cost","Notes"
+"Family Car","2024-03-12","11:00","134,550","mi","Parking","$8.00",""

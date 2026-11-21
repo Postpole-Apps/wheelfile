@@ -1,0 +1,18 @@
+## Vehicle
+Name,Description,DistUnit,FuelUnit,ConsumptionUnit,ImportCSVDateFormat,VIN,Insurance,Plate,Make,Model,Year,TankCount,Tank1Type,Tank2Type,Active,Tank1Capacity,Tank2Capacity
+Test Hatch,,0,0,0,yyyy-MM-dd,VIN123,,AB-123-CD,Example,Hatch,2015,1,100,0,1,45,0
+## Log
+Data,Odo (km),Fuel (litres),Full,Price (optional),l/100km (optional),latitude (optional),longitude (optional),City (optional),Notes (optional),Missed,TankNumber,FuelType,VolumePrice,StationID (optional),ExcludeDistance,UniqueId,TankCalc
+2024-01-05 08:10,10000,40.00,1,60.00,0,,,Springfield,first,0,1,100,1.50,0,0,1,0
+2024-01-20 18:30,10550,38.50,1,57.75,7.0,,,,,0,1,100,1.50,0,0,2,0
+2024-02-03 12:00,11100,20.00,0,30.00,0,,,,,0,1,100,1.50,0,0,3,0
+bad-date,11200,10.00,1,15.00,0,,,,,0,1,100,1.50,0,0,4,0
+2024-02-10 12:00,11300,x,1,15.00,0,,,,,0,1,100,1.50,0,0,5,0
+## CostCategories
+CostTypeID,Name,priority,color
+1,Service,0,0
+2,Parking,1,0
+## Costs
+CostTitle,Date,Odo (km),CostTypeID,Notes (optional),Cost,flag,idR,read,RemindOdo,RemindDate,isTemplate,RepeatOdo,RepeatMonths,isIncome,UniqueId
+Oil change,2024-01-25,10600,1,,89.90,0,0,0,0,2024-01-25,0,0,0,0,1
+City parking,2024-02-01,,2,,12.00,0,0,0,0,2024-02-01,0,0,0,0,2
