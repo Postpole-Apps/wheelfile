@@ -3,6 +3,8 @@ package com.postpole.wheelfile.reminders
 import com.postpole.wheelfile.data.db.Reminder
 import com.postpole.wheelfile.data.db.ReminderDao
 import com.postpole.wheelfile.data.db.Vehicle
+import com.postpole.wheelfile.data.db.VehicleDocument
+import com.postpole.wheelfile.domain.document.DocumentAlerts
 import com.postpole.wheelfile.data.db.VehicleDao
 import com.postpole.wheelfile.domain.reminder.QuietHours
 import com.postpole.wheelfile.domain.reminder.ReminderEngine
@@ -31,6 +33,8 @@ class ReminderChecker(
     private val quietHours: suspend () -> QuietHours,
     private val clock: () -> Long,
     private val zone: () -> ZoneId = { ZoneId.systemDefault() },
+    /** Looks up the document behind a document-expiry reminder; null when it was deleted. */
+    private val documents: suspend (Long) -> VehicleDocument? = { null },
 ) {
     suspend fun run(): CheckResult {
         val now = clock()
@@ -44,7 +48,14 @@ class ReminderChecker(
             val vehicle = byVehicle[reminder.vehicleId]?.takeIf { !it.archived } ?: continue
             val usage = ReminderEngine.usage(readings[vehicle.id].orEmpty(), now)
             val state = ReminderEngine.evaluate(reminder, usage, now, zone())
-            if (!ReminderEngine.shouldNotify(reminder, state, now)) continue
+            val documentId = reminder.linkedDocumentId
+            if (documentId != null) {
+                // Expiry alerts fire at each of the document's alert days (30/14/7/1 by default), once each.
+                val document = documents(documentId) ?: continue
+                if (!DocumentAlerts.shouldNotify(reminder.dueDate, document.alertDays, reminder.lastNotifiedAt, now, zone())) continue
+            } else if (!ReminderEngine.shouldNotify(reminder, state, now)) {
+                continue
+            }
             if (notifier.post(reminder, vehicle, state)) {
                 reminders.update(reminder.copy(lastNotifiedAt = now))
                 posted++

@@ -51,12 +51,15 @@ data class AddVehicleState(
     val archiveCandidates: List<Vehicle> = emptyList(),
     val showArchivePicker: Boolean = false,
     val saving: Boolean = false,
+    /** 3 for the first vehicle (details, units, region presets), otherwise 2. */
+    val totalSteps: Int = 2,
 ) {
     val isElectric: Boolean get() = powertrain == Powertrain.ELECTRIC
 }
 
 sealed interface AddVehicleEvent {
-    data class Saved(val vehicleId: Long) : AddVehicleEvent
+    /** [firstVehicle] is true for the very first vehicle: onboarding continues with the region presets (step 3). */
+    data class Saved(val vehicleId: Long, val firstVehicle: Boolean = false) : AddVehicleEvent
     data object OpenPro : AddVehicleEvent
 }
 
@@ -83,6 +86,12 @@ class AddVehicleViewModel internal constructor(
 
     private val _events = Channel<AddVehicleEvent>(Channel.BUFFERED)
     val events: Flow<AddVehicleEvent> = _events.receiveAsFlow()
+
+    init {
+        viewModelScope.launch {
+            if (repo.vehicles.getAll().isEmpty()) _state.update { it.copy(totalSteps = 3) }
+        }
+    }
 
     fun setName(v: String) = _state.update { it.copy(name = v.take(60), nameMissing = false) }
     fun setType(v: VehicleType) = _state.update { it.copy(type = v) }
@@ -192,7 +201,7 @@ class AddVehicleViewModel internal constructor(
                         AnalyticsParams.UNIT_SYSTEM to s.units.distance.name.lowercase(),
                     ),
                 )
-                _events.send(AddVehicleEvent.Saved(id))
+                _events.send(AddVehicleEvent.Saved(id, firstVehicle))
             } catch (e: Exception) {
                 analytics.recordNonFatal(e)
                 _state.update { it.copy(saving = false) }

@@ -192,8 +192,6 @@
     <string name="history_partial">Partial</string>
     <string name="history_check_odometer">Check odometer</string>
     <string name="history_missed">Missed fill-up before</string>
-    <string name="tab_empty_documents">Documents for this vehicle will appear here.</string>
-    <string name="tab_empty_reports">Reports for this vehicle will appear here.</string>
 
     <!-- Entry forms -->
     <string name="form_fillup_title">Add fill-up</string>
@@ -348,4 +346,158 @@
     <string name="settings_quiet_hours_summary">No reminder notifications during these hours</string>
     <string name="settings_quiet_from">From</string>
     <string name="settings_quiet_until">Until</string>
+
+    <!-- Documents tab -->
+    <string name="documents_folder_papers">Vehicle papers</string>
+    <string name="documents_folder_receipts">Receipts</string>
+    <string name="documents_add">Add document</string>
+    <string name="documents_empty_title">No documents yet</string>
+    <string name="documents_empty_body">Keep insurance, registration and inspection papers with this vehicle. Expiry dates become reminders.</string>
+    <string name="documents_presets_cta">Add suggested documents</string>
+    <string name="documents_attachment_counter">Attachments used: %1$d of %2$d on the free plan</string>
+    <plurals name="documents_receipts_linked">
+        <item quantity="one">%1$d receipt linked to your entries</item>
+        <item quantity="other">%1$d receipts linked to your entries</item>
+    </plurals>
+    <plurals name="documents_file_count">
+        <item quantity="one">%1$d file</item>
+        <item quantity="other">%1$d files</item>
+    </plurals>
+    <string name="documents_no_expiry">No expiry date</string>
+    <string name="expiry_pill_valid_until">Valid until %1$s</string>
+    <string name="expiry_pill_expired">Expired</string>
+    <plurals name="expiry_pill_expires_in">
+        <item quantity="one">Expires in %1$d day</item>
+        <item quantity="other">Expires in %1$d days</item>
+    </plurals>
+    <string name="expiry_pill_expires_today">Expires today</string>
+
+    <!-- Document types -->
+    <string name="doc_type_insurance">Insurance</string>
+    <string name="doc_type_registration">Registration</string>
+    <string name="doc_type_inspection">Inspection certificate</string>
+    <string name="doc_type_licence">Licence</string>
+    <string name="doc_type_warranty">Warranty</string>
+    <string name="doc_type_roadside">Roadside cover</string>
+    <string name="doc_type_lease">Lease</string>
+    <string name="doc_type_custom">Other</string>
+
+    <!-- Document form and detail -->
+    <string name="doc_form_add_title">Add document</string>
+    <string name="doc_form_edit_title">Edit document</string>
+    <string name="doc_field_type">Type</string>
+    <string name="doc_field_title">Title</string>
+    <string name="doc_field_title_required">Enter a title</string>
+    <string name="doc_field_number">Number (optional)</string>
+    <string name="doc_field_issue">Issue date</string>
+    <string name="doc_field_expiry">Expiry date</string>
+    <string name="doc_field_expiry_invalid">The expiry date is before the issue date</string>
+    <string name="doc_field_note">Notes</string>
+    <string name="doc_expiry_clear">Remove expiry date</string>
+    <string name="doc_alert_days">Alert before expiry</string>
+    <string name="doc_alert_days_hint">Alerts use the same reminders as service. Notifications respect your quiet hours.</string>
+    <string name="doc_detail_title">Document</string>
+    <string name="doc_detail_missing">This document no longer exists.</string>
+    <string name="doc_expiry_card_none">No expiry date set</string>
+    <string name="doc_expiry_card_expired">Expired on %1$s</string>
+    <string name="doc_expiry_card_today">Expires today (%1$s)</string>
+    <plurals name="doc_expiry_card_in_days">
+        <item quantity="one">Expires in %1$d day (%2$s)</item>
+        <item quantity="other">Expires in %1$d days (%2$s)</item>
+    </plurals>
+    <string name="doc_expiry_card_valid">Valid until %1$s</string>
+    <string name="doc_row_type">Type</string>
+    <string name="doc_row_number">Number</string>
+    <string name="doc_row_issue">Issued</string>
+    <string name="doc_row_expiry">Expires</string>
+    <string name="doc_row_alerts">Alerts</string>
+    <string name="doc_row_notes">Notes</string>
+    <string name="doc_row_empty">Not set</string>
+    <string name="doc_attachment_pdf">PDF attachment</string>
+    <string name="doc_attachment_photo">Photo attachment</string>
+    <string name="doc_attachment_open">Open</string>
+    <string name="doc_attachment_none">No file attached</string>
+    <string name="doc_attachment_open_failed">No app on this device can open this file.</string>
+    <string name="doc_edit">Edit</string>
+    <string name="doc_delete">Delete document</string>
+    <string name="doc_delete_title">Delete this document?</string>
+    <string name="doc_delete_body">The document, its reminder and its attached files are removed from this device. This can\'t be undone.</string>
+
+    <!-- Regional presets (s01d-region-presets) -->
+    <string name="presets_disclaimer">Suggested schedule; check your local authority. Rules vary and this is not legal advice.</string>
+    <string name="presets_title">Suggested documents</string>
+    <string name="presets_intro">Pick the papers you want to keep track of. Every date can be changed later.</string>
+    <string name="presets_region">Region</string>
+    <string name="presets_first_registration">First registration date (optional)</string>
+    <string name="presets_first_registration_hint">Add the first registration date to see a suggested first due date.</string>
+    <string name="presets_first_registration_clear">Clear first registration date</string>
+    <string name="presets_due">Suggested due date: %1$s</string>
+    <string name="presets_due_window">Suggested due date: %1$s (allowed from %2$s)</string>
+    <string name="presets_due_user_set">You set the date</string>
+    <string name="presets_add">Add selected</string>
+    <string name="presets_skip">Skip</string>
+    <string name="preset_gb_mot">MOT</string>
+    <string name="preset_gb_vehicle_tax">Vehicle tax</string>
+    <string name="preset_de_hu">HU (Hauptuntersuchung)</string>
+    <string name="preset_fr_ct">Contrôle technique</string>
+    <string name="preset_es_itv">ITV</string>
+    <string name="preset_us_ca_smog">Smog check</string>
+    <string name="preset_au_nsw_rego">Registration (rego)</string>
+    <string name="preset_au_safety_inspection">Safety inspection</string>
+    <string name="preset_insurance_renewal">Insurance renewal</string>
+    <string name="preset_licence_expiry">Driving licence expiry</string>
+    <string name="preset_generic_inspection">Emissions or inspection</string>
+    <string name="preset_rule_gb_mot">First at 3 years, then every year</string>
+    <string name="preset_rule_gb_vehicle_tax">Renewal date, yearly or every 6 months</string>
+    <string name="preset_rule_de_hu">New cars at 36 months, then every 24 months</string>
+    <string name="preset_rule_fr_ct">Within the 6 months before the 4th anniversary, then every 2 years</string>
+    <string name="preset_rule_es_itv">From 4 years, every 2 years, yearly after 10 years</string>
+    <string name="preset_rule_user_set">Date you set</string>
+    <string name="preset_rule_au_nsw_rego">Yearly renewal, date you set</string>
+    <string name="region_gb">United Kingdom</string>
+    <string name="region_de">Germany</string>
+    <string name="region_fr">France</string>
+    <string name="region_es">Spain</string>
+    <string name="region_us_ca">United States (California)</string>
+    <string name="region_au_nsw">Australia (New South Wales)</string>
+    <string name="region_generic">Other region</string>
+
+    <!-- Reports tab -->
+    <string name="report_range_12m">12 months</string>
+    <string name="report_range_all">All time</string>
+    <string name="report_range_compare">Compare</string>
+    <string name="report_range_custom">Custom</string>
+    <string name="report_range_locked">%1$s, a Pro range</string>
+    <string name="report_free_note">The free plan shows the last 12 months.</string>
+    <string name="report_locked_title">Longer ranges are part of Pro</string>
+    <string name="report_locked_body">See all-time totals, compare vehicles and choose your own dates with Pro. Your 12-month charts stay free.</string>
+    <string name="report_see_pro">See Pro</string>
+    <string name="report_custom_from">From</string>
+    <string name="report_custom_to">To</string>
+    <string name="report_custom_hint">Pick a start and an end date.</string>
+    <string name="report_economy_title">Economy over time</string>
+    <string name="report_cost_title">Monthly cost</string>
+    <string name="report_price_title">Price per unit</string>
+    <string name="report_compare_title">Total spent per vehicle (%1$s)</string>
+    <string name="report_legend_fuel">Fuel and charging</string>
+    <string name="report_legend_service">Service</string>
+    <string name="report_legend_expenses">Expenses</string>
+    <string name="report_empty_economy">Log two full fill-ups or charges to see economy over time.</string>
+    <string name="report_empty_cost">No costs in this range yet.</string>
+    <string name="report_empty_price">No prices in this range yet.</string>
+    <string name="report_empty_compare">No other vehicles to compare yet.</string>
+    <plurals name="report_summary_economy">
+        <item quantity="one">Economy chart: one measurement, %1$s %4$s.</item>
+        <item quantity="other">Economy chart: %5$d measurements, latest %1$s %4$s, lowest %2$s, highest %3$s.</item>
+    </plurals>
+    <plurals name="report_summary_cost">
+        <item quantity="one">Monthly cost chart in %1$s: %3$d month, %2$s in total.</item>
+        <item quantity="other">Monthly cost chart in %1$s: %3$d months, %2$s in total, highest in %4$s at %5$s.</item>
+    </plurals>
+    <string name="report_summary_cost_empty">Monthly cost chart in %1$s: nothing spent in this range.</string>
+    <plurals name="report_summary_price">
+        <item quantity="one">Price per unit chart in %1$s: one purchase at %2$s.</item>
+        <item quantity="other">Price per unit chart in %1$s: %5$d purchases, latest %2$s, lowest %3$s, highest %4$s.</item>
+    </plurals>
+    <string name="report_summary_compare">Total spent per vehicle in %1$s: %2$s.</string>
 </resources>

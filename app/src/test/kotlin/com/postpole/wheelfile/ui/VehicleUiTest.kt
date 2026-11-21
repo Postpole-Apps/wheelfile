@@ -125,13 +125,13 @@ class VehicleUiTest {
         rule.onNodeWithTag("AdSlot").assertExists()
     }
 
-    @Test fun overviewIsAdFreeAndHistoryHasTheBanner() {
+    @Test fun overviewIsAdFreeAndHistoryDocumentsAndReportsHaveTheBanner() {
         rule.setContent {
             WheelfileTheme(darkTheme = false) {
                 VehicleDetailScreen(
                     state = com.postpole.wheelfile.ui.vehicle.VehicleDetailUiState(data = vehicleData(), switcher = listOf(vehicle()), loaded = true),
                     actions = VehicleDetailActions({}, {}, {}, {}, {}, {}, {}, {}, {}, {}),
-                    historyAdSlot = { Box(Modifier.testTag("AdSlot")) },
+                    adSlot = { Box(Modifier.testTag("AdSlot")) },
                 )
             }
         }
@@ -139,6 +139,10 @@ class VehicleUiTest {
         rule.onNodeWithText("History").performClick()
         rule.onNodeWithTag("AdSlot").assertExists()
         rule.onNodeWithText("Documents").performClick()
+        rule.onNodeWithTag("AdSlot").assertExists()
+        rule.onNodeWithText("Reports").performClick()
+        rule.onNodeWithTag("AdSlot").assertExists()
+        rule.onNodeWithText("Overview").performClick()
         rule.onNodeWithTag("AdSlot").assertDoesNotExist()
     }
 
@@ -171,7 +175,7 @@ class VehicleUiTest {
                     VehicleDetailScreen(
                         state = state,
                         actions = VehicleDetailActions({}, {}, { screen = Screen.Entry(s.id) }, vm::setFilter, {}, {}, {}, {}, {}, {}),
-                        historyAdSlot = {},
+                        adSlot = {},
                     )
                 }
                 is Screen.Entry -> {

@@ -12,6 +12,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.postpole.wheelfile.BuildConfig
+import com.postpole.wheelfile.ui.document.DocumentDetailRoute
+import com.postpole.wheelfile.ui.document.DocumentFormRoute
+import com.postpole.wheelfile.ui.document.PresetsRoute
 import com.postpole.wheelfile.ui.entry.EntryFormRoute
 import com.postpole.wheelfile.ui.entry.RecordFormRoute
 import com.postpole.wheelfile.ui.reminder.ReminderFormRoute
@@ -34,6 +37,9 @@ object Routes {
     const val RECORD = "record/{vehicleId}/{kind}"
     const val REMINDERS = "reminders?vehicleId={vehicleId}"
     const val REMINDER_FORM = "reminder/{vehicleId}"
+    const val DOCUMENT = "document/{vehicleId}/{documentId}"
+    const val DOCUMENT_FORM = "document_form/{vehicleId}/{documentId}"
+    const val PRESETS = "presets/{vehicleId}/{onboarding}"
     const val SETTINGS = "settings"
     const val PRO = "pro"
     const val AD_PREVIEW = "debug_ad_preview"
@@ -45,6 +51,13 @@ object Routes {
     /** Reminders of one vehicle, or of all vehicles when [vehicleId] is null (Settings). */
     fun reminders(vehicleId: Long? = null) = "reminders?vehicleId=${vehicleId ?: -1L}"
     fun reminderForm(vehicleId: Long) = "reminder/$vehicleId"
+    fun document(vehicleId: Long, documentId: Long) = "document/$vehicleId/$documentId"
+
+    /** [documentId] 0 opens the form for a new document. */
+    fun documentForm(vehicleId: Long, documentId: Long = 0L) = "document_form/$vehicleId/$documentId"
+
+    /** The region presets offer: onboarding step 3 when [onboarding], otherwise opened from the Documents tab. */
+    fun presets(vehicleId: Long, onboarding: Boolean = false) = "presets/$vehicleId/$onboarding"
 }
 
 @Composable
@@ -79,9 +92,11 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
         composable(Routes.ADD_VEHICLE) {
             AddVehicleRoute(
                 onClose = { navController.popBackStack() },
-                onSaved = {
-                    // Start over at the Garage so Back never returns to the Welcome or the form.
-                    navController.navigate(Routes.GARAGE) { popUpTo(navController.graph.id) { inclusive = true } }
+                onSaved = { vehicleId, firstVehicle ->
+                    // Start over so Back never returns to the Welcome or the form. The first vehicle continues with
+                    // onboarding step 3 (region presets); later vehicles go straight to the Garage.
+                    val next = if (firstVehicle) Routes.presets(vehicleId, onboarding = true) else Routes.GARAGE
+                    navController.navigate(next) { popUpTo(navController.graph.id) { inclusive = true } }
                 },
                 onOpenPro = { navController.navigate(Routes.PRO) },
             )
@@ -97,6 +112,50 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onAddRecord = { id, expense -> navController.navigate(Routes.record(id, expense)) },
                 onOpenReminders = { navController.navigate(Routes.reminders(it)) },
                 onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenDocument = { vehicleId, documentId -> navController.navigate(Routes.document(vehicleId, documentId)) },
+                onAddDocument = { navController.navigate(Routes.documentForm(it)) },
+                onOpenPresets = { navController.navigate(Routes.presets(it)) },
+            )
+        }
+        composable(
+            Routes.DOCUMENT,
+            arguments = listOf(
+                navArgument("vehicleId") { type = NavType.LongType },
+                navArgument("documentId") { type = NavType.LongType },
+            ),
+        ) {
+            DocumentDetailRoute(
+                onBack = { navController.popBackStack() },
+                onEdit = { vehicleId, documentId -> navController.navigate(Routes.documentForm(vehicleId, documentId)) },
+            )
+        }
+        composable(
+            Routes.DOCUMENT_FORM,
+            arguments = listOf(
+                navArgument("vehicleId") { type = NavType.LongType },
+                navArgument("documentId") { type = NavType.LongType },
+            ),
+        ) {
+            DocumentFormRoute(onClose = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
+        }
+        composable(
+            Routes.PRESETS,
+            arguments = listOf(
+                navArgument("vehicleId") { type = NavType.LongType },
+                navArgument("onboarding") { type = NavType.BoolType },
+            ),
+        ) { entry ->
+            val onboarding = entry.arguments?.getBoolean("onboarding") == true
+            PresetsRoute(
+                onboarding = onboarding,
+                onDone = {
+                    if (onboarding) {
+                        // Onboarding ends at the Garage; Back must not return to the offer.
+                        navController.navigate(Routes.GARAGE) { popUpTo(navController.graph.id) { inclusive = true } }
+                    } else {
+                        navController.popBackStack()
+                    }
+                },
             )
         }
         composable(

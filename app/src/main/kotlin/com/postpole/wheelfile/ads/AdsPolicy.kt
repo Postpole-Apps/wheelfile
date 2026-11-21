@@ -61,6 +61,18 @@ class AdsPolicy(
     private var pumpSession = false
     private var quietAction = false
 
+    /** True once the user opened the History or Reports tab this session. Recorded for the V7 interstitial; shows nothing yet. */
+    var reviewed = false
+        private set
+
+    /** Call when the History or Reports tab is viewed. The future "back to Garage" interstitial needs it (spec §5.2). */
+    fun onReviewViewed() {
+        reviewed = true
+    }
+
+    /** Call when the user leaves Vehicle detail for Garage. Returns whether a review was viewed, then clears the flag. */
+    fun consumeReviewed(): Boolean = reviewed.also { reviewed = false }
+
     /** Call after a save. A fill-up or EV charge blocks interstitials for the rest of the session. */
     fun onSaved(kind: SaveKind) {
         if (kind.isPumpSession) pumpSession = true

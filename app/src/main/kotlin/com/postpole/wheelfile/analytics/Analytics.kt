@@ -19,6 +19,8 @@ object AnalyticsEvents {
     const val EXPENSE_SAVED = "expense_saved"
     const val REMINDER_CREATED = "reminder_created"
     const val ATTACHMENT_CAP_REACHED = "attachment_cap_reached"
+    const val DOCUMENT_SAVED = "document_saved"
+    const val PRESETS_ADDED = "presets_added"
 }
 
 object AnalyticsParams {

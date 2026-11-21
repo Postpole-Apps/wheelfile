@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.first
 interface ReminderWorkerEntryPoint {
     fun reminderDao(): ReminderDao
     fun vehicleDao(): VehicleDao
+    fun documentDao(): com.postpole.wheelfile.data.db.VehicleDocumentDao
     fun settings(): SettingsRepository
     fun notifier(): AndroidReminderNotifier
 }
@@ -35,6 +36,7 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
             notifier = deps.notifier(),
             quietHours = { deps.settings().quietHours.first() },
             clock = System::currentTimeMillis,
+            documents = { deps.documentDao().get(it) },
         )
         val result = checker.run()
         result.deferUntil?.let { ReminderScheduler(applicationContext).scheduleDeferred(it - System.currentTimeMillis()) }

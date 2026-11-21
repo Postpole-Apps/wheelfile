@@ -119,7 +119,7 @@ fun WelcomeScreen(onAddVehicle: () -> Unit) {
 @Composable
 fun AddVehicleRoute(
     onClose: () -> Unit,
-    onSaved: (Long) -> Unit,
+    onSaved: (vehicleId: Long, firstVehicle: Boolean) -> Unit,
     onOpenPro: () -> Unit,
     viewModel: AddVehicleViewModel = hiltViewModel(),
 ) {
@@ -127,7 +127,7 @@ fun AddVehicleRoute(
     LaunchedEffect(viewModel) {
         viewModel.events.collect {
             when (it) {
-                is AddVehicleEvent.Saved -> onSaved(it.vehicleId)
+                is AddVehicleEvent.Saved -> onSaved(it.vehicleId, it.firstVehicle)
                 AddVehicleEvent.OpenPro -> onOpenPro()
             }
         }
@@ -198,7 +198,7 @@ fun AddVehicleScreen(state: AddVehicleState, actions: AddVehicleActions) {
                             style = MaterialTheme.typography.titleLarge,
                         )
                         Text(
-                            stringResource(R.string.add_vehicle_step, if (onUnits) 2 else 1, 2),
+                            stringResource(R.string.add_vehicle_step, if (onUnits) 2 else 1, state.totalSteps),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
