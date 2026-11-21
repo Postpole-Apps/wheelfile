@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Camera captures are written here first, then copied into attachments/. -->
+    <cache-path name="camera" path="camera/" />
+    <!-- Private copies of receipts and documents. -->
+    <files-path name="attachments" path="attachments/" />
+</paths>

@@ -18,6 +18,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,6 +69,7 @@ import com.postpole.wheelfile.ui.common.formatMoney
 import com.postpole.wheelfile.ui.common.formatNumber
 import com.postpole.wheelfile.ui.common.label
 import com.postpole.wheelfile.ui.entry.defaultFormIsCharge
+import com.postpole.wheelfile.ui.entry.label
 import com.postpole.wheelfile.ui.entry.supportsCharge
 import com.postpole.wheelfile.ui.entry.supportsFillUp
 import com.postpole.wheelfile.ui.theme.HeroShape
@@ -98,6 +103,10 @@ class VehicleDetailActions(
     val onSeePro: () -> Unit,
     val onArchiveOpen: () -> Unit,
     val onArchivePick: (Long) -> Unit,
+    /** Opens the service (false) or expense (true) form. */
+    val onAddRecord: (expense: Boolean) -> Unit = {},
+    /** The bell in the top app bar: this vehicle's Reminders. */
+    val onOpenReminders: () -> Unit = {},
 )
 
 @Composable
@@ -105,6 +114,8 @@ fun VehicleDetailRoute(
     onBack: () -> Unit,
     onSwitch: (Long) -> Unit,
     onAddEntry: (vehicleId: Long, charge: Boolean) -> Unit,
+    onAddRecord: (vehicleId: Long, expense: Boolean) -> Unit,
+    onOpenReminders: (vehicleId: Long) -> Unit,
     onOpenPro: () -> Unit,
     viewModel: VehicleDetailViewModel = hiltViewModel(),
 ) {
@@ -123,6 +134,8 @@ fun VehicleDetailRoute(
             onSeePro = { viewModel.dismissFreeLimit(); onOpenPro() },
             onArchiveOpen = viewModel::openArchivePicker,
             onArchivePick = viewModel::archiveAndRestore,
+            onAddRecord = { expense -> id?.let { onAddRecord(it, expense) } },
+            onOpenReminders = { id?.let(onOpenReminders) },
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
     )
@@ -130,7 +143,7 @@ fun VehicleDetailRoute(
 
 /**
  * s04-vehicle-overview and s05-history inside one Vehicle detail. Overview is ad-free; the History tab carries the
- * only banner. The bell for Reminders is intentionally absent until V4 wires it.
+ * only banner. The bell in the top bar opens this vehicle's Reminders (badge = due soon or overdue).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -153,7 +166,12 @@ fun VehicleDetailScreen(
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                         }
                     },
-                    actions = { if (vehicle != null) OverflowMenu(vehicle, actions) },
+                    actions = {
+                        if (vehicle != null) {
+                            RemindersBell(state.dueReminders, actions.onOpenReminders)
+                            OverflowMenu(vehicle, actions)
+                        }
+                    },
                 )
                 VehicleTabs(tabIndex) { tabIndex = it }
             }
@@ -242,6 +260,22 @@ private fun VehicleSwitcher(state: VehicleDetailUiState, onSwitch: (Long) -> Uni
     }
 }
 
+/** The Reminders bell (48 dp target, 24 dp icon). The badge shows the due-soon count and is absent when nothing is due. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RemindersBell(due: Int, onClick: () -> Unit) {
+    val description = if (due > 0) {
+        pluralStringResource(R.plurals.reminders_bell_due, due, due)
+    } else {
+        stringResource(R.string.reminders_title)
+    }
+    IconButton(onClick = onClick) {
+        BadgedBox(badge = { if (due > 0) Badge { Text(due.toString()) } }) {
+            Icon(Icons.Default.Notifications, contentDescription = description)
+        }
+    }
+}
+
 @Composable
 private fun OverflowMenu(vehicle: Vehicle, actions: VehicleDetailActions) {
     var open by remember { mutableStateOf(false) }
@@ -250,6 +284,16 @@ private fun OverflowMenu(vehicle: Vehicle, actions: VehicleDetailActions) {
             Icon(Icons.Default.MoreVert, contentDescription = stringResource(R.string.more_options))
         }
         DropdownMenu(expanded = open, onDismissRequest = { open = false }) {
+            if (!vehicle.archived) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.menu_add_service)) },
+                    onClick = { open = false; actions.onAddRecord(false) },
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.menu_add_expense)) },
+                    onClick = { open = false; actions.onAddRecord(true) },
+                )
+            }
             DropdownMenuItem(
                 text = { Text(stringResource(if (vehicle.archived) R.string.menu_restore else R.string.menu_archive)) },
                 onClick = {
@@ -479,8 +523,7 @@ internal fun EntryRow(row: HistoryRow, vehicle: Vehicle) {
         HistoryKind.FILL_UP -> stringResource(R.string.history_fillup)
         HistoryKind.CHARGE -> stringResource(R.string.history_charge)
         HistoryKind.SERVICE -> row.serviceItems.joinToString().ifEmpty { stringResource(R.string.history_service) }
-        HistoryKind.EXPENSE -> row.expenseCategory?.name?.lowercase()?.replace('_', ' ')?.replaceFirstChar { it.uppercase() }
-            ?: stringResource(R.string.history_expense)
+        HistoryKind.EXPENSE -> row.expenseCategory?.let { stringResource(it.label()) } ?: stringResource(R.string.history_expense)
     }
     val meta = buildList {
         add(date)

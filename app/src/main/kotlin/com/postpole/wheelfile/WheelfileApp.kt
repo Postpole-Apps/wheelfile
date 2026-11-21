@@ -8,11 +8,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.work.Configuration
 import com.postpole.wheelfile.ads.AdsConfigSource
 import com.postpole.wheelfile.ads.AdsPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.billing.BillingRepository
+import com.postpole.wheelfile.reminders.AndroidReminderNotifier
+import com.postpole.wheelfile.reminders.ReminderScheduler
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,11 +24,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class WheelfileApp : Application() {
+class WheelfileApp : Application(), Configuration.Provider {
+    /** Default WorkManager setup, declared so it also initialises on demand where the startup initializer doesn't run. */
+    override val workManagerConfiguration: Configuration = Configuration.Builder().build()
+
     @Inject lateinit var billing: BillingRepository
     @Inject lateinit var analytics: Analytics
     @Inject lateinit var dataStore: DataStore<Preferences>
     @Inject lateinit var adsConfig: AdsConfigSource
+    @Inject lateinit var notifier: AndroidReminderNotifier
 
     // Created at launch so "first session" is decided once per process.
     @Inject lateinit var adsPolicy: AdsPolicy
@@ -35,6 +42,8 @@ class WheelfileApp : Application() {
         billing.start()
         adsConfig.start()
         logLaunch()
+        notifier.ensureChannel()
+        ReminderScheduler(this).scheduleDaily()
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {
                 override fun onStart(owner: LifecycleOwner) = billing.onForeground()

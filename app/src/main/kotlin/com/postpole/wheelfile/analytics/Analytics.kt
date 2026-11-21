@@ -15,6 +15,10 @@ object AnalyticsEvents {
     const val ONBOARDING_COMPLETE = "onboarding_complete"
     const val FILLUP_SAVED = "fillup_saved"
     const val CHARGE_SAVED = "charge_saved"
+    const val SERVICE_SAVED = "service_saved"
+    const val EXPENSE_SAVED = "expense_saved"
+    const val REMINDER_CREATED = "reminder_created"
+    const val ATTACHMENT_CAP_REACHED = "attachment_cap_reached"
 }
 
 object AnalyticsParams {
