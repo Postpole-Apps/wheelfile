@@ -26,6 +26,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -54,6 +55,7 @@ fun SettingsScreen(
     onBack: () -> Unit,
     onOpenPro: () -> Unit,
     onOpenAdPreview: () -> Unit = {},
+    onOpenReminders: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val isPro by viewModel.isPro.collectAsStateWithLifecycle()
@@ -61,6 +63,8 @@ fun SettingsScreen(
     val privacyOptionsRequired by viewModel.privacyOptionsRequired.collectAsStateWithLifecycle()
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     val currency by viewModel.defaultCurrency.collectAsStateWithLifecycle()
+    val quiet by viewModel.quietHours.collectAsStateWithLifecycle()
+    var hourPicker by rememberSaveable { mutableStateOf<Boolean?>(null) } // true = start, false = end
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -93,6 +97,33 @@ fun SettingsScreen(
                 supportingContent = { Text(currency?.let(::currencyLabel) ?: "") },
                 modifier = Modifier.clickable { showCurrency = true },
             )
+            HorizontalDivider()
+
+            SectionHeader(R.string.settings_section_reminders)
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_reminders)) },
+                supportingContent = { Text(stringResource(R.string.settings_reminders_summary)) },
+                modifier = Modifier.clickable(onClick = onOpenReminders),
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_quiet_hours)) },
+                supportingContent = { Text(stringResource(R.string.settings_quiet_hours_summary)) },
+                trailingContent = {
+                    Switch(checked = quiet.enabled, onCheckedChange = { viewModel.setQuietHours(quiet.copy(enabled = it)) })
+                },
+            )
+            if (quiet.enabled) {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_quiet_from)) },
+                    supportingContent = { Text(hourLabel(quiet.startHour)) },
+                    modifier = Modifier.clickable { hourPicker = true },
+                )
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.settings_quiet_until)) },
+                    supportingContent = { Text(hourLabel(quiet.endHour)) },
+                    modifier = Modifier.clickable { hourPicker = false },
+                )
+            }
             HorizontalDivider()
 
             SectionHeader(R.string.settings_section_pro)
@@ -166,6 +197,31 @@ fun SettingsScreen(
                 },
             )
         }
+    }
+
+    hourPicker?.let { isStart ->
+        AlertDialog(
+            onDismissRequest = { hourPicker = null },
+            title = { Text(stringResource(if (isStart) R.string.settings_quiet_from else R.string.settings_quiet_until)) },
+            text = {
+                LazyColumn {
+                    items((0..23).toList(), key = { it }) { hour ->
+                        val selected = hour == if (isStart) quiet.startHour else quiet.endHour
+                        Row(
+                            Modifier.fillMaxWidthClickable {
+                                viewModel.setQuietHours(if (isStart) quiet.copy(startHour = hour) else quiet.copy(endHour = hour))
+                                hourPicker = null
+                            },
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RadioButton(selected = selected, onClick = null)
+                            Text(hourLabel(hour), Modifier.padding(start = 12.dp))
+                        }
+                    }
+                }
+            },
+            confirmButton = { TextButton(onClick = { hourPicker = null }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 
     if (showTheme) {
@@ -244,6 +300,10 @@ private fun ThemeMode.label(): Int = when (this) {
     ThemeMode.LIGHT -> R.string.theme_light
     ThemeMode.DARK -> R.string.theme_dark
 }
+
+/** An hour of the day in the device's time format (for example 21:00 or 9 PM). */
+private fun hourLabel(hour: Int): String =
+    java.time.LocalTime.of(hour, 0).format(java.time.format.DateTimeFormatter.ofLocalizedTime(java.time.format.FormatStyle.SHORT))
 
 private fun currencyLabel(code: String): String =
     runCatching { "$code — ${Currency.getInstance(code).displayName}" }.getOrDefault(code)

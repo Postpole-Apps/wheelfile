@@ -113,6 +113,27 @@ interface ReminderDao {
     @Query("SELECT * FROM Reminder WHERE done = 0")
     suspend fun getPending(): List<Reminder>
 
+    @Query("SELECT * FROM Reminder ORDER BY done ASC, dueDate ASC, id ASC")
+    fun observeAll(): Flow<List<Reminder>>
+
+    @Query("SELECT * FROM Reminder WHERE id = :id")
+    suspend fun get(id: Long): Reminder?
+
+    /** Every odometer reading across fill-ups, charges, services and expenses. Feeds the usage projection. */
+    @Query(
+        "SELECT vehicleId, dateTime, odometer FROM EnergyLog " +
+            "UNION ALL SELECT vehicleId, dateTime, odometer FROM ServiceRecord WHERE odometer IS NOT NULL " +
+            "UNION ALL SELECT vehicleId, dateTime, odometer FROM Expense WHERE odometer IS NOT NULL",
+    )
+    fun observeReadings(): Flow<List<com.postpole.wheelfile.domain.reminder.OdometerReading>>
+
+    @Query(
+        "SELECT vehicleId, dateTime, odometer FROM EnergyLog " +
+            "UNION ALL SELECT vehicleId, dateTime, odometer FROM ServiceRecord WHERE odometer IS NOT NULL " +
+            "UNION ALL SELECT vehicleId, dateTime, odometer FROM Expense WHERE odometer IS NOT NULL",
+    )
+    suspend fun getReadings(): List<com.postpole.wheelfile.domain.reminder.OdometerReading>
+
     @Insert
     suspend fun insert(reminder: Reminder): Long
 
@@ -146,6 +167,9 @@ interface AttachmentDao {
 
     @Query("SELECT COUNT(*) FROM Attachment")
     suspend fun count(): Int
+
+    @Query("SELECT * FROM Attachment ORDER BY id ASC")
+    suspend fun getAll(): List<Attachment>
 
     @Query("SELECT * FROM Attachment WHERE ownerType = :ownerType AND ownerId = :ownerId ORDER BY createdAt ASC, id ASC")
     fun observeForOwner(ownerType: OwnerType, ownerId: Long): Flow<List<Attachment>>

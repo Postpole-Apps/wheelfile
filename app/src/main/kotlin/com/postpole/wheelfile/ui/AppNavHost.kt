@@ -13,6 +13,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.postpole.wheelfile.BuildConfig
 import com.postpole.wheelfile.ui.entry.EntryFormRoute
+import com.postpole.wheelfile.ui.entry.RecordFormRoute
+import com.postpole.wheelfile.ui.reminder.ReminderFormRoute
+import com.postpole.wheelfile.ui.reminder.RemindersRoute
 import com.postpole.wheelfile.ui.garage.GarageActions
 import com.postpole.wheelfile.ui.garage.GarageRoute
 import com.postpole.wheelfile.ui.pro.ProScreen
@@ -28,12 +31,20 @@ object Routes {
     const val ADD_VEHICLE = "add_vehicle"
     const val VEHICLE = "vehicle/{vehicleId}"
     const val ENTRY = "entry/{vehicleId}/{charge}"
+    const val RECORD = "record/{vehicleId}/{kind}"
+    const val REMINDERS = "reminders?vehicleId={vehicleId}"
+    const val REMINDER_FORM = "reminder/{vehicleId}"
     const val SETTINGS = "settings"
     const val PRO = "pro"
     const val AD_PREVIEW = "debug_ad_preview"
 
     fun vehicle(id: Long) = "vehicle/$id"
     fun entry(vehicleId: Long, charge: Boolean) = "entry/$vehicleId/$charge"
+    fun record(vehicleId: Long, expense: Boolean) = "record/$vehicleId/${if (expense) "expense" else "service"}"
+
+    /** Reminders of one vehicle, or of all vehicles when [vehicleId] is null (Settings). */
+    fun reminders(vehicleId: Long? = null) = "reminders?vehicleId=${vehicleId ?: -1L}"
+    fun reminderForm(vehicleId: Long) = "reminder/$vehicleId"
 }
 
 @Composable
@@ -83,8 +94,34 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onBack = { navController.popBackStack() },
                 onSwitch = { navController.navigate(Routes.vehicle(it)) { popUpTo(Routes.GARAGE) } },
                 onAddEntry = { id, charge -> navController.navigate(Routes.entry(id, charge)) },
+                onAddRecord = { id, expense -> navController.navigate(Routes.record(id, expense)) },
+                onOpenReminders = { navController.navigate(Routes.reminders(it)) },
                 onOpenPro = { navController.navigate(Routes.PRO) },
             )
+        }
+        composable(
+            Routes.RECORD,
+            arguments = listOf(
+                navArgument("vehicleId") { type = NavType.LongType },
+                navArgument("kind") { type = NavType.StringType },
+            ),
+        ) {
+            RecordFormRoute(onClose = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
+        }
+        composable(
+            Routes.REMINDERS,
+            arguments = listOf(navArgument("vehicleId") { type = NavType.LongType; defaultValue = -1L }),
+        ) {
+            RemindersRoute(
+                onBack = { navController.popBackStack() },
+                onAdd = { navController.navigate(Routes.reminderForm(it)) },
+            )
+        }
+        composable(
+            Routes.REMINDER_FORM,
+            arguments = listOf(navArgument("vehicleId") { type = NavType.LongType }),
+        ) {
+            ReminderFormRoute(onClose = { navController.popBackStack() })
         }
         composable(
             Routes.ENTRY,
@@ -99,6 +136,7 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
             SettingsScreen(
                 onBack = { navController.popBackStack() },
                 onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenReminders = { navController.navigate(Routes.reminders()) },
                 onOpenAdPreview = { navController.navigate(Routes.AD_PREVIEW) },
             )
         }

@@ -234,4 +234,118 @@
     <string name="form_read_only">Archived vehicles are read-only.</string>
     <string name="form_pick_date">Pick date</string>
     <string name="ok">OK</string>
+
+    <!-- Service and expense forms -->
+    <string name="menu_add_service">Add service</string>
+    <string name="menu_add_expense">Add expense</string>
+    <string name="form_service_title">Add service</string>
+    <string name="form_expense_title">Add expense</string>
+    <string name="service_items">Service items</string>
+    <string name="service_custom_item">Other item</string>
+    <string name="service_add_custom">Add</string>
+    <string name="service_cost">Cost (%1$s)</string>
+    <string name="service_workshop">Workshop</string>
+    <string name="service_next_reminder">Create next reminder from this</string>
+    <string name="service_next_reminder_sub">Be reminded when this service is due again.</string>
+    <string name="service_reminder_months">Repeat after (months)</string>
+    <string name="service_reminder_distance">Or after (%1$s)</string>
+    <string name="service_reminder_first">Whichever comes first. Leave a field blank to skip it.</string>
+    <string name="record_odometer_optional">Odometer (%1$s), optional</string>
+    <string name="item_oil_filter">Oil and filter</string>
+    <string name="item_tyres">Tyres</string>
+    <string name="item_brakes">Brakes</string>
+    <string name="item_battery">Battery</string>
+    <string name="item_inspection">Inspection</string>
+    <string name="item_air_filter">Air filter</string>
+    <string name="item_coolant">Coolant</string>
+    <string name="item_wipers">Wipers</string>
+    <string name="expense_category">Category</string>
+    <string name="expense_amount">Amount (%1$s)</string>
+    <string name="expense_insurance">Insurance</string>
+    <string name="expense_tax">Tax and registration</string>
+    <string name="expense_parking">Parking</string>
+    <string name="expense_tolls">Tolls</string>
+    <string name="expense_washing">Washing</string>
+    <string name="expense_fines">Fines</string>
+    <string name="expense_loan_lease">Loan or lease</string>
+    <string name="expense_accessories">Accessories</string>
+    <string name="expense_other">Other</string>
+    <string name="expense_recurring">Repeats</string>
+    <string name="expense_recurring_none">One-off</string>
+    <string name="expense_recurring_monthly">Monthly</string>
+    <string name="expense_recurring_yearly">Yearly</string>
+
+    <!-- Attachments -->
+    <string name="attachments_title">Attachments</string>
+    <string name="attachment_add_photo">Choose photo</string>
+    <string name="attachment_take_photo">Take photo</string>
+    <string name="attachment_add_pdf">Add PDF</string>
+    <string name="attachment_photo">Photo</string>
+    <string name="attachment_pdf">PDF</string>
+    <string name="attachment_size_kb">%1$d KB</string>
+    <string name="attachment_remove">Remove attachment</string>
+    <string name="attachment_failed">Couldn\'t add that file. Please try another.</string>
+
+    <!-- Reminders -->
+    <string name="reminders_title">Reminders</string>
+    <string name="reminders_add">Add reminder</string>
+    <string name="reminders_empty">No reminders yet. Add one for a service, an inspection or a renewal.</string>
+    <string name="reminders_due_soon">Due soon</string>
+    <string name="reminders_upcoming">Upcoming</string>
+    <string name="reminders_done">Done</string>
+    <plurals name="reminders_bell_due">
+        <item quantity="one">Reminders, %1$d due</item>
+        <item quantity="other">Reminders, %1$d due</item>
+    </plurals>
+    <plurals name="reminder_in_days">
+        <item quantity="one">In %1$d day</item>
+        <item quantity="other">In %1$d days</item>
+    </plurals>
+    <plurals name="reminder_lead_days">
+        <item quantity="one">%1$d day before</item>
+        <item quantity="other">%1$d days before</item>
+    </plurals>
+    <string name="reminder_lead_on_day">On the day</string>
+    <string name="reminder_overdue">Overdue</string>
+    <string name="reminder_due_today">Due today</string>
+    <string name="reminder_due_soon">Due soon</string>
+    <string name="reminder_due_on">Due %1$s</string>
+    <string name="reminder_at_odometer">At %1$s %2$s</string>
+    <string name="reminder_distance_left">About %1$s %2$s left</string>
+    <string name="reminder_about_left">About %1$d left</string>
+    <string name="reminder_about_left_short">~%1$s %2$s left</string>
+    <string name="reminder_estimated_around">Estimated around %1$s</string>
+    <string name="reminder_whichever_first">Whichever comes first</string>
+    <string name="reminder_mark_done">Mark done</string>
+    <string name="reminder_delete">Delete reminder</string>
+    <string name="reminder_form_title">Add reminder</string>
+    <string name="reminder_title_field">What is it for?</string>
+    <string name="reminder_trigger">When</string>
+    <string name="reminder_trigger_date">Date</string>
+    <string name="reminder_trigger_odometer">Odometer</string>
+    <string name="reminder_trigger_first">Whichever first</string>
+    <string name="reminder_due_date">Due date</string>
+    <string name="reminder_due_odometer">Due at odometer (%1$s)</string>
+    <string name="reminder_estimate_note">The date is an estimate based on how much you have driven recently.</string>
+    <string name="reminder_estimate_unavailable">Not enough recent readings to estimate a date yet.</string>
+    <string name="reminder_repeat">Repeat</string>
+    <string name="reminder_repeat_months">Repeat every (months)</string>
+    <string name="reminder_repeat_distance">Repeat every (%1$s)</string>
+    <string name="reminder_repeat_blank">Leave blank for no repeat.</string>
+    <string name="reminder_alert_lead">Alert me</string>
+    <string name="reminders_channel_name">Reminders</string>
+    <string name="reminders_channel_description">Service, inspection and renewal reminders</string>
+    <string name="notification_prompt_title">Get reminded on time</string>
+    <string name="notification_prompt_body">Allow notifications so Wheelfile can tell you when a reminder is due. If you say no, your reminders still show in the app.</string>
+    <string name="notification_prompt_allow">Allow notifications</string>
+    <string name="notification_prompt_later">Not now</string>
+
+    <!-- Settings: reminders -->
+    <string name="settings_section_reminders">Reminders</string>
+    <string name="settings_reminders">All reminders</string>
+    <string name="settings_reminders_summary">Reminders for every vehicle</string>
+    <string name="settings_quiet_hours">Quiet hours</string>
+    <string name="settings_quiet_hours_summary">No reminder notifications during these hours</string>
+    <string name="settings_quiet_from">From</string>
+    <string name="settings_quiet_until">Until</string>
 </resources>

@@ -9,6 +9,7 @@ import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.billing.RestoreResult
 import com.postpole.wheelfile.data.SettingsRepository
 import com.postpole.wheelfile.data.ThemeMode
+import com.postpole.wheelfile.domain.reminder.QuietHours
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +47,14 @@ class SettingsViewModel @Inject constructor(
     val defaultCurrency: StateFlow<String?> = settings.defaultCurrency
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
 
-    private val _restoring = MutableStateFlow(false)
+    val quietHours: StateFlow<QuietHours> = settings.quietHours
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), QuietHours())
+
+    fun setQuietHours(quiet: QuietHours) {
+        viewModelScope.launch { settings.setQuietHours(quiet) }
+    }
+
+    private val _restoring =MutableStateFlow(false)
 
     /** True while "Restore purchases" is running (the screen shows progress). */
     val restoring: StateFlow<Boolean> = _restoring.asStateFlow()

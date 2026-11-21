@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.billing.BillingRepository
+import com.postpole.wheelfile.data.ReminderRepository
 import com.postpole.wheelfile.data.VehicleData
 import com.postpole.wheelfile.data.VehicleRepository
 import com.postpole.wheelfile.data.db.Vehicle
@@ -11,6 +12,7 @@ import com.postpole.wheelfile.domain.vehicle.VehicleLimit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import com.postpole.wheelfile.domain.history.HistoryFilter
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +32,8 @@ data class VehicleDetailUiState(
     val showFreeLimit: Boolean = false,
     val showArchivePicker: Boolean = false,
     val loaded: Boolean = false,
+    /** Open reminders that are due soon or overdue: the badge on the bell in the top bar. */
+    val dueReminders: Int = 0,
 ) {
     val vehicle: Vehicle? get() = data?.vehicle
     val readOnly: Boolean get() = vehicle?.archived == true
@@ -42,6 +46,7 @@ class VehicleDetailViewModel internal constructor(
     private val vehicleId: Long,
     private val isPro: () -> Boolean,
     private val clock: () -> Long,
+    private val dueCount: Flow<Int> = flowOf(0),
 ) : ViewModel() {
 
     @Inject
@@ -49,7 +54,11 @@ class VehicleDetailViewModel internal constructor(
         savedState: SavedStateHandle,
         repo: VehicleRepository,
         billing: BillingRepository,
-    ) : this(repo, checkNotNull(savedState.get<Long>("vehicleId")), { billing.isPro.value }, System::currentTimeMillis)
+        reminders: ReminderRepository,
+    ) : this(
+        repo, checkNotNull(savedState.get<Long>("vehicleId")), { billing.isPro.value }, System::currentTimeMillis,
+        reminders.observeDueCount(checkNotNull(savedState.get<Long>("vehicleId"))),
+    )
 
     private val filter = MutableStateFlow(HistoryFilter.ALL)
     private val freeLimit = MutableStateFlow(false)
@@ -69,6 +78,7 @@ class VehicleDetailViewModel internal constructor(
                 )
             }
         }
+        .let { base -> combine(base, dueCount) { s, due -> s.copy(dueReminders = due) } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleDetailUiState())
 
     fun setFilter(f: HistoryFilter) {
