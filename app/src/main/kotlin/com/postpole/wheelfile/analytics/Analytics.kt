@@ -11,6 +11,10 @@ object AnalyticsEvents {
     const val PURCHASE_RESTORED = "purchase_restored"
     const val BACKUP_EXPORTED = "backup_exported"
     const val BACKUP_IMPORTED = "backup_imported"
+    const val VEHICLE_ADDED = "vehicle_added"
+    const val ONBOARDING_COMPLETE = "onboarding_complete"
+    const val FILLUP_SAVED = "fillup_saved"
+    const val CHARGE_SAVED = "charge_saved"
 }
 
 object AnalyticsParams {
@@ -20,6 +24,8 @@ object AnalyticsParams {
     const val ITEM_ID = "item_id"
     const val ITEM_COUNT = "item_count"
     const val FORMAT = "format"
+    const val POWERTRAIN = "powertrain"
+    const val UNIT_SYSTEM = "unit_system"
 }
 
 /**
