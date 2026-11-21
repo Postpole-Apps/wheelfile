@@ -57,6 +57,7 @@ object AppModule {
     @Provides fun provideVehicleDocumentDao(db: AppDatabase): VehicleDocumentDao = db.vehicleDocumentDao()
     @Provides fun provideAttachmentDao(db: AppDatabase): AttachmentDao = db.attachmentDao()
     @Provides fun provideCustomCategoryDao(db: AppDatabase): CustomCategoryDao = db.customCategoryDao()
+    @Provides fun provideBackupDao(db: AppDatabase): com.postpole.wheelfile.data.db.BackupDao = db.backupDao()
 
     @Provides
     @Singleton

@@ -5,6 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.postpole.wheelfile.data.db.Attachment
 import com.postpole.wheelfile.data.db.AttachmentDao
+import com.postpole.wheelfile.data.db.BackupDao
 import com.postpole.wheelfile.data.db.Converters
 import com.postpole.wheelfile.data.db.CustomCategory
 import com.postpole.wheelfile.data.db.CustomCategoryDao
@@ -32,7 +33,7 @@ import com.postpole.wheelfile.data.db.VehicleDocumentDao
         Attachment::class,
         CustomCategory::class,
     ],
-    version = 1,
+    version = AppDatabase.VERSION,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -45,4 +46,10 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun vehicleDocumentDao(): VehicleDocumentDao
     abstract fun attachmentDao(): AttachmentDao
     abstract fun customCategoryDao(): CustomCategoryDao
+    abstract fun backupDao(): BackupDao
+
+    companion object {
+        /** Mirrors `@Database(version)`; written into every backup manifest. */
+        const val VERSION = 1
+    }
 }

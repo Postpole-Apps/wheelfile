@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  API 28-30: only a phone-to-phone transfer (requireFlags="deviceToDeviceTransfer") carries the database, the private
+  attachment files and the DataStore settings. Cloud backup includes nothing, because an <include> without the
+  device-transfer flag never matches a cloud backup. Firebase and ads caches are not listed, so they stay behind.
+-->
+<full-backup-content>
+    <include domain="database" path="." requireFlags="deviceToDeviceTransfer" />
+    <include domain="file" path="attachments" requireFlags="deviceToDeviceTransfer" />
+    <include domain="file" path="datastore" requireFlags="deviceToDeviceTransfer" />
+    <exclude domain="database" path="google_app_measurement.db" />
+    <exclude domain="database" path="google_app_measurement_local.db" />
+</full-backup-content>
