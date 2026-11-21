@@ -4,6 +4,7 @@ import com.postpole.wheelfile.data.db.Reminder
 import com.postpole.wheelfile.data.db.ReminderDao
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleDao
+import com.postpole.wheelfile.domain.document.DocumentAlerts
 import com.postpole.wheelfile.domain.reminder.QuietHours
 import com.postpole.wheelfile.domain.reminder.ReminderEngine
 import com.postpole.wheelfile.domain.reminder.ReminderState
@@ -31,6 +32,8 @@ class ReminderChecker(
     private val quietHours: suspend () -> QuietHours,
     private val clock: () -> Long,
     private val zone: () -> ZoneId = { ZoneId.systemDefault() },
+    /** Alert days (30 / 14 / 7 / 1 by default) of each document that has an expiry reminder, by document id. */
+    private val documentAlerts: suspend () -> Map<Long, List<Int>> = { emptyMap() },
 ) {
     suspend fun run(): CheckResult {
         val now = clock()
@@ -39,12 +42,20 @@ class ReminderChecker(
 
         val readings = reminders.getReadings().groupBy { it.vehicleId }
         val byVehicle = vehicles.getAll().associateBy { it.id }
+        val alerts = documentAlerts()
         var posted = 0
         for (reminder in reminders.getPending()) {
             val vehicle = byVehicle[reminder.vehicleId]?.takeIf { !it.archived } ?: continue
             val usage = ReminderEngine.usage(readings[vehicle.id].orEmpty(), now)
             val state = ReminderEngine.evaluate(reminder, usage, now, zone())
-            if (!ReminderEngine.shouldNotify(reminder, state, now)) continue
+            val documentDays = reminder.linkedDocumentId?.let { alerts[it] }
+            val due = if (documentDays != null) {
+                // An expiring document notifies once per alert (30 / 14 / 7 / 1 days), then weekly once expired.
+                DocumentAlerts.shouldNotify(documentDays, reminder.dueDate, reminder.lastNotifiedAt, now, zone())
+            } else {
+                ReminderEngine.shouldNotify(reminder, state, now)
+            }
+            if (!due) continue
             if (notifier.post(reminder, vehicle, state)) {
                 reminders.update(reminder.copy(lastNotifiedAt = now))
                 posted++

@@ -56,7 +56,10 @@ import com.postpole.wheelfile.data.db.Powertrain
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleType
 import com.postpole.wheelfile.data.db.VolumeUnit
+import com.postpole.wheelfile.domain.document.Region
 import com.postpole.wheelfile.domain.units.LocaleDefaults
+import com.postpole.wheelfile.ui.document.PresetPicker
+import java.time.LocalDate
 import com.postpole.wheelfile.ui.common.ChoiceChips
 import com.postpole.wheelfile.ui.common.SectionLabel
 import com.postpole.wheelfile.ui.common.WfTextField
@@ -150,6 +153,10 @@ fun AddVehicleViewModel.toActions(onClose: () -> Unit) = AddVehicleActions(
     onEconomy = ::setEconomy,
     onCurrency = ::setCurrency,
     onContinue = ::onContinue,
+    onUnitsDone = ::onUnitsDone,
+    onRegion = ::setRegion,
+    onTogglePreset = ::togglePreset,
+    onSkipPresets = ::skipPresets,
     onBack = ::onBack,
     onSave = ::save,
     onDismissLimit = ::dismissFreeLimit,
@@ -173,6 +180,11 @@ class AddVehicleActions(
     val onEconomy: (com.postpole.wheelfile.data.db.EconomyUnit) -> Unit,
     val onCurrency: (String) -> Unit,
     val onContinue: () -> Unit,
+    /** Step 2 to step 3 (region presets). */
+    val onUnitsDone: () -> Unit,
+    val onRegion: (Region) -> Unit,
+    val onTogglePreset: (String) -> Unit,
+    val onSkipPresets: () -> Unit,
     /** Returns false when nothing was handled and the screen should close. */
     val onBack: () -> Boolean,
     val onSave: () -> Unit,
@@ -182,23 +194,29 @@ class AddVehicleActions(
     val onArchive: (Long) -> Unit,
 )
 
-/** s01b-add-vehicle and s01c-units as two steps of one full-screen form. No ads. */
+/** s01b-add-vehicle, s01c-units and s01d-region-presets as three steps of one full-screen form. No ads. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddVehicleScreen(state: AddVehicleState, actions: AddVehicleActions) {
-    val onUnits = state.step == AddVehicleStep.UNITS
-    BackHandler(enabled = onUnits) { actions.onBack() }
+    val step = state.step
+    BackHandler(enabled = step != AddVehicleStep.DETAILS) { actions.onBack() }
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
         Column(Modifier.fillMaxSize().statusBarsPadding()) {
             TopAppBar(
                 title = {
                     Column {
                         Text(
-                            stringResource(if (onUnits) R.string.units_title else R.string.add_vehicle_title),
+                            stringResource(
+                                when (step) {
+                                    AddVehicleStep.DETAILS -> R.string.add_vehicle_title
+                                    AddVehicleStep.UNITS -> R.string.units_title
+                                    AddVehicleStep.REGION -> R.string.presets_title
+                                },
+                            ),
                             style = MaterialTheme.typography.titleLarge,
                         )
                         Text(
-                            stringResource(R.string.add_vehicle_step, if (onUnits) 2 else 1, 2),
+                            stringResource(R.string.add_vehicle_step, step.ordinal + 1, AddVehicleStep.entries.size),
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -215,22 +233,38 @@ fun AddVehicleScreen(state: AddVehicleState, actions: AddVehicleActions) {
                     .padding(horizontal = Sizes.screenMargin),
                 verticalArrangement = Arrangement.spacedBy(Spacing.m),
             ) {
-                if (onUnits) UnitsStep(state, actions) else DetailsStep(state, actions)
+                when (step) {
+                    AddVehicleStep.DETAILS -> DetailsStep(state, actions)
+                    AddVehicleStep.UNITS -> UnitsStep(state, actions)
+                    AddVehicleStep.REGION -> RegionStep(state, actions)
+                }
                 Spacer(Modifier.height(Spacing.s))
             }
             // Save bar pinned; the form scrolls above it (works at 200% font scale).
             Surface(color = MaterialTheme.colorScheme.surface) {
-                Button(
-                    onClick = if (onUnits) actions.onSave else actions.onContinue,
-                    enabled = !state.saving,
-                    modifier = Modifier.navigationBarsPadding().padding(horizontal = Sizes.screenMargin, vertical = Spacing.m)
-                        .fillMaxWidth().heightIn(min = Sizes.saveButtonHeight),
-                    shape = PillShape,
-                ) {
-                    Text(
-                        stringResource(if (onUnits) R.string.units_save_vehicle else R.string.continue_action),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
+                Column(Modifier.navigationBarsPadding().padding(horizontal = Sizes.screenMargin, vertical = Spacing.m)) {
+                    Button(
+                        onClick = when (step) {
+                            AddVehicleStep.DETAILS -> actions.onContinue
+                            AddVehicleStep.UNITS -> actions.onUnitsDone
+                            AddVehicleStep.REGION -> actions.onSave
+                        },
+                        enabled = !state.saving,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.saveButtonHeight),
+                        shape = PillShape,
+                    ) {
+                        Text(
+                            stringResource(if (step == AddVehicleStep.REGION) R.string.units_save_vehicle else R.string.continue_action),
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                    }
+                    if (step == AddVehicleStep.REGION) {
+                        TextButton(
+                            onClick = actions.onSkipPresets,
+                            enabled = !state.saving,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = Sizes.touchTargetMin),
+                        ) { Text(stringResource(R.string.presets_skip)) }
+                    }
                 }
             }
         }
@@ -343,6 +377,24 @@ private fun UnitsStep(state: AddVehicleState, actions: AddVehicleActions) {
     }
     SectionLabel(stringResource(R.string.units_currency))
     CurrencyPicker(state.units.currency, actions.onCurrency)
+}
+
+/** s01d-region-presets: suggested documents for the region of the device locale. The disclaimer is always visible. */
+@Composable
+private fun RegionStep(state: AddVehicleState, actions: AddVehicleActions) {
+    Text(
+        stringResource(R.string.presets_body),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    PresetPicker(
+        region = state.region,
+        onRegion = actions.onRegion,
+        selected = state.selectedPresets,
+        onToggle = actions.onTogglePreset,
+        vehicleYear = state.year.toIntOrNull(),
+        today = LocalDate.now(),
+    )
 }
 
 @Composable

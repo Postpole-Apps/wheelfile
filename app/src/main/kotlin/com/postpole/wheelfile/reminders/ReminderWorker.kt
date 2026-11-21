@@ -6,6 +6,7 @@ import androidx.work.WorkerParameters
 import com.postpole.wheelfile.data.SettingsRepository
 import com.postpole.wheelfile.data.db.ReminderDao
 import com.postpole.wheelfile.data.db.VehicleDao
+import com.postpole.wheelfile.data.db.VehicleDocumentDao
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.first
 interface ReminderWorkerEntryPoint {
     fun reminderDao(): ReminderDao
     fun vehicleDao(): VehicleDao
+    fun documentDao(): VehicleDocumentDao
     fun settings(): SettingsRepository
     fun notifier(): AndroidReminderNotifier
 }
@@ -35,6 +37,7 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
             notifier = deps.notifier(),
             quietHours = { deps.settings().quietHours.first() },
             clock = System::currentTimeMillis,
+            documentAlerts = { deps.documentDao().getAll().associate { it.id to it.alertDays } },
         )
         val result = checker.run()
         result.deferUntil?.let { ReminderScheduler(applicationContext).scheduleDeferred(it - System.currentTimeMillis()) }

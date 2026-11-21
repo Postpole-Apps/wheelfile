@@ -6,6 +6,7 @@ import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.analytics.AnalyticsParams
 import com.postpole.wheelfile.billing.BillingRepository
+import com.postpole.wheelfile.data.DocumentRepository
 import com.postpole.wheelfile.data.SettingsRepository
 import com.postpole.wheelfile.data.VehicleRepository
 import com.postpole.wheelfile.data.db.DistanceUnit
@@ -14,6 +15,9 @@ import com.postpole.wheelfile.data.db.Powertrain
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleType
 import com.postpole.wheelfile.data.db.VolumeUnit
+import com.postpole.wheelfile.domain.document.PresetPlan
+import com.postpole.wheelfile.domain.document.Region
+import com.postpole.wheelfile.domain.document.RegionPresets
 import com.postpole.wheelfile.domain.units.LocaleDefaults
 import com.postpole.wheelfile.domain.units.UnitChoice
 import com.postpole.wheelfile.domain.vehicle.VehicleLimit
@@ -26,13 +30,18 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
 import java.util.Locale
 import javax.inject.Inject
 
-enum class AddVehicleStep { DETAILS, UNITS }
+enum class AddVehicleStep { DETAILS, UNITS, REGION }
 
 data class AddVehicleState(
     val step: AddVehicleStep = AddVehicleStep.DETAILS,
+    /** Step 3: the region whose document presets are offered (from the device locale, never assumed) and the ticked ones. */
+    val region: Region = Region.GENERIC,
+    val selectedPresets: Set<String> = emptySet(),
     val name: String = "",
     val type: VehicleType = VehicleType.CAR,
     val powertrain: Powertrain = Powertrain.PETROL,
@@ -67,6 +76,8 @@ class AddVehicleViewModel internal constructor(
     private val markOnboardingDone: suspend () -> Unit,
     private val analytics: Analytics,
     private val locale: Locale,
+    /** Creates the documents for the presets ticked in step 3, once the vehicle has an id. */
+    private val applyPresets: suspend (Vehicle, List<PresetPlan>) -> Unit = { _, _ -> },
     private val clock: () -> Long,
 ) : ViewModel() {
 
@@ -76,9 +87,15 @@ class AddVehicleViewModel internal constructor(
         settings: SettingsRepository,
         billing: BillingRepository,
         analytics: Analytics,
-    ) : this(repo, { billing.isPro.value }, settings::setOnboardingDone, analytics, Locale.getDefault(), System::currentTimeMillis)
+        documents: DocumentRepository,
+    ) : this(
+        repo, { billing.isPro.value }, settings::setOnboardingDone, analytics, Locale.getDefault(),
+        { vehicle, plans -> documents.applyPlans(vehicle, plans) }, System::currentTimeMillis,
+    )
 
-    private val _state = MutableStateFlow(AddVehicleState(units = LocaleDefaults.forLocale(locale)))
+    private val _state = MutableStateFlow(
+        AddVehicleState(units = LocaleDefaults.forLocale(locale), region = RegionPresets.regionFor(locale)),
+    )
     val state: StateFlow<AddVehicleState> = _state.asStateFlow()
 
     private val _events = Channel<AddVehicleEvent>(Channel.BUFFERED)
@@ -142,13 +159,30 @@ class AddVehicleViewModel internal constructor(
         }
     }
 
-    /** Back from the Units step. Returns false when the screen should close instead. */
+    /** Step 2 → 3: the suggested documents for the region. */
+    fun onUnitsDone() = _state.update { it.copy(step = AddVehicleStep.REGION) }
+
+    fun setRegion(r: Region) = _state.update { it.copy(region = r) }
+
+    fun togglePreset(code: String) = _state.update {
+        it.copy(selectedPresets = if (code in it.selectedPresets) it.selectedPresets - code else it.selectedPresets + code)
+    }
+
+    /** "Skip" on step 3: save the vehicle without any document. */
+    fun skipPresets() {
+        _state.update { it.copy(selectedPresets = emptySet()) }
+        save()
+    }
+
+    /** Back from step 2 or 3. Returns false when nothing was handled and the screen should close instead. */
     fun onBack(): Boolean {
-        if (_state.value.step == AddVehicleStep.UNITS) {
-            _state.update { it.copy(step = AddVehicleStep.DETAILS) }
-            return true
+        val previous = when (_state.value.step) {
+            AddVehicleStep.REGION -> AddVehicleStep.UNITS
+            AddVehicleStep.UNITS -> AddVehicleStep.DETAILS
+            AddVehicleStep.DETAILS -> return false
         }
-        return false
+        _state.update { it.copy(step = previous) }
+        return true
     }
 
     fun save() {
@@ -165,24 +199,34 @@ class AddVehicleViewModel internal constructor(
                 }
                 val now = clock()
                 val firstVehicle = repo.vehicles.getAll().isEmpty()
-                val id = repo.vehicles.insert(
-                    Vehicle(
-                        name = s.name.trim(),
-                        type = s.type,
-                        powertrain = s.powertrain,
-                        make = s.make.trim().ifEmpty { null },
-                        model = s.model.trim().ifEmpty { null },
-                        year = s.year.toIntOrNull(),
-                        plate = s.plate.trim().ifEmpty { null },
-                        vin = s.vin.trim().ifEmpty { null },
-                        distanceUnit = s.units.distance,
-                        volumeUnit = s.units.volume,
-                        economyDisplay = s.units.economy,
-                        currency = s.units.currency,
-                        createdAt = now,
-                        updatedAt = now,
-                    ),
+                val vehicle = Vehicle(
+                    name = s.name.trim(),
+                    type = s.type,
+                    powertrain = s.powertrain,
+                    make = s.make.trim().ifEmpty { null },
+                    model = s.model.trim().ifEmpty { null },
+                    year = s.year.toIntOrNull(),
+                    plate = s.plate.trim().ifEmpty { null },
+                    vin = s.vin.trim().ifEmpty { null },
+                    distanceUnit = s.units.distance,
+                    volumeUnit = s.units.volume,
+                    economyDisplay = s.units.economy,
+                    currency = s.units.currency,
+                    createdAt = now,
+                    updatedAt = now,
                 )
+                val id = repo.vehicles.insert(vehicle)
+                val chosen = s.selectedPresets.mapNotNull(RegionPresets::find)
+                if (chosen.isNotEmpty()) {
+                    // The vehicle is saved either way; a failure to add documents never loses it.
+                    try {
+                        val today = Instant.ofEpochMilli(now).atZone(ZoneId.systemDefault()).toLocalDate()
+                        applyPresets(vehicle.copy(id = id), RegionPresets.plans(chosen, vehicle.year, today))
+                        analytics.logEvent(AnalyticsEvents.PRESETS_ADDED, mapOf(AnalyticsParams.ITEM_COUNT to chosen.size))
+                    } catch (e: Exception) {
+                        analytics.recordNonFatal(e)
+                    }
+                }
                 markOnboardingDone()
                 if (firstVehicle) analytics.logEvent(AnalyticsEvents.ONBOARDING_COMPLETE)
                 analytics.logEvent(

@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.postpole.wheelfile.BuildConfig
+import com.postpole.wheelfile.ui.document.DocumentDetailRoute
+import com.postpole.wheelfile.ui.document.DocumentFormRoute
 import com.postpole.wheelfile.ui.entry.EntryFormRoute
 import com.postpole.wheelfile.ui.entry.RecordFormRoute
 import com.postpole.wheelfile.ui.reminder.ReminderFormRoute
@@ -34,6 +36,8 @@ object Routes {
     const val RECORD = "record/{vehicleId}/{kind}"
     const val REMINDERS = "reminders?vehicleId={vehicleId}"
     const val REMINDER_FORM = "reminder/{vehicleId}"
+    const val DOCUMENT = "document/{documentId}"
+    const val DOCUMENT_FORM = "document_form/{vehicleId}?documentId={documentId}"
     const val SETTINGS = "settings"
     const val PRO = "pro"
     const val AD_PREVIEW = "debug_ad_preview"
@@ -45,6 +49,10 @@ object Routes {
     /** Reminders of one vehicle, or of all vehicles when [vehicleId] is null (Settings). */
     fun reminders(vehicleId: Long? = null) = "reminders?vehicleId=${vehicleId ?: -1L}"
     fun reminderForm(vehicleId: Long) = "reminder/$vehicleId"
+    fun document(id: Long) = "document/$id"
+
+    /** The document form: a new document for [vehicleId], or [documentId] to edit. */
+    fun documentForm(vehicleId: Long, documentId: Long? = null) = "document_form/$vehicleId?documentId=${documentId ?: -1L}"
 }
 
 @Composable
@@ -97,7 +105,27 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onAddRecord = { id, expense -> navController.navigate(Routes.record(id, expense)) },
                 onOpenReminders = { navController.navigate(Routes.reminders(it)) },
                 onOpenPro = { navController.navigate(Routes.PRO) },
+                onOpenDocument = { navController.navigate(Routes.document(it)) },
+                onAddDocument = { navController.navigate(Routes.documentForm(it)) },
             )
+        }
+        composable(
+            Routes.DOCUMENT,
+            arguments = listOf(navArgument("documentId") { type = NavType.LongType }),
+        ) {
+            DocumentDetailRoute(
+                onBack = { navController.popBackStack() },
+                onEdit = { vehicleId, documentId -> navController.navigate(Routes.documentForm(vehicleId, documentId)) },
+            )
+        }
+        composable(
+            Routes.DOCUMENT_FORM,
+            arguments = listOf(
+                navArgument("vehicleId") { type = NavType.LongType },
+                navArgument("documentId") { type = NavType.LongType; defaultValue = -1L },
+            ),
+        ) {
+            DocumentFormRoute(onClose = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
         }
         composable(
             Routes.RECORD,
