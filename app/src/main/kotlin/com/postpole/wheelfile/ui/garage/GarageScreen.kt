@@ -73,6 +73,8 @@ class GarageActions(
 @Composable
 fun GarageRoute(
     actions: GarageActions,
+    /** False in the two-pane layout while a vehicle is open, so only one banner is on screen. */
+    showBanner: Boolean = true,
     viewModel: GarageViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -82,7 +84,7 @@ fun GarageRoute(
             actions.onOpenSettings, actions.onOpenPro, actions.onAddVehicle, actions.onOpenVehicle, actions.onAddEntry,
             onSelect = { viewModel.select(it); actions.onSelect(it) },
         ),
-        adSlot = { AdSlot(AdScreen.GARAGE) },
+        adSlot = { if (showBanner) AdSlot(AdScreen.GARAGE) },
     )
 }
 
