@@ -1,0 +1,18 @@
+##Vehicle
+Name,Model,Plate,Type,Year,Notes
+Family Wagon,Estate 2.0,XY-99-ZZ,Car,2018,synthetic
+
+##Refuelling
+Odometer,Date,Fuel,Price per unit,Total cost,Volume,Full tank,A7,A8,A9,A10,A11,A12,A13,A14,A15,A16,A17,Notes
+15000,15/01/2024,Gasoline,1.50,60.00,40.00,Yes,,,,,,,,,,,,first fill
+15450,20/02/2024,Gasoline,1.60,32.00,20.00,No,,,,,,,,,,,,partial
+15900,03/03/2024,Gasoline,1.55,62.00,40.00,Yes,,,,,,,,,,,,
+16000,not-a-date,Gasoline,1.50,60.00,40.00,Yes,,,,,,,,,,,,
+
+##Service
+Odometer,Date,Cost,Title,Place,Notes
+15200,10/02/2024,150.00,Brake pads,Garage One,synthetic
+
+##Expense
+Odometer,Date,Cost,Title,Place,Type,Notes
+15300,05/03/2024,45.00,Parking permit,,,synthetic

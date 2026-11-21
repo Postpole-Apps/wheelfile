@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,8 +58,21 @@ fun SettingsScreen(
     onOpenPro: () -> Unit,
     onOpenAdPreview: () -> Unit = {},
     onOpenReminders: () -> Unit = {},
+    onOpenImport: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
+    dataViewModel: DataTransferViewModel = hiltViewModel(),
 ) {
+    val dataBusy by dataViewModel.busy.collectAsStateWithLifecycle()
+    var pendingRestore by rememberSaveable { mutableStateOf<String?>(null) }
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
+        dataViewModel.exportCsv(it)
+    }
+    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) {
+        dataViewModel.backup(it)
+    }
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
+        pendingRestore = it?.toString()
+    }
     val isPro by viewModel.isPro.collectAsStateWithLifecycle()
     val restoring by viewModel.restoring.collectAsStateWithLifecycle()
     val privacyOptionsRequired by viewModel.privacyOptionsRequired.collectAsStateWithLifecycle()
@@ -74,6 +89,10 @@ fun SettingsScreen(
     val messages = rememberEventMessages()
     LaunchedEffect(viewModel) {
         viewModel.events.collect { snackbarHostState.showSnackbar(messages(it)) }
+    }
+    val dataMessages = rememberDataMessages()
+    LaunchedEffect(dataViewModel) {
+        dataViewModel.events.collect { snackbarHostState.showSnackbar(dataMessages(it)) }
     }
 
     Scaffold(
@@ -124,6 +143,41 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { hourPicker = false },
                 )
             }
+            HorizontalDivider()
+
+            // Import, export, backup and restore are free on every tier and never show an ad.
+            SectionHeader(R.string.settings_section_data)
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_import)) },
+                supportingContent = { Text(stringResource(R.string.settings_import_summary)) },
+                modifier = Modifier.clickable(onClick = onOpenImport),
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_export_csv)) },
+                supportingContent = { Text(stringResource(R.string.settings_export_csv_summary)) },
+                modifier = Modifier.clickable(enabled = !dataBusy) { exportLauncher.launch(dataViewModel.csvFileName()) },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_backup)) },
+                supportingContent = { Text(stringResource(R.string.settings_backup_summary)) },
+                modifier = Modifier.clickable(enabled = !dataBusy) { backupLauncher.launch(dataViewModel.backupFileName()) },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_restore_backup)) },
+                supportingContent = { Text(stringResource(R.string.settings_restore_backup_summary)) },
+                trailingContent = if (dataBusy) {
+                    { CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp) }
+                } else {
+                    null
+                },
+                modifier = Modifier.clickable(enabled = !dataBusy) { restoreLauncher.launch(arrayOf("*/*")) },
+            )
+            Text(
+                stringResource(R.string.settings_transfer_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            )
             HorizontalDivider()
 
             SectionHeader(R.string.settings_section_pro)
@@ -197,6 +251,23 @@ fun SettingsScreen(
                 },
             )
         }
+    }
+
+    pendingRestore?.let { uri ->
+        AlertDialog(
+            onDismissRequest = { pendingRestore = null },
+            title = { Text(stringResource(R.string.data_restore_confirm_title)) },
+            text = { Text(stringResource(R.string.data_restore_confirm_body)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        pendingRestore = null
+                        dataViewModel.restore(Uri.parse(uri))
+                    },
+                ) { Text(stringResource(R.string.data_restore_confirm)) }
+            },
+            dismissButton = { TextButton(onClick = { pendingRestore = null }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 
     hourPicker?.let { isStart ->
@@ -329,6 +400,28 @@ private fun rememberEventMessages(): (SettingsEvent) -> String {
             SettingsEvent.NothingToRestore -> nothing
             SettingsEvent.RestoreFailed -> restoreFailed
             SettingsEvent.PrivacyOptionsUnavailable -> privacyUnavailable
+        }
+    }
+}
+
+@Composable
+private fun rememberDataMessages(): (DataTransferEvent) -> String {
+    val exported = stringResource(R.string.data_export_done)
+    val exportFailed = stringResource(R.string.data_export_failed)
+    val backedUp = stringResource(R.string.data_backup_done)
+    val backupFailed = stringResource(R.string.data_backup_failed)
+    val restored = stringResource(R.string.data_restore_done)
+    val restoreFailed = stringResource(R.string.data_restore_failed)
+    val context = LocalContext.current
+    return { event ->
+        when (event) {
+            DataTransferEvent.ExportDone -> exported
+            DataTransferEvent.ExportFailed -> exportFailed
+            DataTransferEvent.BackupDone -> backedUp
+            DataTransferEvent.BackupFailed -> backupFailed
+            is DataTransferEvent.Restored ->
+                if (event.archivedForCap > 0) context.getString(R.string.data_restore_done_archived, event.archivedForCap) else restored
+            DataTransferEvent.RestoreFailed -> restoreFailed
         }
     }
 }

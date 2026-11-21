@@ -36,6 +36,10 @@ interface VehicleDao {
 
     @Delete
     suspend fun delete(vehicle: Vehicle)
+
+    /** Restore only: removes every vehicle; foreign keys cascade to all child tables. */
+    @Query("DELETE FROM Vehicle")
+    suspend fun deleteAll()
 }
 
 @Dao
@@ -112,6 +116,9 @@ interface ReminderDao {
 
     @Query("SELECT * FROM Reminder WHERE done = 0")
     suspend fun getPending(): List<Reminder>
+
+    @Query("SELECT * FROM Reminder ORDER BY id ASC")
+    suspend fun getAll(): List<Reminder>
 
     @Query("SELECT * FROM Reminder ORDER BY done ASC, dueDate ASC, id ASC")
     fun observeAll(): Flow<List<Reminder>>
@@ -207,6 +214,9 @@ interface AttachmentDao {
 
     @Delete
     suspend fun delete(attachment: Attachment)
+
+    @Query("DELETE FROM Attachment")
+    suspend fun deleteAll()
 }
 
 @Dao
@@ -214,9 +224,15 @@ interface CustomCategoryDao {
     @Query("SELECT * FROM CustomCategory ORDER BY name COLLATE NOCASE ASC")
     fun observeAll(): Flow<List<CustomCategory>>
 
+    @Query("SELECT * FROM CustomCategory ORDER BY id ASC")
+    suspend fun getAll(): List<CustomCategory>
+
     @Insert
     suspend fun insert(category: CustomCategory): Long
 
     @Delete
     suspend fun delete(category: CustomCategory)
+
+    @Query("DELETE FROM CustomCategory")
+    suspend fun deleteAll()
 }

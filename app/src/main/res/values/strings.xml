@@ -486,4 +486,118 @@
     <string name="reports_compare_cost_per">%1$s per %2$s</string>
     <string name="reports_compare_note">Each vehicle is shown in its own currency. Amounts are never converted.</string>
     <string name="reports_compare_empty">Add another vehicle to compare.</string>
+
+    <!-- Import, export, backup (V6). Labels stay neutral: no source app is named in the UI. -->
+    <string name="settings_section_data">Your data</string>
+    <string name="settings_import">Import from another vehicle app</string>
+    <string name="settings_import_summary">Bring in a history file you already exported</string>
+    <string name="settings_export_csv">Export CSV</string>
+    <string name="settings_export_csv_summary">A zip of CSV files with every vehicle</string>
+    <string name="settings_backup">Back up to file</string>
+    <string name="settings_backup_summary">Save a .wheelfile with your vehicles, logs and attachments</string>
+    <string name="settings_restore_backup">Restore from backup file</string>
+    <string name="settings_restore_backup_summary">Replaces what is in the app with the backup</string>
+    <string name="settings_transfer_note">Moving to a new phone? Android\'s phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case.</string>
+    <string name="data_working">Working…</string>
+    <string name="data_export_done">Export saved</string>
+    <string name="data_export_failed">Couldn\'t save the export</string>
+    <string name="data_backup_done">Backup saved</string>
+    <string name="data_backup_failed">Couldn\'t save the backup</string>
+    <string name="data_restore_done">Backup restored</string>
+    <string name="data_restore_done_archived">Backup restored. %1$d vehicles beyond the free limit were archived; nothing was removed.</string>
+    <string name="data_restore_failed">That file isn\'t a valid backup</string>
+    <string name="data_restore_confirm_title">Restore this backup?</string>
+    <string name="data_restore_confirm_body">Everything currently in the app is replaced by the contents of the backup file.</string>
+    <string name="data_restore_confirm">Restore</string>
+
+    <string name="import_title">Import</string>
+    <string name="import_intro">Import is free on every plan. Pick a history file from another vehicle app, preview it, map your vehicles, and see what was imported, skipped as a duplicate, or could not be read.</string>
+    <string name="import_formats_hint">Supported files: .csv, .zip and .abp. The format is detected from the file content.</string>
+    <string name="import_choose_file">Choose a file</string>
+    <string name="import_choose_another">Choose another file</string>
+    <string name="import_reading">Reading the file…</string>
+    <string name="import_importing">Importing…</string>
+    <string name="import_unsupported_title">This file couldn\'t be recognised</string>
+    <string name="import_unsupported_body">Choose a history file exported by another vehicle app (.csv, .zip or .abp). Nothing was changed.</string>
+    <string name="import_failed">The import failed and nothing was changed.</string>
+    <string name="import_try_again">Try again</string>
+    <string name="import_beta">Beta</string>
+    <string name="import_beta_note">This format is a beta import. Check the preview before you continue.</string>
+    <string name="import_preview_title">Preview</string>
+    <string name="import_currency">Currency</string>
+    <string name="import_currency_hint">History files don\'t carry a currency</string>
+    <string name="import_vehicle_counts">%1$d fill-ups, %2$d services, %3$d expenses</string>
+    <string name="import_vehicle_range">%1$s to %2$s</string>
+    <string name="import_vehicle_units">Units: %1$s</string>
+    <string name="import_target_new">New vehicle</string>
+    <string name="import_target_label">Import into: %1$s</string>
+    <string name="import_start">Import</string>
+    <string name="import_done_title">Import finished</string>
+    <string name="import_done_summary">Imported %1$s, %2$s.</string>
+    <string name="import_error_row">%1$s, line %2$d: %3$s</string>
+    <string name="import_copy_report">Copy error report</string>
+    <string name="import_error_report_label">Import report</string>
+    <string name="import_archived_note">Added as archived (read-only, data kept): %1$s. The free plan holds 2 active vehicles.</string>
+    <string name="import_archived_cta">See Pro</string>
+    <string name="import_done_button">Done</string>
+    <plurals name="import_n_fillups">
+        <item quantity="one">%d fill-up</item>
+        <item quantity="other">%d fill-ups</item>
+    </plurals>
+    <plurals name="import_n_services">
+        <item quantity="one">%d service</item>
+        <item quantity="other">%d services</item>
+    </plurals>
+    <plurals name="import_n_expenses">
+        <item quantity="one">%d expense imported</item>
+        <item quantity="other">%d expenses imported</item>
+    </plurals>
+    <plurals name="import_n_duplicates">
+        <item quantity="one">Skipped %d duplicate</item>
+        <item quantity="other">Skipped %d duplicates</item>
+    </plurals>
+    <plurals name="import_n_unreadable">
+        <item quantity="one">%d row couldn\'t be read</item>
+        <item quantity="other">%d rows couldn\'t be read</item>
+    </plurals>
+    <plurals name="import_preview_unreadable">
+        <item quantity="one">%d row can\'t be read and will be listed after the import.</item>
+        <item quantity="other">%d rows can\'t be read and will be listed after the import.</item>
+    </plurals>
+
+    <string name="welcome_import">Import from another app</string>
+
+    <!-- PDF vehicle history report (Pro). -->
+    <string name="pdf_share">Share history report (PDF)</string>
+    <string name="pdf_share_locked">History report (PDF), Pro</string>
+    <string name="pdf_failed">Couldn\'t create the report</string>
+    <string name="pdf_share_title">Vehicle history report</string>
+    <string name="pdf_title">Vehicle history report</string>
+    <string name="pdf_generated">Created %1$s</string>
+    <string name="pdf_section_details">Vehicle</string>
+    <string name="pdf_section_summary">Costs and economy</string>
+    <string name="pdf_section_economy">Economy over time</string>
+    <string name="pdf_section_services">Service history</string>
+    <string name="pdf_section_expenses">Expenses</string>
+    <string name="pdf_section_attachments">Attachments</string>
+    <string name="pdf_total_cost">Total cost</string>
+    <string name="pdf_energy_cost">Fuel and energy</string>
+    <string name="pdf_service_cost">Service</string>
+    <string name="pdf_expense_cost">Expenses</string>
+    <string name="pdf_odometer">Odometer</string>
+    <string name="pdf_fill_ups">Fill-ups and charges</string>
+    <string name="pdf_none">Nothing recorded</string>
+    <string name="pdf_page">Page %1$d</string>
+    <string name="pdf_unit_l_per_100km">L/100 km</string>
+    <string name="pdf_unit_km_per_l">km/L</string>
+    <string name="pdf_unit_mpg_us">MPG (US)</string>
+    <string name="pdf_unit_mpg_uk">MPG (UK)</string>
+    <string name="pdf_unit_kwh_per_100km">kWh/100 km</string>
+    <string name="pdf_unit_mi_per_kwh">mi/kWh</string>
+    <string name="pdf_unit_kwh_per_100mi">kWh/100 mi</string>
+    <string name="pdf_unit_kg_per_100km">kg/100 km</string>
+    <plurals name="pdf_attachments_count">
+        <item quantity="one">%d attachment is stored with the entries in the app.</item>
+        <item quantity="other">%d attachments are stored with the entries in the app.</item>
+    </plurals>
 </resources>

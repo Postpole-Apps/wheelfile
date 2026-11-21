@@ -20,6 +20,7 @@ import com.postpole.wheelfile.ui.reminder.ReminderFormRoute
 import com.postpole.wheelfile.ui.reminder.RemindersRoute
 import com.postpole.wheelfile.ui.garage.GarageActions
 import com.postpole.wheelfile.ui.garage.GarageRoute
+import com.postpole.wheelfile.ui.importer.ImportRoute
 import com.postpole.wheelfile.ui.pro.ProScreen
 import com.postpole.wheelfile.ui.settings.AdPreviewScreen
 import com.postpole.wheelfile.ui.settings.SettingsScreen
@@ -39,6 +40,7 @@ object Routes {
     const val DOCUMENT = "document/{documentId}"
     const val DOCUMENT_FORM = "document_form/{vehicleId}?documentId={documentId}"
     const val SETTINGS = "settings"
+    const val IMPORT = "import"
     const val PRO = "pro"
     const val AD_PREVIEW = "debug_ad_preview"
 
@@ -70,7 +72,10 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
     }
     NavHost(navController = navController, startDestination = route) {
         composable(Routes.WELCOME) {
-            WelcomeScreen(onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) })
+            WelcomeScreen(
+                onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) },
+                onImport = { navController.navigate(Routes.IMPORT) },
+            )
         }
         composable(Routes.GARAGE) {
             GarageRoute(
@@ -166,6 +171,13 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onOpenPro = { navController.navigate(Routes.PRO) },
                 onOpenReminders = { navController.navigate(Routes.reminders()) },
                 onOpenAdPreview = { navController.navigate(Routes.AD_PREVIEW) },
+                onOpenImport = { navController.navigate(Routes.IMPORT) },
+            )
+        }
+        composable(Routes.IMPORT) {
+            ImportRoute(
+                onBack = { navController.popBackStack() },
+                onOpenPro = { navController.navigate(Routes.PRO) },
             )
         }
         if (BuildConfig.DEBUG) {

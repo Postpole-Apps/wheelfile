@@ -68,9 +68,9 @@ import com.postpole.wheelfile.ui.theme.PillShape
 import com.postpole.wheelfile.ui.theme.Sizes
 import com.postpole.wheelfile.ui.theme.Spacing
 
-/** s01-welcome. No ads. "Import from another app" arrives with the importers in V6. */
+/** s01-welcome. No ads. */
 @Composable
-fun WelcomeScreen(onAddVehicle: () -> Unit) {
+fun WelcomeScreen(onAddVehicle: () -> Unit, onImport: () -> Unit = {}) {
     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
         Column(
             Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding().padding(horizontal = 24.dp),
@@ -114,7 +114,11 @@ fun WelcomeScreen(onAddVehicle: () -> Unit) {
                 modifier = Modifier.fillMaxWidth().height(Sizes.saveButtonHeight),
                 shape = PillShape,
             ) { Text(stringResource(R.string.welcome_add_vehicle), style = MaterialTheme.typography.labelLarge) }
-            Spacer(Modifier.height(Spacing.xl))
+            androidx.compose.material3.TextButton(
+                onClick = onImport,
+                modifier = Modifier.fillMaxWidth().height(Sizes.touchTargetMin),
+            ) { Text(stringResource(R.string.welcome_import)) }
+            Spacer(Modifier.height(Spacing.l))
         }
     }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 8 and below (fullBackupContent, spec section 6.3): exclude everything, so there is no cloud copy.
+  Android 9 to 11 use res/xml-v28/backup_rules.xml instead, which lets phone-to-phone transfer carry the data.
+-->
+<full-backup-content>
+    <exclude domain="root" />
+    <exclude domain="file" />
+    <exclude domain="database" />
+    <exclude domain="sharedpref" />
+    <exclude domain="external" />
+    <exclude domain="device_root" />
+    <exclude domain="device_file" />
+    <exclude domain="device_database" />
+    <exclude domain="device_sharedpref" />
+</full-backup-content>

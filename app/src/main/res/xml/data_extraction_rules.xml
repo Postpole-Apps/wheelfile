@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Data backup is user-driven: Settings > "Back up to file" writes a JSON file via the Storage
-  Access Framework and "Restore from backup file" reads it back. Android Auto Backup and
-  device-to-device transfer are therefore excluded, so the Room database and the cached Pro flag
-  are never copied behind the user's back (Pro is re-verified with Google Play on every launch).
+  Backup and transfer rules for Android 12+ (spec section 6.3).
+  - cloud-backup: nothing is copied. Every domain is excluded, so there is no cloud copy of vehicle logs.
+  - device-transfer: Android's phone-to-phone transfer carries the Room database, the attachment files and the DataStore
+    settings. Firebase, ads and WorkManager caches stay behind.
+  User-driven backups are separate: Settings > Back up to file writes a .wheelfile through the Storage Access Framework.
+  BackupRulesXmlTest parses this file.
 -->
 <data-extraction-rules>
     <cloud-backup>
@@ -12,11 +14,24 @@
         <exclude domain="database" />
         <exclude domain="sharedpref" />
         <exclude domain="external" />
+        <exclude domain="device_root" />
+        <exclude domain="device_file" />
+        <exclude domain="device_database" />
+        <exclude domain="device_sharedpref" />
     </cloud-backup>
     <device-transfer>
-        <exclude domain="root" />
-        <exclude domain="file" />
-        <exclude domain="database" />
+        <!-- The Room database (journal files included, so a transfer never misses uncheckpointed writes). -->
+        <include domain="database" path="app.db" />
+        <include domain="database" path="app.db-wal" />
+        <include domain="database" path="app.db-shm" />
+        <!-- Private copies of receipts and documents. -->
+        <include domain="file" path="attachments" />
+        <!-- Preferences DataStore ("settings"). -->
+        <include domain="file" path="datastore" />
+        <!--
+          With includes present, everything not listed stays behind: the Firebase Analytics and Crashlytics databases,
+          ads SDK caches, the WorkManager database, shared preferences and external storage are never transferred.
+        -->
         <exclude domain="sharedpref" />
         <exclude domain="external" />
     </device-transfer>

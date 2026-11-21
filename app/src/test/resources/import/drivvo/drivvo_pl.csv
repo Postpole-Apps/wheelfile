@@ -1,0 +1,13 @@
+##Pojazd
+Nazwa;Model;Tablica;Typ;Rok;Uwagi
+Kombi;Octavia;WX 12345;Auto;2017;syntetyczny
+
+##Tankowanie
+Przebieg;Data;Paliwo;Cena;Razem;Objetosc;Pelny;A7;A8;A9;A10;A11;A12;A13;A14;A15;A16;A17;Uwagi
+15000;15/01/2024;Benzyna;6,50;260,00;40,00;Tak;;;;;;;;;;;;pierwsze
+15450;20/02/2024;Benzyna;6,60;132,00;20,00;Nie;;;;;;;;;;;;
+15900;03/03/2024;Benzyna;6,55;262,00;40,00;Tak;;;;;;;;;;;;
+
+##Serwis
+Przebieg;Data;Koszt;Tytul;Miejsce;Uwagi
+15200;10/02/2024;650,00;Wymiana klockow;Warsztat;
