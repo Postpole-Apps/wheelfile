@@ -54,10 +54,13 @@ class BackupRulesXmlTest {
 
     @Test
     fun deviceTransferExcludesFirebaseAndAdsCaches() {
-        val excludes = section("device-transfer").filter { it.tag == "exclude" }
+        val rules = section("device-transfer")
+        val excludes = rules.filter { it.tag == "exclude" }
         assertTrue(excludes.any { it.domain == "database" && it.path == "google_app_measurement.db" })
-        assertTrue(excludes.any { it.domain == "sharedpref" })
-        assertFalse(section("device-transfer").any { it.tag == "include" && it.domain == "sharedpref" })
+        assertTrue(excludes.any { it.domain == "database" && it.path == "google_app_measurement_local.db" })
+        // Shared preferences (ads and Firebase state), root and external are never included, so they stay behind.
+        val includedDomains = rules.filter { it.tag == "include" }.map { it.domain }.toSet()
+        assertFalse("sharedpref" in includedDomains || "root" in includedDomains || "external" in includedDomains)
     }
 
     @Test

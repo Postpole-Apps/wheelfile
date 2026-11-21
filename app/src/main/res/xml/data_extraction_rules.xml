@@ -6,7 +6,9 @@
   - Device-to-device transfer (phone to phone): the Room database, the private attachment files and the DataStore
     settings are copied, so a new phone starts with the same vehicles, logs and attachments. Firebase and ads
     caches are not copied; they are rebuilt on the new phone.
-  An <include> list means "only these"; the explicit excludes document the caches that must never be moved.
+  An <include> list means "only these": shared preferences (ads and Firebase state), the root and external domains
+  and every other file are therefore left behind. The explicit excludes name the Firebase databases inside the
+  included database folder.
 -->
 <data-extraction-rules>
     <cloud-backup>
@@ -23,8 +25,5 @@
         <exclude domain="database" path="google_app_measurement.db" />
         <exclude domain="database" path="google_app_measurement_local.db" />
         <exclude domain="database" path="com.google.android.datatransport.events" />
-        <exclude domain="sharedpref" path="." />
-        <exclude domain="root" path="." />
-        <exclude domain="external" path="." />
     </device-transfer>
 </data-extraction-rules>
