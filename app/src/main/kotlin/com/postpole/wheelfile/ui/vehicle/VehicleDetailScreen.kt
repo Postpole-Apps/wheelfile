@@ -120,6 +120,8 @@ class VehicleDetailActions(
     val onApplyPresets: (List<DocumentPreset>) -> Unit = {},
     val onRange: (ReportRange) -> Unit = {},
     val onCustomRange: (Long?, Long?) -> Unit = { _, _ -> },
+    /** The Pro PDF history report for this vehicle (opens its own screen). */
+    val onOpenPdfReport: () -> Unit = {},
 )
 
 @Composable
@@ -132,6 +134,7 @@ fun VehicleDetailRoute(
     onOpenPro: () -> Unit,
     onOpenDocument: (documentId: Long) -> Unit,
     onAddDocument: (vehicleId: Long) -> Unit,
+    onOpenPdfReport: (vehicleId: Long) -> Unit = {},
     viewModel: VehicleDetailViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -160,6 +163,7 @@ fun VehicleDetailRoute(
             onApplyPresets = viewModel::applyPresets,
             onRange = viewModel::setRange,
             onCustomRange = viewModel::setCustomRange,
+            onOpenPdfReport = { id?.let(onOpenPdfReport) },
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
         documentsAdSlot = { AdSlot(AdScreen.DOCUMENTS) },
@@ -351,6 +355,10 @@ private fun OverflowMenu(vehicle: Vehicle, actions: VehicleDetailActions) {
                     onClick = { open = false; actions.onAddRecord(true) },
                 )
             }
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.menu_history_report)) },
+                onClick = { open = false; actions.onOpenPdfReport() },
+            )
             DropdownMenuItem(
                 text = { Text(stringResource(if (vehicle.archived) R.string.menu_restore else R.string.menu_archive)) },
                 onClick = {

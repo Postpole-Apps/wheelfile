@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,8 +58,15 @@ fun SettingsScreen(
     onOpenPro: () -> Unit,
     onOpenAdPreview: () -> Unit = {},
     onOpenReminders: () -> Unit = {},
+    onOpenImport: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
+    dataViewModel: DataTransferViewModel = hiltViewModel(),
 ) {
+    val dataBusy by dataViewModel.busy.collectAsStateWithLifecycle()
+    val csvLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip"), dataViewModel::exportCsv)
+    val backupLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream"), dataViewModel::backup)
+    var pendingRestore by rememberSaveable { mutableStateOf<String?>(null) }
+    val restoreLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { pendingRestore = it?.toString() }
     val isPro by viewModel.isPro.collectAsStateWithLifecycle()
     val restoring by viewModel.restoring.collectAsStateWithLifecycle()
     val privacyOptionsRequired by viewModel.privacyOptionsRequired.collectAsStateWithLifecycle()
@@ -74,6 +83,9 @@ fun SettingsScreen(
     val messages = rememberEventMessages()
     LaunchedEffect(viewModel) {
         viewModel.events.collect { snackbarHostState.showSnackbar(messages(it)) }
+    }
+    LaunchedEffect(dataViewModel) {
+        dataViewModel.events.collect { snackbarHostState.showSnackbar(dataMessage(context, it)) }
     }
 
     Scaffold(
@@ -124,6 +136,42 @@ fun SettingsScreen(
                     modifier = Modifier.clickable { hourPicker = false },
                 )
             }
+            HorizontalDivider()
+
+            SectionHeader(R.string.settings_section_data)
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.import_entry)) },
+                supportingContent = { Text(stringResource(R.string.import_entry_summary)) },
+                modifier = Modifier.clickable(enabled = !dataBusy, onClick = onOpenImport),
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_export_csv)) },
+                supportingContent = { Text(stringResource(R.string.settings_export_csv_summary)) },
+                modifier = Modifier.clickable(enabled = !dataBusy) { csvLauncher.launch("wheelfile-export-${java.time.LocalDate.now()}.zip") },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_backup)) },
+                supportingContent = { Text(stringResource(R.string.settings_backup_summary)) },
+                modifier = Modifier.clickable(enabled = !dataBusy) { backupLauncher.launch("wheelfile-backup-${java.time.LocalDate.now()}.wheelfile") },
+            )
+            ListItem(
+                headlineContent = { Text(stringResource(R.string.settings_restore_backup)) },
+                supportingContent = {
+                    Text(stringResource(if (dataBusy) R.string.data_working else R.string.settings_restore_backup_summary))
+                },
+                trailingContent = if (dataBusy) {
+                    { CircularProgressIndicator(Modifier.size(24.dp), strokeWidth = 2.dp) }
+                } else {
+                    null
+                },
+                modifier = Modifier.clickable(enabled = !dataBusy) { restoreLauncher.launch(arrayOf("*/*")) },
+            )
+            Text(
+                stringResource(R.string.settings_transfer_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            )
             HorizontalDivider()
 
             SectionHeader(R.string.settings_section_pro)
@@ -197,6 +245,20 @@ fun SettingsScreen(
                 },
             )
         }
+    }
+
+    pendingRestore?.let { source ->
+        AlertDialog(
+            onDismissRequest = { pendingRestore = null },
+            title = { Text(stringResource(R.string.data_restore_confirm_title)) },
+            text = { Text(stringResource(R.string.data_restore_confirm_body)) },
+            confirmButton = {
+                TextButton(onClick = { pendingRestore = null; dataViewModel.restore(Uri.parse(source)) }) {
+                    Text(stringResource(R.string.data_restore_confirm_button))
+                }
+            },
+            dismissButton = { TextButton(onClick = { pendingRestore = null }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 
     hourPicker?.let { isStart ->
@@ -331,6 +393,19 @@ private fun rememberEventMessages(): (SettingsEvent) -> String {
             SettingsEvent.PrivacyOptionsUnavailable -> privacyUnavailable
         }
     }
+}
+
+private fun dataMessage(context: Context, event: DataTransferEvent): String = when (event) {
+    DataTransferEvent.CsvSaved -> context.getString(R.string.data_csv_saved)
+    DataTransferEvent.BackupSaved -> context.getString(R.string.data_backup_saved)
+    DataTransferEvent.SaveFailed -> context.getString(R.string.data_export_failed)
+    is DataTransferEvent.Restored -> buildList {
+        add(context.getString(R.string.data_restore_done, event.summary.vehicles, event.summary.entries))
+        if (event.summary.archivedForCap > 0) add(context.getString(R.string.data_restore_archived, event.summary.archivedForCap))
+        if (event.summary.missingAttachmentFiles > 0) add(context.getString(R.string.data_restore_missing_files, event.summary.missingAttachmentFiles))
+    }.joinToString(" ")
+    is DataTransferEvent.RestoreFailed ->
+        event.reason?.let { context.getString(R.string.data_restore_failed_reason, it) } ?: context.getString(R.string.data_restore_failed)
 }
 
 /** The hosting Activity, unwrapping any [ContextWrapper]s. Null if the context isn't backed by one. */

@@ -20,6 +20,8 @@ import com.postpole.wheelfile.ui.reminder.ReminderFormRoute
 import com.postpole.wheelfile.ui.reminder.RemindersRoute
 import com.postpole.wheelfile.ui.garage.GarageActions
 import com.postpole.wheelfile.ui.garage.GarageRoute
+import com.postpole.wheelfile.ui.importer.ImportRoute
+import com.postpole.wheelfile.ui.report.PdfReportRoute
 import com.postpole.wheelfile.ui.pro.ProScreen
 import com.postpole.wheelfile.ui.settings.AdPreviewScreen
 import com.postpole.wheelfile.ui.settings.SettingsScreen
@@ -38,6 +40,8 @@ object Routes {
     const val REMINDER_FORM = "reminder/{vehicleId}"
     const val DOCUMENT = "document/{documentId}"
     const val DOCUMENT_FORM = "document_form/{vehicleId}?documentId={documentId}"
+    const val IMPORT = "import"
+    const val PDF_REPORT = "pdf_report/{vehicleId}"
     const val SETTINGS = "settings"
     const val PRO = "pro"
     const val AD_PREVIEW = "debug_ad_preview"
@@ -50,6 +54,7 @@ object Routes {
     fun reminders(vehicleId: Long? = null) = "reminders?vehicleId=${vehicleId ?: -1L}"
     fun reminderForm(vehicleId: Long) = "reminder/$vehicleId"
     fun document(id: Long) = "document/$id"
+    fun pdfReport(vehicleId: Long) = "pdf_report/$vehicleId"
 
     /** The document form: a new document for [vehicleId], or [documentId] to edit. */
     fun documentForm(vehicleId: Long, documentId: Long? = null) = "document_form/$vehicleId?documentId=${documentId ?: -1L}"
@@ -70,7 +75,10 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
     }
     NavHost(navController = navController, startDestination = route) {
         composable(Routes.WELCOME) {
-            WelcomeScreen(onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) })
+            WelcomeScreen(
+                onAddVehicle = { navController.navigate(Routes.ADD_VEHICLE) },
+                onImport = { navController.navigate(Routes.IMPORT) },
+            )
         }
         composable(Routes.GARAGE) {
             GarageRoute(
@@ -107,6 +115,19 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onOpenPro = { navController.navigate(Routes.PRO) },
                 onOpenDocument = { navController.navigate(Routes.document(it)) },
                 onAddDocument = { navController.navigate(Routes.documentForm(it)) },
+                onOpenPdfReport = { navController.navigate(Routes.pdfReport(it)) },
+            )
+        }
+        composable(
+            Routes.PDF_REPORT,
+            arguments = listOf(navArgument("vehicleId") { type = NavType.LongType }),
+        ) {
+            PdfReportRoute(onBack = { navController.popBackStack() }, onOpenPro = { navController.navigate(Routes.PRO) })
+        }
+        composable(Routes.IMPORT) {
+            ImportRoute(
+                onBack = { navController.popBackStack() },
+                onOpenPro = { navController.navigate(Routes.PRO) },
             )
         }
         composable(
@@ -165,6 +186,7 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onBack = { navController.popBackStack() },
                 onOpenPro = { navController.navigate(Routes.PRO) },
                 onOpenReminders = { navController.navigate(Routes.reminders()) },
+                onOpenImport = { navController.navigate(Routes.IMPORT) },
                 onOpenAdPreview = { navController.navigate(Routes.AD_PREVIEW) },
             )
         }

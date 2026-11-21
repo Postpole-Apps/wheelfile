@@ -4,4 +4,6 @@
     <cache-path name="camera" path="camera/" />
     <!-- Private copies of receipts and documents. -->
     <files-path name="attachments" path="attachments/" />
+    <!-- The latest PDF history report, shared through the share sheet. -->
+    <cache-path name="reports" path="reports/" />
 </paths>
