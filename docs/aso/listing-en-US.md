@@ -52,47 +52,45 @@ Fill-ups, charging, service and reminders. Your data is stored on your device.
 Fuel, charging and service log. Pay once. Your data is stored on your device.
 ```
 
-## Full description (2992/4000 chars)
+## Full description (2884/4000 chars)
 
 ```
 Wheelfile is a car maintenance and fuel log you can pay for once. Record fill-ups, EV charges, services and other costs for your car, motorbike or van, including petrol, diesel, electric and hybrid. No account needed. Your data is stored on your device.
 
-LOG FUEL AND CHARGES
+Log Fuel and Charges
 • Log a fill-up with the odometer, volume and cost. Enter any two of price, total and volume, and the third is calculated
 • Log EV charges in kWh, with optional charger type and battery percentage
 • Plug-in hybrids keep a fuel log and a charge log on the same vehicle
 • Set kilometers or miles, and liters, US gallons, UK gallons or kWh, separately for each vehicle
 
-SERVICE, COSTS AND REMINDERS
+Service, Costs and Reminders
 • Record oil changes, inspections and other services, with photos or PDFs attached
 • Track expenses such as insurance, registration, parking, tolls and washing
 • Set reminders by date, by odometer, or whichever comes first
 • Store insurance, registration and inspection documents, with expiry alerts
 • Add suggested reminder schedules for common inspections and renewals, then edit them for your area
 
-SEE WHAT YOU SPEND
+See What You Spend
 • Fuel economy uses a full-to-full method, and a plain-language sheet explains how each figure was calculated
 • See cost per kilometer or mile, monthly costs, and charts for the last 12 months
 • A one-time Pro purchase unlocks all-time and custom-range charts, vehicle comparison, and a PDF service history you can share when you sell or take the vehicle in for service
 
-BRING IN A HISTORY FILE
-• Import is free on every plan. You can import a history file from Fuelio, aCar or Simply Auto, and a Drivvo import is available as a beta
+Bring In a History File
+• Import is free on every plan. Bring in your history from popular fuel and car log apps (CSV and backup files), with some formats in beta
 • Preview the file, map each vehicle, and skip duplicates. You get a clear report of what was imported, skipped, or could not be read
 • Export a CSV or a full backup any time, free. Restoring a backup is never blocked
 • Moving to a new phone? Android's phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case
 
-FREE AND PRO
+Free and Pro
 The free version includes two active vehicles, unlimited logs and reminders, import, CSV export and backup, 12-month charts, and up to 30 attachments. Free with ads. Go Pro with a one-time purchase for unlimited vehicles, a PDF service history for resale or your mechanic, all-time charts, vehicle comparison, unlimited attachments, and custom categories. Pro also removes ads. Or remove ads on their own with a separate one-time purchase.
 
-PRIVACY, PLAINLY
+Privacy, Plainly
 Your data is stored on your device. There is no Wheelfile account and no Wheelfile server holding your vehicle logs. See the Data safety section and Privacy Policy for details.
 
-BUILT FOR
+Built For
 Drivers who want a fuel, charging and service log without a subscription or a sign-up wall, and who want a clean record for themselves or for resale.
 
 Wheelfile — a car maintenance and fuel log that keeps your records on your device.
-
-Fuelio, Drivvo, aCar and Simply Auto are trademarks of their owners; this app is not affiliated with them.
 ```
 
 ## Brand swap (Wheelfile → Gearfile)
@@ -109,7 +107,7 @@ Replace every "Wheelfile" with "Gearfile" and recount. Gearfile is one character
 | Full description, opening line | "Wheelfile is a car maintenance and fuel log you can pay for once. …" | 253 | "Gearfile is a car maintenance and fuel log you can pay for once. …" | 252 |
 | Full description, PRIVACY, PLAINLY | "There is no Wheelfile account and no Wheelfile server holding your vehicle logs." (two mentions on this line) | 176 (whole line) | "There is no Gearfile account and no Gearfile server holding your vehicle logs." | 174 (whole line) |
 | Full description, closing line | "Wheelfile — a car maintenance and fuel log that keeps your records on your device." | 82 | "Gearfile — a car maintenance and fuel log that keeps your records on your device." | 81 |
-| Full description, total | (4 mentions) | 2992/4000 | (4 mentions) | 2988/4000 |
+| Full description, total | (4 mentions) | 2884/4000 | (4 mentions) | 2880/4000 |
 
 If Gearfile is locked, also change the package in accompanying materials to `com.postpole.gearfile`, and replace the brand in this file's header and notes. The short description, alternative shorts, screenshot captions and importer blurb/FAQ do not change length.
 
@@ -122,42 +120,40 @@ Gearfile: Car Maintenance Log
 ```
 Gearfile is a car maintenance and fuel log you can pay for once. Record fill-ups, EV charges, services and other costs for your car, motorbike or van, including petrol, diesel, electric and hybrid. No account needed. Your data is stored on your device.
 
-LOG FUEL AND CHARGES
+Log Fuel and Charges
 • Log a fill-up with the odometer, volume and cost. Enter any two of price, total and volume, and the third is calculated
 • Log EV charges in kWh, with optional charger type and battery percentage
 • Plug-in hybrids keep a fuel log and a charge log on the same vehicle
 • Set kilometers or miles, and liters, US gallons, UK gallons or kWh, separately for each vehicle
 
-SERVICE, COSTS AND REMINDERS
+Service, Costs and Reminders
 • Record oil changes, inspections and other services, with photos or PDFs attached
 • Track expenses such as insurance, registration, parking, tolls and washing
 • Set reminders by date, by odometer, or whichever comes first
 • Store insurance, registration and inspection documents, with expiry alerts
 • Add suggested reminder schedules for common inspections and renewals, then edit them for your area
 
-SEE WHAT YOU SPEND
+See What You Spend
 • Fuel economy uses a full-to-full method, and a plain-language sheet explains how each figure was calculated
 • See cost per kilometer or mile, monthly costs, and charts for the last 12 months
 • A one-time Pro purchase unlocks all-time and custom-range charts, vehicle comparison, and a PDF service history you can share when you sell or take the vehicle in for service
 
-BRING IN A HISTORY FILE
-• Import is free on every plan. You can import a history file from Fuelio, aCar or Simply Auto, and a Drivvo import is available as a beta
+Bring In a History File
+• Import is free on every plan. Bring in your history from popular fuel and car log apps (CSV and backup files), with some formats in beta
 • Preview the file, map each vehicle, and skip duplicates. You get a clear report of what was imported, skipped, or could not be read
 • Export a CSV or a full backup any time, free. Restoring a backup is never blocked
 • Moving to a new phone? Android's phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case
 
-FREE AND PRO
+Free and Pro
 The free version includes two active vehicles, unlimited logs and reminders, import, CSV export and backup, 12-month charts, and up to 30 attachments. Free with ads. Go Pro with a one-time purchase for unlimited vehicles, a PDF service history for resale or your mechanic, all-time charts, vehicle comparison, unlimited attachments, and custom categories. Pro also removes ads. Or remove ads on their own with a separate one-time purchase.
 
-PRIVACY, PLAINLY
+Privacy, Plainly
 Your data is stored on your device. There is no Gearfile account and no Gearfile server holding your vehicle logs. See the Data safety section and Privacy Policy for details.
 
-BUILT FOR
+Built For
 Drivers who want a fuel, charging and service log without a subscription or a sign-up wall, and who want a clean record for themselves or for resale.
 
 Gearfile — a car maintenance and fuel log that keeps your records on your device.
-
-Fuelio, Drivvo, aCar and Simply Auto are trademarks of their owners; this app is not affiliated with them.
 ```
 
 ## Target keywords (UNMEASURED)
@@ -321,7 +317,7 @@ Checked with Python `len()` (NFC) on the exact store-text strings, and with `rg`
 |---|---|
 | Title ≤ 30 | 30/30 (alts 29, 30) |
 | Short ≤ 80 | 74/80 (alts 78, 77) |
-| Full ≤ 4000 | 2992/4000 (Gearfile swap 2988/4000) |
+| Full ≤ 4000 | 2884/4000 (Gearfile swap 2880/4000) |
 | Captions ≤ 40 | 24, 24, 23, 30, 28, 18, 25, 35 |
 | studio-banned connectivity word (any spelling) | 0 matches |
 | internet | 0 matches |
@@ -371,37 +367,37 @@ Log fuel, charging, service and costs. Your data is stored on your device.
 ```
 Wheelfile is a car maintenance and fuel log you can pay for once. Record fill-ups, EV charges, services and other costs for your car, motorbike or van, including petrol, diesel, electric and hybrid. No account needed. Your data is stored on your device.
 
-LOG FUEL AND CHARGES
+Log Fuel and Charges
 • Log a fill-up with the odometer, volume and cost. Enter any two of price, total and volume, and the third is calculated
 • Log EV charges in kWh, with optional charger type and battery percentage
 • Plug-in hybrids keep a fuel log and a charge log on the same vehicle
 • Set kilometers or miles, and liters, US gallons, UK gallons or kWh, separately for each vehicle
 
-SERVICE, COSTS AND REMINDERS
+Service, Costs and Reminders
 • Record oil changes, inspections and other services, with photos or PDFs attached
 • Track expenses such as insurance, registration, parking, tolls and washing
 • Set reminders by date, by odometer, or whichever comes first
 • Store insurance, registration and inspection documents, with expiry alerts
 • Add suggested reminder schedules for common inspections and renewals, then edit them for your area
 
-SEE WHAT YOU SPEND
+See What You Spend
 • Fuel economy uses a full-to-full method, and a plain-language sheet explains how each figure was calculated
 • See cost per kilometer or mile, monthly costs, and charts for the last 12 months
 • A one-time Pro purchase unlocks all-time and custom-range charts, vehicle comparison, and a PDF service history you can share when you sell or take the vehicle in for service
 
-BRING IN A HISTORY FILE
-• Import is free on every plan. You can import a history file from Fuelio, aCar or Simply Auto, and a Drivvo import is available as a beta
+Bring In a History File
+• Import is free on every plan. Bring in your history from popular fuel and car log apps (CSV and backup files), with some formats in beta
 • Preview the file, map each vehicle, and skip duplicates. You get a clear report of what was imported, skipped, or could not be read
 • Export a CSV or a full backup any time, free. Restoring a backup is never blocked
 • Moving to a new phone? Android's phone-to-phone transfer brings your vehicles, logs and attachments along. Keep a backup file too, just in case
 
-FREE AND PRO
+Free and Pro
 The free version includes two active vehicles, unlimited logs and reminders, import, CSV export and backup, 12-month charts, and up to 30 attachments. Free with ads. Go Pro with a one-time purchase for unlimited vehicles, a PDF service history for resale or your mechanic, all-time charts, vehicle comparison, unlimited attachments, and custom categories. Pro also removes ads. Or remove ads on their own with a separate one-time purchase.
 
-PRIVACY, PLAINLY
+Privacy, Plainly
 Your data is stored on your device. There is no Wheelfile account and no Wheelfile server holding your vehicle logs. See the Data safety section and Privacy Policy for details.
 
-BUILT FOR
+Built For
 Drivers who want a fuel, charging and service log without a subscription or a sign-up wall, and who want a clean record for themselves or for resale.
 
 Wheelfile — a car maintenance and fuel log that keeps your records on your device.
