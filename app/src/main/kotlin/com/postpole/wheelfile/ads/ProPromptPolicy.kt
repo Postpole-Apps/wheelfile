@@ -1,5 +1,6 @@
 package com.postpole.wheelfile.ads
 
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -160,7 +161,16 @@ class ProPromptPolicy(
     private val store: ProPromptStateStore,
 ) : ProPromptSessionGate {
     private val mutex = Mutex()
-    private var state = ProPromptState()
+
+    // Threading: the main thread (AdsPolicy -> onInterstitialShown/onSaved) and coroutines on other dispatchers
+    // (startSession, onForegrounded, qualify, evaluate, onShown, ...) all change the state. Every change goes
+    // through AtomicReference.updateAndGet, so a main-thread flag can never be lost to a concurrent
+    // copy-and-write-back of an older state. The mutex only orders the suspending persist calls.
+    // Transform lambdas must be pure: updateAndGet may retry them.
+    private val stateRef = AtomicReference(ProPromptState())
+    private val state: ProPromptState get() = stateRef.get()
+
+    @Volatile
     private var backgroundedAt: Long? = null
 
     val current: ProPromptState get() = state
@@ -171,7 +181,8 @@ class ProPromptPolicy(
     suspend fun startSession(installTimeMs: Long): Unit = mutex.withLock {
         val loaded = store.load()
         backgroundedAt = null
-        update(newSession(loaded.copy(installTimeMs = loaded.installTimeMs.takeIf { it > 0 } ?: installTimeMs)))
+        val first = newSession(loaded.copy(installTimeMs = loaded.installTimeMs.takeIf { it > 0 } ?: installTimeMs))
+        update { first }
     }
 
     fun onBackgrounded() {
@@ -183,7 +194,7 @@ class ProPromptPolicy(
         val left = backgroundedAt ?: return false
         backgroundedAt = null
         if (clock() - left < SESSION_GAP_MS) return false
-        update(newSession(state))
+        update { newSession(it) }
         true
     }
 
@@ -192,15 +203,18 @@ class ProPromptPolicy(
      * Main thread; the flag is persisted with the next state write (a new session resets it anyway).
      */
     override fun onSaved(kind: SaveKind) {
-        if (kind.isPumpSession) state = state.copy(pumpSession = true)
+        if (kind.isPumpSession) stateRef.updateAndGet { it.copy(pumpSession = true) }
     }
 
     /** Call when a hard-gate paywall was shown; automatic prompts then wait 48 h. */
-    suspend fun onHardGateShown(): Unit = mutex.withLock { update(state.copy(lastHardGateAt = clock())) }
+    suspend fun onHardGateShown(): Unit = mutex.withLock {
+        val now = clock()
+        update { it.copy(lastHardGateAt = now) }
+    }
 
     override fun onInterstitialShown() {
         // Called from AdsPolicy on the main thread; the flag is also persisted with the next state write.
-        state = state.copy(interstitialThisSession = true)
+        stateRef.updateAndGet { it.copy(interstitialThisSession = true) }
     }
 
     /**
@@ -212,12 +226,15 @@ class ProPromptPolicy(
         mutex.withLock {
             if (trigger.id in state.pending) return@withLock
             val pump = earnedBy?.isPumpSession == true
-            val prompt = PendingProPrompt(
-                surface = if (pump) ProPromptSurface.CARD else surface,
-                qualifiedAt = clock(),
-                minSession = if (pump) state.sessionCount + 1 else 0,
-            )
-            update(state.copy(pending = state.pending + (trigger.id to prompt)))
+            val now = clock()
+            update {
+                val prompt = PendingProPrompt(
+                    surface = if (pump) ProPromptSurface.CARD else surface,
+                    qualifiedAt = now,
+                    minSession = if (pump) it.sessionCount + 1 else 0,
+                )
+                it.copy(pending = it.pending + (trigger.id to prompt))
+            }
         }
 
     /** Decides whether [trigger] may show now. Also drops expired prompts and turns pump-blocked sheets into cards. */
@@ -230,7 +247,7 @@ class ProPromptPolicy(
         val cfg = config.coerced()
         val pending = state.pending[trigger.id] ?: return ProPromptOutcome(ProPromptDecision.NOT_PENDING, null)
         if (now - pending.qualifiedAt > DEFERRAL_MS) {
-            update(state.copy(pending = state.pending - trigger.id))
+            update { it.copy(pending = it.pending - trigger.id) }
             return ProPromptOutcome(ProPromptDecision.EXPIRED, null)
         }
         var surface = pending.surface
@@ -241,8 +258,10 @@ class ProPromptPolicy(
         if (state.pumpSession) {
             if (surface == ProPromptSurface.SHEET) {
                 surface = ProPromptSurface.CARD
-                val next = pending.copy(surface = surface, minSession = state.sessionCount + 1)
-                update(state.copy(pending = state.pending + (trigger.id to next)))
+                update {
+                    val next = pending.copy(surface = surface, minSession = it.sessionCount + 1)
+                    it.copy(pending = it.pending + (trigger.id to next))
+                }
             }
             return out(ProPromptDecision.PUMP_SESSION)
         }
@@ -280,24 +299,26 @@ class ProPromptPolicy(
     /** Call when the prompt was actually shown. This is what uses up the session and 7-day caps. */
     suspend fun onShown(trigger: ProPromptTrigger, surface: ProPromptSurface): Unit = mutex.withLock {
         val key = ProPromptState.key(trigger, surface)
-        update(
-            state.copy(
-                shownCounts = state.shownCounts + (key to (state.shownCounts[key] ?: 0) + 1),
-                lastShownAt = state.lastShownAt + (key to clock()),
-                pending = state.pending - trigger.id,
+        val now = clock()
+        update {
+            it.copy(
+                shownCounts = it.shownCounts + (key to (it.shownCounts[key] ?: 0) + 1),
+                lastShownAt = it.lastShownAt + (key to now),
+                pending = it.pending - trigger.id,
                 proPromptThisSession = true,
-            ),
-        )
+            )
+        }
     }
 
     suspend fun onDismissed(trigger: ProPromptTrigger, surface: ProPromptSurface): Unit = mutex.withLock {
         val key = ProPromptState.key(trigger, surface)
-        update(
-            state.copy(
-                dismissedCounts = state.dismissedCounts + (key to (state.dismissedCounts[key] ?: 0) + 1),
-                lastDismissedAt = state.lastDismissedAt + (key to clock()),
-            ),
-        )
+        val now = clock()
+        update {
+            it.copy(
+                dismissedCounts = it.dismissedCounts + (key to (it.dismissedCounts[key] ?: 0) + 1),
+                lastDismissedAt = it.lastDismissedAt + (key to now),
+            )
+        }
     }
 
     private fun newSession(from: ProPromptState) = from.copy(
@@ -307,9 +328,8 @@ class ProPromptPolicy(
         pumpSession = false,
     )
 
-    private suspend fun update(next: ProPromptState) {
-        state = next
-        store.save(next)
+    private suspend fun update(transform: (ProPromptState) -> ProPromptState) {
+        store.save(stateRef.updateAndGet(transform))
     }
 
     companion object {

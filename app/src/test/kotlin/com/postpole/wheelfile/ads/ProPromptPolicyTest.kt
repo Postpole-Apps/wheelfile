@@ -64,6 +64,35 @@ class ProPromptPolicyTest {
         assertEquals(ProPromptOutcome(ProPromptDecision.SHOW, sheet), eval(milestone))
     }
 
+    // --- Threading ---
+
+    @Test fun mainThreadFlagsSetDuringInFlightUpdates_areNotLost() = runBlocking {
+        // The clock and the store are called while a coroutine update is in flight; use them to inject the
+        // main-thread calls (AdsPolicy -> onInterstitialShown / onSaved) at that moment.
+        var inject: (() -> Unit)? = null
+        val racingStore = object : ProPromptStateStore {
+            override suspend fun load() = ProPromptState()
+            override suspend fun save(state: ProPromptState) {
+                inject?.also { inject = null }?.invoke()
+            }
+        }
+        val racing = ProPromptPolicy({ inject?.also { inject = null }?.invoke(); now }, racingStore)
+        now = install + 4 * day
+        racing.startSession(install)
+        racing.startSession(install)
+
+        racing.qualify(milestone, sheet)
+        inject = { racing.onInterstitialShown() }
+        racing.onShown(milestone, sheet)
+        assertTrue(racing.current.interstitialThisSession)
+        assertTrue(racing.current.proPromptThisSession)
+
+        inject = { racing.onSaved(SaveKind.FILL_UP) }
+        racing.onDismissed(milestone, sheet)
+        assertTrue(racing.current.pumpSession)
+        assertTrue(racing.current.interstitialThisSession)
+    }
+
     @Test fun nothingPending_noPrompt() {
         inSession(3)
         assertEquals(ProPromptDecision.NOT_PENDING, decision(milestone))
