@@ -204,6 +204,10 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onOpenReminders = { navController.navigate(Routes.reminders()) },
                 onOpenAdPreview = { navController.navigate(Routes.AD_PREVIEW) },
                 onOpenImport = { navController.navigate(Routes.IMPORT) },
+                // Everything is gone: back to the first-run Welcome screen with an empty back stack.
+                onDataDeleted = {
+                    navController.navigate(Routes.WELCOME) { popUpTo(navController.graph.id) { inclusive = true } }
+                },
             )
         }
         composable(Routes.IMPORT) {

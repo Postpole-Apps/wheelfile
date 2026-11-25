@@ -10,6 +10,7 @@ import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.data.ReminderRepository
 import com.postpole.wheelfile.data.SettingsRepository
+import com.postpole.wheelfile.data.Transactor
 import com.postpole.wheelfile.data.attachments.AttachmentLimit
 import com.postpole.wheelfile.data.attachments.AttachmentStore
 import com.postpole.wheelfile.data.attachments.StageResult
@@ -68,6 +69,7 @@ class RecordFormViewModel internal constructor(
     private val reminders: ReminderRepository,
     private val attachmentStore: AttachmentStore,
     attachmentDao: AttachmentDao,
+    private val transactor: Transactor,
     private val settings: SettingsRepository,
     private val adsPolicy: AdsPolicy,
     private val analytics: Analytics,
@@ -86,12 +88,13 @@ class RecordFormViewModel internal constructor(
         reminders: ReminderRepository,
         attachmentStore: AttachmentStore,
         attachmentDao: AttachmentDao,
+        transactor: Transactor,
         settings: SettingsRepository,
         adsPolicy: AdsPolicy,
         analytics: Analytics,
         billing: BillingRepository,
     ) : this(
-        vehicles, services, expenses, reminders, attachmentStore, attachmentDao, settings, adsPolicy, analytics,
+        vehicles, services, expenses, reminders, attachmentStore, attachmentDao, transactor, settings, adsPolicy, analytics,
         isPro = billing.isPro,
         vehicleId = checkNotNull(savedState.get<Long>("vehicleId")),
         kind = if (savedState.get<String>("kind") == "expense") RecordKind.EXPENSE else RecordKind.SERVICE,
@@ -193,19 +196,24 @@ class RecordFormViewModel internal constructor(
             try {
                 val now = clock()
                 val service = s.isService
-                val ownerId: Long
-                if (service) {
-                    ownerId = services.insert(RecordForm.toServiceRecord(s.form, vehicle, now))
-                } else {
-                    ownerId = expenses.insert(RecordForm.toExpense(s.form, vehicle, now))
-                }
-                val owner = if (service) OwnerType.SERVICE else OwnerType.EXPENSE
-                s.attachments.forEach { attachmentStore.commit(it, owner, ownerId) }
-                saved = true
                 val reminder = RecordForm.toNextReminder(s.form, vehicle)
+                val owner = if (service) OwnerType.SERVICE else OwnerType.EXPENSE
+                // Record, attachment rows and next reminder commit together: a failure leaves no partial rows, and
+                // the staged files stay in place so the user can retry.
+                val dropped = transactor.run {
+                    val ownerId = if (service) {
+                        services.insert(RecordForm.toServiceRecord(s.form, vehicle, now))
+                    } else {
+                        expenses.insert(RecordForm.toExpense(s.form, vehicle, now))
+                    }
+                    val over = attachmentStore.commitAll(s.attachments, owner, ownerId)
+                    if (reminder != null) reminders.save(reminder)
+                    over
+                }
+                saved = true
+                attachmentStore.discardAll(dropped) // files over the free cap, only after the commit
                 var prompt = false
                 if (reminder != null) {
-                    reminders.save(reminder)
                     analytics.logEvent(AnalyticsEvents.REMINDER_CREATED, mapOf("source" to "service"))
                     if (!settings.notificationPrompted.first()) {
                         settings.setNotificationPrompted()

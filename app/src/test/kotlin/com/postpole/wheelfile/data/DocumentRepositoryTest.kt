@@ -69,7 +69,7 @@ class DocumentRepositoryTest {
             isPro = { pro },
             clock = { 1_000L },
         )
-        repo = DocumentRepository(db.vehicleDocumentDao(), db.reminderDao(), db.attachmentDao(), store)
+        repo = DocumentRepository(db.vehicleDocumentDao(), db.reminderDao(), db.attachmentDao(), store, RoomTransactor(db), deleter(db, store))
         vehicleId = runBlocking {
             db.vehicleDao().insert(
                 Vehicle(

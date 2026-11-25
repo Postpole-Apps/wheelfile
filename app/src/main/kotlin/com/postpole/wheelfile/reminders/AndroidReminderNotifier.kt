@@ -46,7 +46,7 @@ class AndroidReminderNotifier @Inject constructor(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_stat_wheelfile)
             .setContentTitle(reminder.title)
             .setContentText("${vehicle.name} · ${describe(state)}")
             .setContentIntent(open)

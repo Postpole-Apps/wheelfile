@@ -24,6 +24,8 @@ import com.postpole.wheelfile.billing.BillingGateway
 import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.billing.PlayBillingGateway
 import com.postpole.wheelfile.data.AppDatabase
+import com.postpole.wheelfile.data.RoomTransactor
+import com.postpole.wheelfile.data.Transactor
 import com.postpole.wheelfile.data.db.AttachmentDao
 import com.postpole.wheelfile.data.db.CustomCategoryDao
 import com.postpole.wheelfile.data.db.EnergyLogDao
@@ -50,6 +52,10 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "app.db").build()
+
+    @Provides
+    @Singleton
+    fun provideTransactor(db: AppDatabase): Transactor = RoomTransactor(db)
 
     @Provides fun provideVehicleDao(db: AppDatabase): VehicleDao = db.vehicleDao()
     @Provides fun provideEnergyLogDao(db: AppDatabase): EnergyLogDao = db.energyLogDao()

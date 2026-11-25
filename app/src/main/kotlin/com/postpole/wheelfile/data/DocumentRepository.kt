@@ -1,6 +1,7 @@
 package com.postpole.wheelfile.data
 
 import com.postpole.wheelfile.data.attachments.AttachmentStore
+import com.postpole.wheelfile.data.attachments.StagedAttachment
 import com.postpole.wheelfile.data.db.Attachment
 import com.postpole.wheelfile.data.db.AttachmentDao
 import com.postpole.wheelfile.data.db.OwnerType
@@ -32,6 +33,8 @@ class DocumentRepository @Inject constructor(
     private val reminders: ReminderDao,
     private val attachments: AttachmentDao,
     private val store: AttachmentStore,
+    private val transactor: Transactor,
+    private val deleter: RecordDeleter,
 ) {
     fun observeItems(vehicleId: Long): Flow<List<DocumentItem>> =
         combine(documents.observeForVehicle(vehicleId), attachments.observeForType(OwnerType.DOCUMENT)) { docs, files ->
@@ -54,12 +57,30 @@ class DocumentRepository @Inject constructor(
         return id
     }
 
-    /** Deletes the document, its attachment files and its reminder. */
-    suspend fun delete(document: VehicleDocument) {
-        attachments.getForOwner(OwnerType.DOCUMENT, document.id).forEach { store.delete(it) }
-        reminders.getForDocument(document.id).forEach { reminders.delete(it) }
-        documents.delete(document)
+    /**
+     * Saves the document, removes [removed] attachments and adds the [staged] ones as one transaction. If anything
+     * throws, no row changes and the staged files are left for a retry. Files are deleted only after the commit.
+     */
+    suspend fun saveWithAttachments(
+        document: VehicleDocument,
+        staged: List<StagedAttachment>,
+        removed: List<Attachment> = emptyList(),
+        presetCode: String? = null,
+    ): Long {
+        var dropped: List<StagedAttachment> = emptyList()
+        val id = transactor.run {
+            val savedId = save(document, presetCode)
+            removed.map { it.id }.chunked(500).forEach { attachments.deleteByIds(it) }
+            dropped = store.commitAll(staged, OwnerType.DOCUMENT, savedId)
+            savedId
+        }
+        store.deleteFiles(removed.map { it.fileName })
+        store.discardAll(dropped)
+        return id
     }
+
+    /** Deletes the document, its attachment rows and its reminder in one transaction, then its files. */
+    suspend fun delete(document: VehicleDocument) = deleter.deleteDocument(document)
 
     /**
      * Creates the documents for the chosen presets. A preset whose type and title already exist for the vehicle is skipped.

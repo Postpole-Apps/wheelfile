@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
 import com.postpole.wheelfile.ads.QuietAction
+import com.postpole.wheelfile.data.DataWiper
 import com.postpole.wheelfile.data.backup.BackupManager
 import com.postpole.wheelfile.data.backup.CsvExporter
 import com.postpole.wheelfile.data.backup.RestoreOutcome
@@ -32,6 +33,10 @@ sealed interface DataTransferEvent {
     data object BackupFailed : DataTransferEvent
     data class Restored(val archivedForCap: Int) : DataTransferEvent
     data object RestoreFailed : DataTransferEvent
+
+    /** Everything was wiped: the screen sends the user back to onboarding. */
+    data object DataDeleted : DataTransferEvent
+    data object DeleteFailed : DataTransferEvent
 }
 
 /** CSV export, `.wheelfile` backup and restore through the Storage Access Framework. All free, on every tier. */
@@ -41,6 +46,7 @@ class DataTransferViewModel @Inject constructor(
     private val csv: CsvExporter,
     private val backups: BackupManager,
     private val adsPolicy: AdsPolicy,
+    private val wiper: DataWiper.Factory,
 ) : ViewModel() {
     private val _busy = MutableStateFlow(false)
     val busy: StateFlow<Boolean> = _busy.asStateFlow()
@@ -82,6 +88,24 @@ class DataTransferViewModel @Inject constructor(
                 false
             }
             _events.trySend(if (ok) done else failed)
+            _busy.value = false
+        }
+    }
+
+    /** Settings › Delete all data, after the confirm dialog. */
+    fun deleteAll() {
+        if (_busy.value) return
+        _busy.value = true
+        viewModelScope.launch {
+            val ok = try {
+                withContext(Dispatchers.IO) { wiper.create().wipe() }
+                true
+            } catch (e: CancellationException) {
+                throw e
+            } catch (_: Exception) {
+                false
+            }
+            _events.trySend(if (ok) DataTransferEvent.DataDeleted else DataTransferEvent.DeleteFailed)
             _busy.value = false
         }
     }

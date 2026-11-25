@@ -162,6 +162,7 @@ fun VehicleDetailRoute(
                         android.widget.Toast.makeText(context, R.string.pdf_failed, android.widget.Toast.LENGTH_SHORT).show()
                     }
                 }
+                PdfEvent.ProRequired -> onOpenPro(PaywallTrigger.PDF_REPORT)
                 PdfEvent.Failed ->
                     android.widget.Toast.makeText(context, R.string.pdf_failed, android.widget.Toast.LENGTH_SHORT).show()
             }

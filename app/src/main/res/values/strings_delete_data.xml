@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Settings > Delete all data (spec 6.1). Kept apart from strings.xml on purpose: DE/FR/ES go through a native-speaker
+  review that is handled separately, so these strings fall back to English until that review adds them.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="settings_delete_all" tools:ignore="MissingTranslation">Delete all data</string>
+    <string name="settings_delete_all_summary" tools:ignore="MissingTranslation">Removes your vehicles, entries, documents, attachments and reminders from this device</string>
+    <string name="data_delete_confirm_title" tools:ignore="MissingTranslation">Delete all data?</string>
+    <string name="data_delete_confirm_body" tools:ignore="MissingTranslation">This permanently deletes every vehicle, entry, document, attachment and reminder on this device and resets your settings. Save a backup file first if you may need them again. Your purchases are not affected.</string>
+    <string name="data_delete_confirm" tools:ignore="MissingTranslation">Delete everything</string>
+    <string name="data_delete_failed" tools:ignore="MissingTranslation">Couldn\'t delete your data</string>
+</resources>

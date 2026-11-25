@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -147,6 +148,23 @@ class BillingRepositoryTest {
         repo.restore()
         advanceUntilIdle()
         assertFalse(repo.isPro.value)
+    }
+
+    /** Device transfer copies the cached `is_pro` flag to a new phone; Play is the source of truth on first launch there. */
+    @Test fun startup_clearsATransferredProFlagWhenPlayHasNoPurchase() = runTest {
+        val repo = repo()
+        dataStore.edit {
+            it[EntitlementKeys.IS_PRO] = true
+            it[EntitlementKeys.OWNS_REMOVE_ADS] = true
+        }
+        advanceUntilIdle()
+        assertTrue("cached flag is trusted only until Play answers", repo.isPro.value)
+        gateway.owned = emptyList()
+        repo.start()
+        advanceUntilIdle()
+        assertFalse(repo.isPro.value)
+        assertFalse(repo.adsHidden.value)
+        assertFalse(dataStore.data.first()[EntitlementKeys.IS_PRO] ?: false)
     }
 
     @Test fun failedQuery_keepsCachedPro() = runTest {

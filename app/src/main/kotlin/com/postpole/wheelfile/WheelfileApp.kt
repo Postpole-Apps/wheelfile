@@ -65,7 +65,7 @@ class WheelfileApp : Application(), Configuration.Provider {
         }
     }
 
-    private companion object {
+    internal companion object {
         val LAUNCHED_BEFORE = booleanPreferencesKey("launched_before")
     }
 }
