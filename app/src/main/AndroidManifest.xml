@@ -12,6 +12,13 @@
     <!-- Asked in context when the first reminder is saved (Android 13+). Reminders still show in the app if denied. -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!--
+      WorkManager's library manifest adds FOREGROUND_SERVICE for its optional setForeground() support. Reminders run as
+      plain periodic and one-time work and never start a foreground service, so the permission is removed: no
+      foreground-service type and no Play Console foreground-service declaration are needed (docs/merged-manifest.md).
+      The unused SystemForegroundService entry stays; without the permission it can never be started.
+    -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" tools:node="remove" />
+    <!--
       Deliberately absent: CAMERA (photos use the TakePicture intent), READ_MEDIA_* / storage (Photo Picker and the
       document picker hand over a readable URI), location and exact alarms. ManifestPermissionsTest enforces this.
     -->

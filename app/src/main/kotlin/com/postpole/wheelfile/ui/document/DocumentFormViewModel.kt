@@ -15,7 +15,6 @@ import com.postpole.wheelfile.data.attachments.StagedAttachment
 import com.postpole.wheelfile.data.db.Attachment
 import com.postpole.wheelfile.data.db.AttachmentDao
 import com.postpole.wheelfile.data.db.DocumentType
-import com.postpole.wheelfile.data.db.OwnerType
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleDao
 import com.postpole.wheelfile.domain.document.DocumentError
@@ -176,10 +175,9 @@ class DocumentFormViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val doc = DocumentForm.toDocument(s.form, vehicleId, documentId ?: 0L)
-                val id = documents.save(doc)
-                removed.forEach { attachmentStore.delete(it) }
+                // One transaction: a failure leaves no partial rows, and the staged files stay for a retry.
+                documents.saveWithAttachments(doc, staged = s.attachments, removed = removed)
                 removed = emptyList()
-                s.attachments.forEach { attachmentStore.commit(it, OwnerType.DOCUMENT, id) }
                 saved = true
                 analytics.logEvent(AnalyticsEvents.DOCUMENT_SAVED)
                 var prompt = false

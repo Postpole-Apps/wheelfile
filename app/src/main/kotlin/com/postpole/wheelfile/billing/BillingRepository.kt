@@ -259,8 +259,19 @@ class BillingRepository(
     }
 
     private companion object {
-        val IS_PRO = booleanPreferencesKey("is_pro")
-        val OWNS_REMOVE_ADS = booleanPreferencesKey("owns_remove_ads")
+        val IS_PRO = EntitlementKeys.IS_PRO
+        val OWNS_REMOVE_ADS = EntitlementKeys.OWNS_REMOVE_ADS
         const val MAX_BACKOFF_MS = 15_000L
     }
+}
+
+/**
+ * DataStore keys of the cached purchases. They describe what the Google account owns, not user data, so "Delete all
+ * data" keeps them (the next Play refresh would only restore them) and a device-transfer copy of them is never trusted:
+ * [BillingRepository.start] reconciles them with Play on every launch and clears Pro when Play has no purchase.
+ */
+object EntitlementKeys {
+    val IS_PRO = booleanPreferencesKey("is_pro")
+    val OWNS_REMOVE_ADS = booleanPreferencesKey("owns_remove_ads")
+    val ALL: Set<Preferences.Key<*>> = setOf(IS_PRO, OWNS_REMOVE_ADS)
 }

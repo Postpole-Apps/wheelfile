@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
 import com.postpole.wheelfile.ads.QuietAction
+import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.data.backup.VehiclePdfExporter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -27,15 +28,28 @@ sealed interface PdfEvent {
     /** The report is ready: hand [uri] to the share sheet. */
     data class Ready(val uri: Uri) : PdfEvent
     data object Failed : PdfEvent
+
+    /** The report is Pro only: the UI opens the paywall. Nothing was built. */
+    data object ProRequired : PdfEvent
 }
 
 /** Builds the Pro vehicle history PDF in the cache folder and offers it to the share sheet. */
 @HiltViewModel
-class PdfReportViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+class PdfReportViewModel internal constructor(
+    private val context: Context,
     private val exporter: VehiclePdfExporter,
     private val adsPolicy: AdsPolicy,
+    private val isPro: () -> Boolean,
 ) : ViewModel() {
+
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+        exporter: VehiclePdfExporter,
+        adsPolicy: AdsPolicy,
+        billing: BillingRepository,
+    ) : this(context, exporter, adsPolicy, { billing.isPro.value })
+
     private val _busy = MutableStateFlow(false)
     val busy: StateFlow<Boolean> = _busy.asStateFlow()
 
@@ -43,6 +57,12 @@ class PdfReportViewModel @Inject constructor(
     val events: Flow<PdfEvent> = _events.receiveAsFlow()
 
     fun share(vehicleId: Long) {
+        // The UI hides the button from free users, but the guard lives here too: a stale screen or a cached Pro flag
+        // that Play has since cleared must never build the report.
+        if (!isPro()) {
+            _events.trySend(PdfEvent.ProRequired)
+            return
+        }
         if (_busy.value) return
         adsPolicy.onQuietAction(QuietAction.PDF_SHARE)
         _busy.value = true

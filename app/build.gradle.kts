@@ -154,6 +154,10 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+        // Screenshot goldens (ui/GoldenImage.kt): `./gradlew testDebugUnitTest -PupdateGoldens` re-records them.
+        unitTests.all { test ->
+            test.systemProperty("updateGoldens", providers.gradleProperty("updateGoldens").isPresent.toString())
+        }
     }
 
     // Exported Room schemas as assets for MigrationTestHelper. Robolectric unit tests only see the app's
@@ -230,4 +234,9 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.androidx.test.ext.junit)
     testImplementation(libs.androidx.work.testing)
+
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
 }

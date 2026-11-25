@@ -209,11 +209,25 @@ interface AttachmentDao {
     )
     fun observeReceiptCount(vehicleId: Long): Flow<Int>
 
+    /** Every attachment owned by this vehicle itself or by any of its entries and documents. */
+    @Query(
+        "SELECT * FROM Attachment WHERE " +
+            "(ownerType = 'VEHICLE' AND ownerId = :vehicleId) OR " +
+            "(ownerType = 'ENERGY' AND ownerId IN (SELECT id FROM EnergyLog WHERE vehicleId = :vehicleId)) OR " +
+            "(ownerType = 'SERVICE' AND ownerId IN (SELECT id FROM ServiceRecord WHERE vehicleId = :vehicleId)) OR " +
+            "(ownerType = 'EXPENSE' AND ownerId IN (SELECT id FROM Expense WHERE vehicleId = :vehicleId)) OR " +
+            "(ownerType = 'DOCUMENT' AND ownerId IN (SELECT id FROM VehicleDocument WHERE vehicleId = :vehicleId))",
+    )
+    suspend fun getForVehicle(vehicleId: Long): List<Attachment>
+
     @Insert
     suspend fun insert(attachment: Attachment): Long
 
     @Delete
     suspend fun delete(attachment: Attachment)
+
+    @Query("DELETE FROM Attachment WHERE id IN (:ids)")
+    suspend fun deleteByIds(ids: List<Long>)
 
     @Query("DELETE FROM Attachment")
     suspend fun deleteAll()

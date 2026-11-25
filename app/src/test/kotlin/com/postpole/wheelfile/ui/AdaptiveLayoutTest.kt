@@ -33,7 +33,8 @@ import java.io.File
 
 /**
  * Adaptive layouts at compact, medium and expanded widths (spec §3.2): one pane below 600 dp, Garage | Vehicle side
- * by side from 600 dp up. Each test also writes a PNG to `build/screenshots/` for the Play screenshot sets.
+ * by side from 600 dp up. Each test compares its render with a committed golden PNG in `src/test/golden/`
+ * ([GoldenImage]) and also writes the latest render to `build/screenshots/`. Pane-layout assertions run first.
  */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
@@ -61,9 +62,11 @@ class AdaptiveLayoutTest {
         val view = checkNotNull(rootView)
         val bitmap = android.graphics.Bitmap.createBitmap(view.width, view.height, android.graphics.Bitmap.Config.ARGB_8888)
         view.draw(android.graphics.Canvas(bitmap))
+        assertTrue(bitmap.width > 0 && bitmap.height > 0)
+        // The latest render, for the Play screenshot sets; the committed golden is what the test compares against.
         val dir = File("build/screenshots").apply { mkdirs() }
         File(dir, "$name.png").outputStream().use { bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it) }
-        assertTrue(bitmap.width > 0 && bitmap.height > 0)
+        GoldenImage.assertMatches(name, bitmap)
     }
 
     private var rootView: android.view.View? = null

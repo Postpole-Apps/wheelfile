@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +51,9 @@ import com.postpole.wheelfile.R
 import com.postpole.wheelfile.data.ThemeMode
 import java.util.Currency
 
+const val DELETE_ALL_TAG = "settings-delete-all"
+const val DELETE_ALL_CONFIRM_TAG = "settings-delete-all-confirm"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -58,11 +62,14 @@ fun SettingsScreen(
     onOpenAdPreview: () -> Unit = {},
     onOpenReminders: () -> Unit = {},
     onOpenImport: () -> Unit = {},
+    /** After Delete all data: leave Settings and return to onboarding. */
+    onDataDeleted: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel(),
     dataViewModel: DataTransferViewModel = hiltViewModel(),
 ) {
     val dataBusy by dataViewModel.busy.collectAsStateWithLifecycle()
     var pendingRestore by rememberSaveable { mutableStateOf<String?>(null) }
+    var confirmDelete by rememberSaveable { mutableStateOf(false) }
     val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) {
         dataViewModel.exportCsv(it)
     }
@@ -91,7 +98,9 @@ fun SettingsScreen(
     }
     val dataMessages = rememberDataMessages()
     LaunchedEffect(dataViewModel) {
-        dataViewModel.events.collect { snackbarHostState.showSnackbar(dataMessages(it)) }
+        dataViewModel.events.collect {
+            if (it == DataTransferEvent.DataDeleted) onDataDeleted() else snackbarHostState.showSnackbar(dataMessages(it))
+        }
     }
 
     Scaffold(
@@ -170,6 +179,13 @@ fun SettingsScreen(
                     null
                 },
                 modifier = Modifier.clickable(enabled = !dataBusy) { restoreLauncher.launch(arrayOf("*/*")) },
+            )
+            ListItem(
+                headlineContent = {
+                    Text(stringResource(R.string.settings_delete_all), color = MaterialTheme.colorScheme.error)
+                },
+                supportingContent = { Text(stringResource(R.string.settings_delete_all_summary)) },
+                modifier = Modifier.testTag(DELETE_ALL_TAG).clickable(enabled = !dataBusy) { confirmDelete = true },
             )
             Text(
                 stringResource(R.string.settings_transfer_note),
@@ -250,6 +266,24 @@ fun SettingsScreen(
                 },
             )
         }
+    }
+
+    if (confirmDelete) {
+        AlertDialog(
+            onDismissRequest = { confirmDelete = false },
+            title = { Text(stringResource(R.string.data_delete_confirm_title)) },
+            text = { Text(stringResource(R.string.data_delete_confirm_body)) },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmDelete = false
+                        dataViewModel.deleteAll()
+                    },
+                    modifier = Modifier.testTag(DELETE_ALL_CONFIRM_TAG),
+                ) { Text(stringResource(R.string.data_delete_confirm), color = MaterialTheme.colorScheme.error) }
+            },
+            dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(stringResource(R.string.cancel)) } },
+        )
     }
 
     pendingRestore?.let { uri ->
@@ -411,6 +445,7 @@ private fun rememberDataMessages(): (DataTransferEvent) -> String {
     val backupFailed = stringResource(R.string.data_backup_failed)
     val restored = stringResource(R.string.data_restore_done)
     val restoreFailed = stringResource(R.string.data_restore_failed)
+    val deleteFailed = stringResource(R.string.data_delete_failed)
     val context = LocalContext.current
     return { event ->
         when (event) {
@@ -421,6 +456,8 @@ private fun rememberDataMessages(): (DataTransferEvent) -> String {
             is DataTransferEvent.Restored ->
                 if (event.archivedForCap > 0) context.getString(R.string.data_restore_done_archived, event.archivedForCap) else restored
             DataTransferEvent.RestoreFailed -> restoreFailed
+            DataTransferEvent.DataDeleted -> ""
+            DataTransferEvent.DeleteFailed -> deleteFailed
         }
     }
 }

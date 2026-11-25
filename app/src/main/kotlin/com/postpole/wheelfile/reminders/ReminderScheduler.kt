@@ -30,6 +30,13 @@ class ReminderScheduler(private val workManager: WorkManager) {
         workManager.enqueueUniqueWork(DEFERRED_WORK, ExistingWorkPolicy.REPLACE, request)
     }
 
+    /** Cancels the daily, deferred and immediate runs (Delete all data). */
+    fun cancelAll() {
+        workManager.cancelUniqueWork(DAILY_WORK)
+        workManager.cancelUniqueWork(DEFERRED_WORK)
+        workManager.cancelUniqueWork(NOW_WORK)
+    }
+
     /** A run as soon as possible, for example right after a reminder is saved. */
     fun runNow() {
         workManager.enqueueUniqueWork(NOW_WORK, ExistingWorkPolicy.REPLACE, OneTimeWorkRequestBuilder<ReminderWorker>().build())

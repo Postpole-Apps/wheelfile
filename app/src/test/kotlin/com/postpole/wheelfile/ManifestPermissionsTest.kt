@@ -46,6 +46,13 @@ class ManifestPermissionsTest {
         assertFalse(requested.any { it.endsWith(".SCHEDULE_EXACT_ALARM") || it.endsWith(".USE_EXACT_ALARM") })
     }
 
+    /** WorkManager merges FOREGROUND_SERVICE in; nothing here uses a foreground service, so it is stripped (issue #12). */
+    @Test
+    fun noForegroundServicePermissions() {
+        val fgs = requested.filter { it.contains("FOREGROUND_SERVICE") }
+        assertTrue("Unexpected foreground-service permissions: $fgs", fgs.isEmpty())
+    }
+
     @Test
     fun notificationsAndAdIdStayOn() {
         assertTrue("android.permission.POST_NOTIFICATIONS" in requested)

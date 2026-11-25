@@ -98,7 +98,10 @@ class DocumentsReportsUiTest {
             dir = File(temp.newFolder("files"), "attachments"), dao = db.attachmentDao(),
             opener = SourceOpener { ByteArrayInputStream(ByteArray(1)) }, mimeOf = { "application/pdf" }, isPro = { false }, clock = { 1L },
         )
-        documents = DocumentRepository(db.vehicleDocumentDao(), db.reminderDao(), db.attachmentDao(), store)
+        documents = DocumentRepository(
+            db.vehicleDocumentDao(), db.reminderDao(), db.attachmentDao(), store,
+            com.postpole.wheelfile.data.RoomTransactor(db), com.postpole.wheelfile.data.deleter(db, store),
+        )
         vehicleId = runBlocking {
             val id = db.vehicleDao().insert(
                 Vehicle(

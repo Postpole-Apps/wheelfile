@@ -108,6 +108,45 @@ class AttachmentStore(
         )
     }
 
+    /**
+     * Inserts rows for [staged] without touching any file, so it is safe to run inside the caller's transaction: if the
+     * transaction rolls back, no row exists and the staged files are still there for a retry. Files that don't fit under
+     * the free cap are returned; pass them to [discardAll] once the transaction has committed.
+     */
+    suspend fun commitAll(staged: List<StagedAttachment>, ownerType: OwnerType, ownerId: Long): List<StagedAttachment> {
+        var count = dao.count()
+        val pro = isPro()
+        val dropped = mutableListOf<StagedAttachment>()
+        for (file in staged) {
+            if (!AttachmentLimit.canAdd(count, pro)) {
+                dropped += file
+                continue
+            }
+            dao.insert(
+                Attachment(
+                    ownerType = ownerType, ownerId = ownerId, fileName = file.fileName,
+                    mimeType = file.mimeType, sizeBytes = file.sizeBytes, createdAt = clock(),
+                ),
+            )
+            count++
+        }
+        return dropped
+    }
+
+    /** Deletes the private files of [staged]. Missing files are ignored. */
+    suspend fun discardAll(staged: List<StagedAttachment>) = deleteFiles(staged.map { it.fileName })
+
+    /** Deletes private files by name, after the database rows that pointed at them are gone for good. */
+    suspend fun deleteFiles(fileNames: List<String>) = withContext(Dispatchers.IO) {
+        fileNames.forEach { fileFor(it).delete() }
+    }
+
+    /** Deletes every attachment file (Delete all data). */
+    suspend fun deleteAllFiles() = withContext(Dispatchers.IO) {
+        dir.listFiles()?.forEach { it.delete() }
+        Unit
+    }
+
     /** Stage then commit in one go, for owners that already exist. */
     suspend fun add(source: String, ownerType: OwnerType, ownerId: Long): StageResult {
         val result = stage(source)
