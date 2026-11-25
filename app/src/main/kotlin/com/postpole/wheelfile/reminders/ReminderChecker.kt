@@ -1,5 +1,6 @@
 package com.postpole.wheelfile.reminders
 
+import com.postpole.wheelfile.ads.ReminderFiredStore
 import com.postpole.wheelfile.data.db.Reminder
 import com.postpole.wheelfile.data.db.ReminderDao
 import com.postpole.wheelfile.data.db.Vehicle
@@ -34,6 +35,8 @@ class ReminderChecker(
     private val zone: () -> ZoneId = { ZoneId.systemDefault() },
     /** Alert days (30 / 14 / 7 / 1 by default) of each document that has an expiry reminder, by document id. */
     private val documentAlerts: suspend () -> Map<Long, List<Int>> = { emptyMap() },
+    /** Records the app-level reminder-fired timestamp when a run posts at least one notification. */
+    private val firedStore: ReminderFiredStore? = null,
 ) {
     suspend fun run(): CheckResult {
         val now = clock()
@@ -61,6 +64,7 @@ class ReminderChecker(
                 posted++
             }
         }
+        if (posted > 0) firedStore?.recordFired(now)
         return CheckResult(posted)
     }
 }

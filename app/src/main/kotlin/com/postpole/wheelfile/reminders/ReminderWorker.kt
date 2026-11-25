@@ -3,6 +3,9 @@ package com.postpole.wheelfile.reminders
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import com.postpole.wheelfile.ads.DataStoreReminderFiredStore
 import com.postpole.wheelfile.data.SettingsRepository
 import com.postpole.wheelfile.data.db.ReminderDao
 import com.postpole.wheelfile.data.db.VehicleDao
@@ -21,6 +24,7 @@ interface ReminderWorkerEntryPoint {
     fun documentDao(): VehicleDocumentDao
     fun settings(): SettingsRepository
     fun notifier(): AndroidReminderNotifier
+    fun dataStore(): DataStore<Preferences>
 }
 
 /**
@@ -37,6 +41,7 @@ class ReminderWorker(context: Context, params: WorkerParameters) : CoroutineWork
             notifier = deps.notifier(),
             quietHours = { deps.settings().quietHours.first() },
             clock = System::currentTimeMillis,
+            firedStore = DataStoreReminderFiredStore(deps.dataStore()),
             documentAlerts = { deps.documentDao().getAll().associate { it.id to it.alertDays } },
         )
         val result = checker.run()

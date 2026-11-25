@@ -1,7 +1,10 @@
 package com.postpole.wheelfile.reminders
 
 import android.content.Context
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.room.Room
+import com.postpole.wheelfile.ads.DataStoreReminderFiredStore
+import com.postpole.wheelfile.ads.ReminderFiredStore
 import androidx.test.core.app.ApplicationProvider
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -66,7 +69,70 @@ class ReminderSchedulerTest {
         quietHours = { quiet },
         clock = { now },
         zone = { zone },
+        firedStore = fired,
     )
+
+    private val fired = object : ReminderFiredStore {
+        var at: Long? = null
+        override suspend fun lastFiredAt() = at
+        override suspend fun recordFired(at: Long) {
+            this.at = at
+        }
+    }
+
+    @Test
+    fun successfulNotifyRecordsTheReminderFiredTimestamp() = runBlocking {
+        val v = vehicle()
+        remind(v, ReminderKind.DATE, dueDate = at(LocalDate.of(2026, 6, 16), 0))
+        assertNull(fired.lastFiredAt())
+        assertEquals(1, checker().run().posted)
+        assertEquals(now, fired.lastFiredAt())
+    }
+
+    @Test
+    fun runThatPostsNothingDoesNotWriteOrRefreshTheTimestamp() = runBlocking {
+        val v = vehicle()
+        remind(v, ReminderKind.DATE, dueDate = at(LocalDate.of(2026, 7, 30), 0))
+        assertEquals(0, checker().run().posted)
+        assertNull(fired.lastFiredAt())
+
+        val firedAt = now
+        fired.at = firedAt
+        now += day // later run, still nothing due
+        assertEquals(0, checker().run().posted)
+        assertEquals(firedAt, fired.lastFiredAt())
+    }
+
+    @Test
+    fun failedPostDoesNotWriteTheTimestamp() = runBlocking {
+        val v = vehicle()
+        remind(v, ReminderKind.DATE, dueDate = at(LocalDate.of(2026, 6, 16), 0))
+        canPost = false
+        assertEquals(0, checker().run().posted)
+        assertNull(fired.lastFiredAt())
+    }
+
+    @Test
+    fun quietHoursDeferralDoesNotWriteTheTimestamp() = runBlocking {
+        val v = vehicle()
+        remind(v, ReminderKind.DATE, dueDate = at(LocalDate.of(2026, 6, 16), 0))
+        quiet = QuietHours(enabled = true, startHour = 21, endHour = 8)
+        now = at(LocalDate.of(2026, 6, 15), 23)
+        assertEquals(0, checker().run().posted)
+        assertNull(fired.lastFiredAt())
+    }
+
+    @Test
+    fun dataStoreStoreRoundTripsTheTimestamp() = runBlocking {
+        val store = DataStoreReminderFiredStore(
+            PreferenceDataStoreFactory.create(scope = kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO)) {
+                java.io.File(context.cacheDir, "fired-${System.nanoTime()}.preferences_pb")
+            },
+        )
+        assertNull(store.lastFiredAt())
+        store.recordFired(1234L)
+        assertEquals(1234L, store.lastFiredAt())
+    }
 
     private suspend fun vehicle(archived: Boolean = false) = db.vehicleDao().insert(
         Vehicle(
