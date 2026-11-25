@@ -60,7 +60,7 @@ class ReviewPolicy(
         const val DEFAULT_REQUIRED_ACTIONS = 5
         const val DEFAULT_MIN_INTERVAL_DAYS = 60L
         private val ACTIONS = intPreferencesKey("review_positive_actions")
-        private val LAST_PROMPT = longPreferencesKey("review_last_prompt")
+        internal val LAST_PROMPT = longPreferencesKey("review_last_prompt")
     }
 }
 

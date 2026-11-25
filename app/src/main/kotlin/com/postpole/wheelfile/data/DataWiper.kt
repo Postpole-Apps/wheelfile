@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import com.postpole.wheelfile.WheelfileApp
 import com.postpole.wheelfile.billing.EntitlementKeys
+import com.postpole.wheelfile.review.ReviewPolicy
 import com.postpole.wheelfile.data.attachments.AttachmentStore
 import com.postpole.wheelfile.data.db.AttachmentDao
 import com.postpole.wheelfile.data.db.CustomCategoryDao
@@ -18,8 +20,8 @@ import javax.inject.Singleton
 
 /**
  * Settings › Delete all data (spec §6.1). Wipes the database in one transaction, then the attachment files, the
- * scheduled reminder work and posted notifications, and the DataStore. Only the cached purchase flags survive: they
- * belong to the Google account and are re-checked with Play anyway.
+ * scheduled reminder work and posted notifications, and the DataStore. Only [KEPT_KEYS] survive: the cached purchase flags
+ * (they belong to the Google account and are re-checked with Play anyway) and app state such as `launched_before`.
  */
 class DataWiper(
     private val transactor: Transactor,
@@ -50,6 +52,14 @@ class DataWiper(
         }
     }
 
+    companion object {
+        /** App state that is not user data and must survive the wipe, so a non-new user is not counted as new again. */
+        val KEPT_APP_STATE_KEYS: Set<Preferences.Key<*>> = setOf(WheelfileApp.LAUNCHED_BEFORE, ReviewPolicy.LAST_PROMPT)
+
+        /** Every DataStore key that survives Delete all data: the purchase flags plus [KEPT_APP_STATE_KEYS]. */
+        val KEPT_KEYS: Set<Preferences.Key<*>> = EntitlementKeys.ALL.toSet() + KEPT_APP_STATE_KEYS
+    }
+
     suspend fun wipe() {
         transactor.run {
             vehicles.deleteAll() // cascades to entries, documents and reminders
@@ -61,7 +71,7 @@ class DataWiper(
         store.deleteAllFiles()
         cancelReminders()
         dataStore.edit { prefs ->
-            val keep = EntitlementKeys.ALL.mapNotNull { key -> prefs.asMap()[key]?.let { key to it } }
+            val keep = KEPT_KEYS.mapNotNull { key -> prefs.asMap()[key]?.let { key to it } }
             prefs.clear()
             @Suppress("UNCHECKED_CAST")
             keep.forEach { (key, value) -> prefs[key as Preferences.Key<Any>] = value }

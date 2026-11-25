@@ -9,7 +9,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.postpole.wheelfile.WheelfileApp
 import com.postpole.wheelfile.billing.EntitlementKeys
+import com.postpole.wheelfile.review.ReviewPolicy
 import com.postpole.wheelfile.data.attachments.AttachmentStore
 import com.postpole.wheelfile.data.attachments.SourceOpener
 import com.postpole.wheelfile.data.attachments.StageResult
@@ -131,6 +133,19 @@ class DataWiperTest {
         fill()
         wiper().wipe()
         assertEquals(true, dataStore.data.first()[EntitlementKeys.IS_PRO])
+    }
+
+    @Test fun keepsLaunchedBeforeAndReviewPromptStateSoAnalyticsAndReviewPacingAreNotReset() = runBlocking {
+        fill()
+        dataStore.edit {
+            it[WheelfileApp.LAUNCHED_BEFORE] = true
+            it[ReviewPolicy.LAST_PROMPT] = 123L
+        }
+        wiper().wipe()
+        val prefs = dataStore.data.first()
+        assertEquals(true, prefs[WheelfileApp.LAUNCHED_BEFORE])
+        assertEquals(123L, prefs[ReviewPolicy.LAST_PROMPT])
+        assertFalse(prefs.contains(stringPreferencesKey("anything_else")))
     }
 
     @Test fun afterTheWipeTheAppStartsOnTheWelcomeScreen() = runBlocking {
