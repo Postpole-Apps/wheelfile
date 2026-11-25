@@ -27,6 +27,9 @@ class RemoteConfigDefaultsTest {
             AdsConfigKeys.INTERSTITIAL_MAX_PER_DAY to "3",
             AdsConfigKeys.MAX_CONTENT_RATING to "PG",
             AdsConfigKeys.REWARDED_DAILY_LIMIT to "1",
+            AdsConfigKeys.PRO_AUTO_PROMPT_ENABLED to "true",
+            AdsConfigKeys.PRO_AUTO_PROMPT_MIN_SESSION to "3",
+            AdsConfigKeys.WF_AUTO_ENTRIES_THRESHOLD to "10",
         )
         expected.forEach { (key, v) -> assertEquals(key, v, value(key)) }
         assertEquals(expected.size, Regex("<entry>").findAll(xml).count())
@@ -47,5 +50,8 @@ class RemoteConfigDefaultsTest {
         assertEquals(value(AdsConfigKeys.INTERSTITIAL_MAX_PER_DAY).toInt(), d.interstitialMaxPerDay)
         assertEquals(value(AdsConfigKeys.MAX_CONTENT_RATING), d.maxContentRating)
         assertEquals(value(AdsConfigKeys.REWARDED_DAILY_LIMIT).toInt(), d.rewardedDailyLimit)
+        assertEquals(value(AdsConfigKeys.PRO_AUTO_PROMPT_ENABLED).toBoolean(), d.proPrompt.enabled)
+        assertEquals(value(AdsConfigKeys.PRO_AUTO_PROMPT_MIN_SESSION).toInt(), d.proPrompt.minSession)
+        assertEquals(value(AdsConfigKeys.WF_AUTO_ENTRIES_THRESHOLD).toInt(), d.proPrompt.entriesThreshold)
     }
 }

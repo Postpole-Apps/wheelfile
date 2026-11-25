@@ -11,6 +11,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import com.postpole.wheelfile.ads.AdsConfigSource
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ProPromptPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.billing.BillingRepository
@@ -36,9 +37,13 @@ class WheelfileApp : Application(), Configuration.Provider {
 
     // Created at launch so "first session" is decided once per process.
     @Inject lateinit var adsPolicy: AdsPolicy
+    @Inject lateinit var proPrompts: ProPromptPolicy
+
+    private val appScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
+        startProPromptSession()
         billing.start()
         adsConfig.start()
         logLaunch()
@@ -46,9 +51,21 @@ class WheelfileApp : Application(), Configuration.Provider {
         ReminderScheduler(this).scheduleDaily()
         ProcessLifecycleOwner.get().lifecycle.addObserver(
             object : DefaultLifecycleObserver {
-                override fun onStart(owner: LifecycleOwner) = billing.onForeground()
+                override fun onStart(owner: LifecycleOwner) {
+                    billing.onForeground()
+                    appScope.launch { proPrompts.onForegrounded() }
+                }
+
+                override fun onStop(owner: LifecycleOwner) = proPrompts.onBackgrounded()
             },
         )
+    }
+
+    /** Cold start begins a Pro-prompt session (spec §5.4a); a return after ≥ 30 min in the background begins another. */
+    private fun startProPromptSession() {
+        val installTime = runCatching { packageManager.getPackageInfo(packageName, 0).firstInstallTime }
+            .getOrDefault(System.currentTimeMillis())
+        appScope.launch { proPrompts.startSession(installTime) }
     }
 
     private fun logLaunch() {

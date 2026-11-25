@@ -26,6 +26,9 @@ enum class InterstitialDecision {
     DAY_CAP,
     PUMP_SESSION,
     QUIET_ACTION,
+
+    /** An automatic Pro prompt was shown this session; prompts and interstitials never share a session (§5.4a). */
+    PRO_PROMPT_SESSION,
 }
 
 /** Persists the times interstitials were shown so day caps and the interval survive restarts. */
@@ -56,6 +59,7 @@ class AdsPolicy(
     private val isFirstSession: Boolean,
     private val history: InterstitialHistory = InMemoryInterstitialHistory(),
     private val zone: ZoneId = ZoneId.systemDefault(),
+    private val proPrompts: ProPromptSessionGate = ProPromptSessionGate.None,
 ) {
     private var shownThisSession = 0
     private var pumpSession = false
@@ -64,6 +68,7 @@ class AdsPolicy(
     /** Call after a save. A fill-up or EV charge blocks interstitials for the rest of the session. */
     fun onSaved(kind: SaveKind) {
         if (kind.isPumpSession) pumpSession = true
+        proPrompts.onSaved(kind)
     }
 
     /**
@@ -92,6 +97,7 @@ class AdsPolicy(
     fun onInterstitialShown() {
         shownThisSession++
         history.record(clock())
+        proPrompts.onInterstitialShown()
     }
 
     fun evaluate(config: AdsConfig, adsHidden: Boolean, canRequestAds: Boolean): InterstitialDecision {
@@ -106,6 +112,7 @@ class AdsPolicy(
                 InterstitialDecision.TOO_SOON_AFTER_INSTALL
             pumpSession -> InterstitialDecision.PUMP_SESSION
             quietAction -> InterstitialDecision.QUIET_ACTION
+            proPrompts.proPromptShownThisSession -> InterstitialDecision.PRO_PROMPT_SESSION
             shownThisSession >= config.interstitialMaxPerSession -> InterstitialDecision.SESSION_CAP
             shown.count { sameDay(it, now) } >= config.interstitialMaxPerDay -> InterstitialDecision.DAY_CAP
             shown.lastOrNull()?.let { now - it < config.interstitialMinIntervalSec * 1_000L } == true ->

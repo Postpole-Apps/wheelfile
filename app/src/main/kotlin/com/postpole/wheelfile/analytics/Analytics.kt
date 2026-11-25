@@ -1,5 +1,9 @@
 package com.postpole.wheelfile.analytics
 
+import com.postpole.wheelfile.ads.ProPromptDismissMethod
+import com.postpole.wheelfile.ads.ProPromptSurface
+import com.postpole.wheelfile.ads.ProPromptTrigger
+
 /** Event and parameter names. Values mirror Firebase's standard names where one exists. */
 object AnalyticsEvents {
     const val APP_OPEN = "app_open"
@@ -25,6 +29,9 @@ object AnalyticsEvents {
     const val DOCUMENT_SAVED = "document_saved"
     const val PRESETS_ADDED = "presets_added"
     const val ATTACHMENT_CAP_REACHED = "attachment_cap_reached"
+    const val PRO_PROMPT_SHOWN = "pro_prompt_shown"
+    const val PRO_PROMPT_DISMISSED = "pro_prompt_dismissed"
+    const val PRO_PROMPT_CTA_TAP = "pro_prompt_cta_tap"
 }
 
 object AnalyticsParams {
@@ -39,7 +46,35 @@ object AnalyticsParams {
     const val FORMAT = "format"
     const val POWERTRAIN = "powertrain"
     const val UNIT_SYSTEM = "unit_system"
+
+    /** `sheet` or `card` (automatic Pro prompts). */
+    const val SURFACE = "surface"
+
+    /** `close`, `not_now` or `swipe` (automatic Pro prompts). */
+    const val METHOD = "method"
 }
+
+/**
+ * Automatic Pro prompt events (spec v0.2.2 §5.4a). The only inputs are enums, so no free text, count, ID or user
+ * data can reach the event.
+ */
+fun Analytics.logProPromptShown(trigger: ProPromptTrigger, surface: ProPromptSurface) =
+    logEvent(AnalyticsEvents.PRO_PROMPT_SHOWN, proPromptParams(trigger, surface))
+
+fun Analytics.logProPromptDismissed(
+    trigger: ProPromptTrigger,
+    surface: ProPromptSurface,
+    method: ProPromptDismissMethod,
+) = logEvent(
+    AnalyticsEvents.PRO_PROMPT_DISMISSED,
+    proPromptParams(trigger, surface) + (AnalyticsParams.METHOD to method.id),
+)
+
+fun Analytics.logProPromptCtaTap(trigger: ProPromptTrigger, surface: ProPromptSurface) =
+    logEvent(AnalyticsEvents.PRO_PROMPT_CTA_TAP, proPromptParams(trigger, surface))
+
+private fun proPromptParams(trigger: ProPromptTrigger, surface: ProPromptSurface): Map<String, Any> =
+    mapOf(AnalyticsParams.TRIGGER to trigger.id, AnalyticsParams.SURFACE to surface.id)
 
 /**
  * App-facing analytics + crash reporting seam. Backed by Firebase when the app has a

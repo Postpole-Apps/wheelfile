@@ -15,6 +15,11 @@ object AdsConfigKeys {
     const val INTERSTITIAL_MAX_PER_DAY = "ads_interstitial_max_per_day"
     const val MAX_CONTENT_RATING = "ads_max_content_rating"
     const val REWARDED_DAILY_LIMIT = "ads_rewarded_daily_limit"
+
+    // Automatic Pro prompts (spec v0.2.2 §5.4a). They share the ads fetch; see [ProPromptConfig].
+    const val PRO_AUTO_PROMPT_ENABLED = "pro_auto_prompt_enabled"
+    const val PRO_AUTO_PROMPT_MIN_SESSION = "pro_auto_prompt_min_session"
+    const val WF_AUTO_ENTRIES_THRESHOLD = "wf_auto_entries_threshold"
 }
 
 /** Snapshot of the ad-related Remote Config values. Controls whether a format shows, never unit IDs. */
@@ -32,6 +37,7 @@ data class AdsConfig(
     val interstitialMaxPerDay: Int = 3,
     val maxContentRating: String = "PG",
     val rewardedDailyLimit: Int = 1,
+    val proPrompt: ProPromptConfig = ProPromptConfig(),
 ) {
     /** True when banners may be requested as far as Remote Config is concerned. */
     val bannersAllowed: Boolean get() = adsEnabled && bannerEnabled
