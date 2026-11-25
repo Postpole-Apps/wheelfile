@@ -65,6 +65,11 @@ class FirebaseAdsConfigSource(
             interstitialMaxPerDay = getLong(AdsConfigKeys.INTERSTITIAL_MAX_PER_DAY).toInt(),
             maxContentRating = getString(AdsConfigKeys.MAX_CONTENT_RATING).ifBlank { d.maxContentRating },
             rewardedDailyLimit = getLong(AdsConfigKeys.REWARDED_DAILY_LIMIT).toInt(),
+            proPrompt = ProPromptConfig(
+                enabled = getBoolean(AdsConfigKeys.PRO_AUTO_PROMPT_ENABLED),
+                minSession = getLong(AdsConfigKeys.PRO_AUTO_PROMPT_MIN_SESSION).toInt(),
+                entriesThreshold = getLong(AdsConfigKeys.WF_AUTO_ENTRIES_THRESHOLD).toInt(),
+            ).coerced(),
         )
     }
 }

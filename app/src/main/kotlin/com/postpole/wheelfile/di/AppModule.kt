@@ -15,6 +15,8 @@ import com.postpole.wheelfile.ads.ConsentManager
 import com.postpole.wheelfile.ads.FirebaseAdsConfigSource
 import com.postpole.wheelfile.ads.GoogleAdsSdk
 import com.postpole.wheelfile.ads.UmpConsentForms
+import com.postpole.wheelfile.ads.DataStoreProPromptStateStore
+import com.postpole.wheelfile.ads.ProPromptPolicy
 import com.postpole.wheelfile.ads.createAdsPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.createAnalytics
@@ -96,7 +98,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideAdsPolicy(@ApplicationContext context: Context): AdsPolicy = createAdsPolicy(context)
+    fun provideAdsPolicy(@ApplicationContext context: Context, proPrompts: ProPromptPolicy): AdsPolicy =
+        createAdsPolicy(context, proPrompts)
+
+    @Provides
+    @Singleton
+    fun provideProPromptPolicy(dataStore: DataStore<Preferences>): ProPromptPolicy =
+        ProPromptPolicy(System::currentTimeMillis, DataStoreProPromptStateStore(dataStore))
 
     @Provides
     @Singleton

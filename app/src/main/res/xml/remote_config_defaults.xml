@@ -53,4 +53,16 @@
         <key>ads_rewarded_daily_limit</key>
         <value>1</value>
     </entry>
+    <entry>
+        <key>pro_auto_prompt_enabled</key>
+        <value>true</value>
+    </entry>
+    <entry>
+        <key>pro_auto_prompt_min_session</key>
+        <value>3</value>
+    </entry>
+    <entry>
+        <key>wf_auto_entries_threshold</key>
+        <value>10</value>
+    </entry>
 </defaultsMap>

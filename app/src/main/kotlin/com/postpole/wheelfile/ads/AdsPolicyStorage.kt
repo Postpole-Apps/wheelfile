@@ -23,7 +23,7 @@ class PrefsInterstitialHistory(context: Context) : InterstitialHistory {
 }
 
 /** Builds the per-launch [AdsPolicy]. True "first session" is the very first launch after install. */
-fun createAdsPolicy(context: Context): AdsPolicy {
+fun createAdsPolicy(context: Context, proPrompts: ProPromptSessionGate = ProPromptSessionGate.None): AdsPolicy {
     val prefs = context.getSharedPreferences("ads_policy", Context.MODE_PRIVATE)
     val first = !prefs.getBoolean("seen_first_session", false)
     if (first) prefs.edit().putBoolean("seen_first_session", true).apply()
@@ -34,5 +34,6 @@ fun createAdsPolicy(context: Context): AdsPolicy {
         installTimeMs = installTime,
         isFirstSession = first,
         history = PrefsInterstitialHistory(context),
+        proPrompts = proPrompts,
     )
 }
