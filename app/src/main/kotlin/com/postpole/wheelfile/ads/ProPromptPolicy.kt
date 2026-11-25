@@ -33,7 +33,7 @@ enum class ProPromptDecision {
     EXPIRED,
     DISABLED_BY_CONFIG,
     PRO_OWNER,
-    REMOVE_ADS_NO_SHEET,
+    NO_CARD_SLOT,
     FIRST_SESSION,
     TOO_SOON_AFTER_INSTALL,
     MIN_SESSION,
@@ -242,6 +242,7 @@ class ProPromptPolicy(
         trigger: ProPromptTrigger,
         config: ProPromptConfig,
         access: ProAccess,
+        hasCardSlot: Boolean = true,
     ): ProPromptOutcome = mutex.withLock {
         val now = clock()
         val cfg = config.coerced()
@@ -266,8 +267,12 @@ class ProPromptPolicy(
             return out(ProPromptDecision.PUMP_SESSION)
         }
         if (access == ProAccess.REMOVE_ADS && surface == ProPromptSurface.SHEET) {
-            return out(ProPromptDecision.REMOVE_ADS_NO_SHEET)
+            // remove_ads owners get a card with the same trigger instead of a sheet (Monetisation §E).
+            surface = ProPromptSurface.CARD
+            update { it.copy(pending = it.pending + (trigger.id to pending.copy(surface = surface))) }
         }
+        // A card needs a card slot on the current screen. Without one it stays pending for the next Garage rest point.
+        if (surface == ProPromptSurface.CARD && !hasCardSlot) return out(ProPromptDecision.NO_CARD_SLOT)
         if (state.sessionCount <= 1) return out(ProPromptDecision.FIRST_SESSION)
         if (now - state.installTimeMs < MIN_INSTALL_AGE_MS) return out(ProPromptDecision.TOO_SOON_AFTER_INSTALL)
         if (pending.minSession > state.sessionCount) return out(ProPromptDecision.NEXT_SESSION)

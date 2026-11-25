@@ -434,12 +434,78 @@ class ProPromptPolicyTest {
         assertEquals(ProPromptDecision.PRO_OWNER, decision(reports, access = ProAccess.PRO))
     }
 
-    @Test fun removeAdsOwner_cardsOnly_neverSheets() {
+    @Test fun removeAdsOwner_sheetTriggerBecomesCardWithSameTrigger() {
         inSession(3)
         qualify(milestone, sheet)
         qualify(reports, card)
-        assertEquals(ProPromptDecision.REMOVE_ADS_NO_SHEET, decision(milestone, access = ProAccess.REMOVE_ADS))
+        assertEquals(
+            ProPromptOutcome(ProPromptDecision.SHOW, card),
+            eval(milestone, access = ProAccess.REMOVE_ADS),
+        )
+        assertEquals(card, policy.current.pending.getValue(milestone.id).surface)
         assertEquals(ProPromptDecision.SHOW, decision(reports, access = ProAccess.REMOVE_ADS))
+    }
+
+    @Test fun removeAdsOwner_convertedCard_waitsForGarageWhenNoCardSlot() {
+        inSession(3)
+        qualify(milestone, sheet)
+        val noSlot = runBlocking { policy.evaluate(milestone, config, ProAccess.REMOVE_ADS, hasCardSlot = false) }
+        assertEquals(ProPromptOutcome(ProPromptDecision.NO_CARD_SLOT, card), noSlot)
+        assertTrue(milestone.id in policy.current.pending)
+        val garage = runBlocking { policy.evaluate(milestone, config, ProAccess.REMOVE_ADS, hasCardSlot = true) }
+        assertEquals(ProPromptOutcome(ProPromptDecision.SHOW, card), garage)
+    }
+
+    @Test fun removeAdsOwner_convertedCard_expiresAfter7Days() {
+        inSession(3)
+        qualify(milestone, sheet)
+        now += 6 * day
+        assertEquals(
+            ProPromptDecision.NO_CARD_SLOT,
+            runBlocking { policy.evaluate(milestone, config, ProAccess.REMOVE_ADS, hasCardSlot = false) }.decision,
+        )
+        now += 2 * day
+        assertEquals(ProPromptDecision.EXPIRED, decision(milestone, access = ProAccess.REMOVE_ADS))
+        assertFalse(milestone.id in policy.current.pending)
+    }
+
+    @Test fun removeAdsOwner_convertedCard_usesCardCaps() {
+        inSession(3)
+        // Shared 7-day soft window: another soft prompt was shown earlier in the week.
+        qualify(reports, card)
+        shown(reports, card)
+        launch()
+        qualify(milestone, sheet)
+        assertEquals(ProPromptDecision.SOFT_WINDOW, decision(milestone, access = ProAccess.REMOVE_ADS))
+        now += 8 * day
+        assertEquals(ProPromptDecision.EXPIRED, decision(milestone, access = ProAccess.REMOVE_ADS))
+        // 3 dismissals of that trigger's card stop it.
+        repeat(3) {
+            now += 15 * day
+            launch()
+            qualify(milestone, sheet)
+            assertEquals(ProPromptOutcome(ProPromptDecision.SHOW, card), eval(milestone, access = ProAccess.REMOVE_ADS))
+            shown(milestone, card)
+            dismissed(milestone, card)
+        }
+        now += 15 * day
+        launch()
+        qualify(milestone, sheet)
+        assertEquals(ProPromptDecision.CARD_DISMISS_LIMIT, decision(milestone, access = ProAccess.REMOVE_ADS))
+        assertEquals(0, policy.current.sheetDismissals)
+    }
+
+    @Test fun removeAdsOwner_convertedCard_leavesSheetCountersUntouched() {
+        inSession(3)
+        qualify(milestone, sheet)
+        assertEquals(ProPromptDecision.SHOW, decision(milestone, access = ProAccess.REMOVE_ADS))
+        shown(milestone, card)
+        dismissed(milestone, card)
+        val s = policy.current
+        assertEquals(0, s.sheetDismissals)
+        assertEquals(0, s.count(s.shownCounts, milestone, sheet))
+        assertEquals(1, s.count(s.shownCounts, milestone, card))
+        assertEquals(1, s.count(s.dismissedCounts, milestone, card))
     }
 
     // --- Remote Config ---
