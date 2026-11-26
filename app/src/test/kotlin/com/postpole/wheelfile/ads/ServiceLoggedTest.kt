@@ -14,6 +14,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 import java.nio.file.Files
+import java.util.concurrent.CopyOnWriteArrayList
 
 /** `service_logged` (spec v0.2.2 §5.4a): the once-ever gate, the coordinator and the shared policy rules. */
 class ServiceLoggedTest {
@@ -21,7 +22,7 @@ class ServiceLoggedTest {
     private val install = 1_700_000_000_000L
     private var now = install
     private var access = ProAccess.FREE
-    private val events = mutableListOf<Pair<String, Map<String, Any>>>()
+    private val events = CopyOnWriteArrayList<Pair<String, Map<String, Any>>>()
     private val analytics = object : Analytics {
         override fun logEvent(name: String, params: Map<String, Any>) {
             events += name to params
