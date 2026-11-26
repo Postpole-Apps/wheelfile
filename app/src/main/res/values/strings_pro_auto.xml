@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Automatic Pro prompts (spec v0.2.2 §5.4a): `entries_milestone` and `second_vehicle_added`. English only for now:
+  DE/FR/ES go through the native review in the funnel/translations issue (#23), so these fall back to English until
+  then (same approach as strings_delete_data.xml). The entries_milestone strings are exact from the spec table. Do not
+  paraphrase them. Prompt copy never mentions ads. The price is always the Play ProductDetails string.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- entries_milestone: {count} is the threshold that fired (Remote Config wf_auto_entries_threshold). -->
+    <plurals name="pro_auto_entries_title" tools:ignore="MissingTranslation">
+        <item quantity="one">%1$d entry logged</item>
+        <item quantity="other">%1$d entries logged</item>
+    </plurals>
+    <plurals name="pro_auto_entries_sheet_title" tools:ignore="MissingTranslation">
+        <item quantity="one">%1$d entry in your logbook</item>
+        <item quantity="other">%1$d entries in your logbook</item>
+    </plurals>
+    <string name="pro_auto_entries_body" tools:ignore="MissingTranslation">Pro adds unlimited vehicles, a PDF history report and all-time charts.</string>
+    <string name="pro_auto_entries_sheet_body" tools:ignore="MissingTranslation">Keep going with Pro: a one-time purchase that adds more to the logbook you already keep.</string>
+    <string name="pro_benefit_unlimited_vehicles" tools:ignore="MissingTranslation">Unlimited vehicles</string>
+    <string name="pro_benefit_pdf_history" tools:ignore="MissingTranslation">PDF history report</string>
+    <string name="pro_benefit_all_time_charts" tools:ignore="MissingTranslation">All-time charts</string>
+
+    <!-- second_vehicle_added (card). -->
+    <string name="pro_auto_second_vehicle_title" tools:ignore="MissingTranslation">Compare your vehicles with Pro</string>
+    <string name="pro_auto_second_vehicle_body" tools:ignore="MissingTranslation">Pro unlocks vehicle comparison and unlimited active vehicles.</string>
+
+    <!-- Shared. The CTA takes the Play price; with no price loaded yet it reads "See Pro". -->
+    <string name="pro_auto_cta" tools:ignore="MissingTranslation">See Pro · %1$s</string>
+    <string name="pro_auto_cta_no_price" tools:ignore="MissingTranslation">See Pro</string>
+    <string name="pro_auto_not_now" tools:ignore="MissingTranslation">Not now</string>
+    <!-- One id cannot hold both values: the card says "Dismiss", the sheet says "Close". -->
+    <string name="pro_auto_close_cd_card" tools:ignore="MissingTranslation">Dismiss</string>
+    <string name="pro_auto_close_cd_sheet" tools:ignore="MissingTranslation">Close</string>
+
+    <!-- Static PDF sample page on the sheet (not user data, no price). -->
+    <string name="pro_auto_sample_title" tools:ignore="MissingTranslation">Service history</string>
+    <string name="pro_auto_sample_vehicle" tools:ignore="MissingTranslation">Mazda CX-5 · 2019 · Petrol · 48,200 km</string>
+    <string name="pro_auto_sample_row_1" tools:ignore="MissingTranslation">12 Mar · Oil and filter</string>
+    <string name="pro_auto_sample_row_2" tools:ignore="MissingTranslation">02 Jun · Brake pads</string>
+    <string name="pro_auto_sample_row_3" tools:ignore="MissingTranslation">18 Sep · Tyre rotation</string>
+    <string name="pro_auto_sample_total" tools:ignore="MissingTranslation">Services in 12 months: 3</string>
+    <string name="pro_auto_sample_badge" tools:ignore="MissingTranslation">PDF</string>
+</resources>

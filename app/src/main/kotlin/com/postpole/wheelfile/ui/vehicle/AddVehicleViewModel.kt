@@ -2,6 +2,7 @@ package com.postpole.wheelfile.ui.vehicle
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.postpole.wheelfile.ads.ProPromptCoordinator
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.analytics.AnalyticsParams
@@ -78,6 +79,7 @@ class AddVehicleViewModel internal constructor(
     private val locale: Locale,
     /** Creates the documents for the presets ticked in step 3, once the vehicle has an id. */
     private val applyPresets: suspend (Vehicle, List<PresetPlan>) -> Unit = { _, _ -> },
+    private val proPrompts: ProPromptCoordinator? = null,
     private val clock: () -> Long,
 ) : ViewModel() {
 
@@ -88,9 +90,10 @@ class AddVehicleViewModel internal constructor(
         billing: BillingRepository,
         analytics: Analytics,
         documents: DocumentRepository,
+        proPrompts: ProPromptCoordinator,
     ) : this(
         repo, { billing.isPro.value }, settings::setOnboardingDone, analytics, Locale.getDefault(),
-        { vehicle, plans -> documents.applyPlans(vehicle, plans) }, System::currentTimeMillis,
+        { vehicle, plans -> documents.applyPlans(vehicle, plans) }, proPrompts, System::currentTimeMillis,
     )
 
     private val _state = MutableStateFlow(
@@ -236,6 +239,8 @@ class AddVehicleViewModel internal constructor(
                         AnalyticsParams.UNIT_SYSTEM to s.units.distance.name.lowercase(),
                     ),
                 )
+                // The 2nd active vehicle earns the next-session Garage card.
+                proPrompts?.onVehicleAdded(repo.vehicles.activeCount())
                 _events.send(AddVehicleEvent.Saved(id))
             } catch (e: Exception) {
                 analytics.recordNonFatal(e)

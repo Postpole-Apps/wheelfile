@@ -40,6 +40,9 @@ class VehicleRepository @Inject constructor(
         VehicleData(vehicle, logs, svc, exp, VehicleStatsCalculator.compute(vehicle, logs, svc, exp))
     }
 
+    /** Saved fill-ups, charges, services and expenses across all vehicles (the `entries_milestone` count). */
+    suspend fun totalEntryCount(): Int = energyLogs.countAll() + services.countAll() + expenses.countAll()
+
     suspend fun setArchived(id: Long, archived: Boolean, now: Long) {
         val v = vehicles.get(id) ?: return
         vehicles.update(v.copy(archived = archived, updatedAt = now))

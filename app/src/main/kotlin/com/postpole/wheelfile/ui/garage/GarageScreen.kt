@@ -43,10 +43,14 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.postpole.wheelfile.R
 import com.postpole.wheelfile.ads.AdScreen
 import com.postpole.wheelfile.ads.AdSlot
+import com.postpole.wheelfile.ads.ProPromptCoordinator
+import com.postpole.wheelfile.ui.pro.PaywallTrigger
+import com.postpole.wheelfile.ui.pro.ProPromptCard
 import com.postpole.wheelfile.data.VehicleData
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.domain.economy.StreamEconomy
@@ -68,6 +72,8 @@ class GarageActions(
     val onOpenVehicle: (Long) -> Unit,
     val onAddEntry: (vehicleId: Long, charge: Boolean) -> Unit,
     val onSelect: (Long) -> Unit,
+    /** Opens the existing paywall with a trigger (the automatic Pro card passes `auto_<trigger>`). */
+    val onOpenPaywall: (PaywallTrigger) -> Unit = { onOpenPro() },
 )
 
 @Composable
@@ -78,13 +84,29 @@ fun GarageRoute(
     viewModel: GarageViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val proPrompt by viewModel.proPrompt.collectAsStateWithLifecycle()
+    val price by viewModel.price.collectAsStateWithLifecycle()
+    // Rest point: the Garage is on screen with its vehicles (also after Back from a form or the paywall).
+    val hasVehicles = state is GarageUiState.Content
+    LifecycleResumeEffect(hasVehicles) {
+        if (hasVehicles) viewModel.onRestPoint()
+        onPauseOrDispose {}
+    }
     GarageScreen(
         state = state,
         actions = GarageActions(
             actions.onOpenSettings, actions.onOpenPro, actions.onAddVehicle, actions.onOpenVehicle, actions.onAddEntry,
             onSelect = { viewModel.select(it); actions.onSelect(it) },
+            onOpenPaywall = actions.onOpenPaywall,
         ),
         adSlot = { if (showBanner) AdSlot(AdScreen.GARAGE) },
+        proPrompt = proPrompt,
+        proPrice = price,
+        onProPromptCta = {
+            viewModel.onProPromptCta()
+            proPrompt?.let { actions.onOpenPaywall(ProPromptCoordinator.paywallTrigger(it.prompt.trigger)) }
+        },
+        onProPromptDismiss = viewModel::dismissProPrompt,
     )
 }
 
@@ -99,6 +121,12 @@ fun GarageScreen(
     state: GarageUiState,
     actions: GarageActions,
     adSlot: @Composable () -> Unit,
+    /** The automatic Pro card for the slot between the hero card and the other vehicles. */
+    proPrompt: GarageProPrompt? = null,
+    /** Play's formatted Pro price; null until loaded (the CTA then reads "See Pro"). */
+    proPrice: String? = null,
+    onProPromptCta: () -> Unit = {},
+    onProPromptDismiss: () -> Unit = {},
 ) {
     val content = state as? GarageUiState.Content
     Scaffold(
@@ -133,7 +161,7 @@ fun GarageScreen(
             when (state) {
                 GarageUiState.Loading -> GarageSkeleton()
                 GarageUiState.Empty -> EmptyGarage(actions.onAddVehicle)
-                is GarageUiState.Content -> GarageContent(state, actions)
+                is GarageUiState.Content -> GarageContent(state, actions, proPrompt, proPrice, onProPromptCta, onProPromptDismiss)
             }
         }
     }
@@ -176,7 +204,14 @@ private fun GarageSkeleton() {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun GarageContent(state: GarageUiState.Content, actions: GarageActions) {
+private fun GarageContent(
+    state: GarageUiState.Content,
+    actions: GarageActions,
+    proPrompt: GarageProPrompt?,
+    proPrice: String?,
+    onProPromptCta: () -> Unit,
+    onProPromptDismiss: () -> Unit,
+) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = Sizes.screenMargin, vertical = Spacing.m),
         verticalArrangement = Arrangement.spacedBy(Spacing.m),
@@ -195,6 +230,17 @@ private fun GarageContent(state: GarageUiState.Content, actions: GarageActions) 
             }
         }
         if (selected != null) HeroCard(selected, actions)
+        // Pro card slot: after the hero card (there is no due card on the Garage yet), before the other vehicles.
+        // It sits in the scrolling list, so it never covers the FAB or the banner (the list ends with FAB room).
+        if (proPrompt != null) {
+            ProPromptCard(
+                trigger = proPrompt.prompt.trigger,
+                count = proPrompt.count,
+                price = proPrice,
+                onCta = onProPromptCta,
+                onClose = onProPromptDismiss,
+            )
+        }
         if (state.others.isNotEmpty()) {
             Text(
                 stringResource(R.string.garage_other_vehicles),

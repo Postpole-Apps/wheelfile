@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ProPromptCoordinator
 import com.postpole.wheelfile.ads.SaveKind
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
@@ -76,6 +77,7 @@ class RecordFormViewModel internal constructor(
     private val isPro: StateFlow<Boolean>,
     private val vehicleId: Long,
     kind: RecordKind,
+    private val proPrompts: ProPromptCoordinator? = null,
     private val clock: () -> Long,
 ) : ViewModel() {
 
@@ -93,11 +95,13 @@ class RecordFormViewModel internal constructor(
         adsPolicy: AdsPolicy,
         analytics: Analytics,
         billing: BillingRepository,
+        proPrompts: ProPromptCoordinator,
     ) : this(
         vehicles, services, expenses, reminders, attachmentStore, attachmentDao, transactor, settings, adsPolicy, analytics,
         isPro = billing.isPro,
         vehicleId = checkNotNull(savedState.get<Long>("vehicleId")),
         kind = if (savedState.get<String>("kind") == "expense") RecordKind.EXPENSE else RecordKind.SERVICE,
+        proPrompts = proPrompts,
         clock = System::currentTimeMillis,
     )
 
@@ -221,7 +225,10 @@ class RecordFormViewModel internal constructor(
                     }
                 }
                 // Service and expense saves are not a pump session: they never block the interstitial rule.
-                adsPolicy.onSaved(if (service) SaveKind.SERVICE else SaveKind.EXPENSE)
+                val saveKind = if (service) SaveKind.SERVICE else SaveKind.EXPENSE
+                adsPolicy.onSaved(saveKind)
+                // The Nth saved entry earns the entries_milestone sheet (shown on Vehicle detail > Overview).
+                proPrompts?.onEntrySaved(saveKind)
                 analytics.logEvent(if (service) AnalyticsEvents.SERVICE_SAVED else AnalyticsEvents.EXPENSE_SAVED)
                 _events.send(RecordEvent.Saved(prompt))
             } catch (e: Exception) {

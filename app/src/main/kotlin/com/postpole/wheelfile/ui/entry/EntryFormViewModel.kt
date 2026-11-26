@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ProPromptCoordinator
 import com.postpole.wheelfile.ads.SaveKind
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
@@ -56,6 +57,7 @@ class EntryFormViewModel internal constructor(
     private val analytics: Analytics,
     private val vehicleId: Long,
     isCharge: Boolean,
+    private val proPrompts: ProPromptCoordinator? = null,
     private val clock: () -> Long,
 ) : ViewModel() {
 
@@ -65,10 +67,12 @@ class EntryFormViewModel internal constructor(
         repo: VehicleRepository,
         adsPolicy: AdsPolicy,
         analytics: Analytics,
+        proPrompts: ProPromptCoordinator,
     ) : this(
         repo, adsPolicy, analytics,
         vehicleId = checkNotNull(savedState.get<Long>("vehicleId")),
         isCharge = savedState.get<Boolean>("charge") ?: false,
+        proPrompts = proPrompts,
         clock = System::currentTimeMillis,
     )
 
@@ -136,7 +140,10 @@ class EntryFormViewModel internal constructor(
             try {
                 repo.energyLogs.insert(EntryForm.toEnergyLog(s.form, vehicle, clock()))
                 // A saved fill-up or charge starts the pump-session rule: no interstitial for the rest of the session.
-                adsPolicy.onSaved(if (s.isCharge) SaveKind.EV_CHARGE else SaveKind.FILL_UP)
+                val kind = if (s.isCharge) SaveKind.EV_CHARGE else SaveKind.FILL_UP
+                adsPolicy.onSaved(kind)
+                // The Nth saved entry earns the next-session Garage card (a fill-up or charge is a pump-session).
+                proPrompts?.onEntrySaved(kind)
                 analytics.logEvent(
                     if (s.isCharge) AnalyticsEvents.CHARGE_SAVED else AnalyticsEvents.FILLUP_SAVED,
                     mapOf(AnalyticsParams.POWERTRAIN to vehicle.powertrain.name.lowercase()),

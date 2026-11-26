@@ -4,7 +4,13 @@ import android.app.Activity
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.postpole.wheelfile.ads.ActiveProPrompt
+import com.postpole.wheelfile.ads.AdsConfigSource
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ProPromptCoordinator
+import com.postpole.wheelfile.ads.ProPromptDismissMethod
+import com.postpole.wheelfile.ads.ProPromptRestPoint
+import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import com.postpole.wheelfile.ads.InterstitialCoordinator
 import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.data.DocumentRepository
@@ -53,6 +59,10 @@ data class VehicleDetailUiState(
     val reports: ReportsUiState = ReportsUiState(),
     /** The clock the state was built with, for expiry pills. */
     val now: Long = 0L,
+    /** The `entries_milestone` sheet on Overview: the threshold that fired, or null when none shows. */
+    val proSheetCount: Int? = null,
+    /** Play's formatted Pro price for the sheet CTA; null until loaded. */
+    val proPrice: String? = null,
 ) {
     val vehicle: Vehicle? get() = data?.vehicle
     val readOnly: Boolean get() = vehicle?.archived == true
@@ -71,6 +81,9 @@ class VehicleDetailViewModel internal constructor(
     private val attachmentTotal: Flow<Int> = flowOf(0),
     private val adsPolicy: AdsPolicy? = null,
     private val interstitials: InterstitialCoordinator? = null,
+    private val proPrompts: ProPromptCoordinator? = null,
+    private val proPrice: Flow<String?> = flowOf(null),
+    private val entriesThreshold: () -> Int = { 0 },
 ) : ViewModel() {
 
     @Inject
@@ -83,11 +96,18 @@ class VehicleDetailViewModel internal constructor(
         attachments: AttachmentDao,
         adsPolicy: AdsPolicy,
         interstitials: InterstitialCoordinator,
+        proPrompts: ProPromptCoordinator,
+        configSource: AdsConfigSource,
     ) : this(
         repo, checkNotNull(savedState.get<Long>("vehicleId")), { billing.isPro.value }, System::currentTimeMillis,
         reminders.observeDueCount(checkNotNull(savedState.get<Long>("vehicleId"))),
         documents, billing.isPro, attachments.observeCount(), adsPolicy, interstitials,
+        proPrompts, billing.price, { configSource.config.value.proPrompt.coerced().entriesThreshold },
     )
+
+    private val proSheet = MutableStateFlow<ActiveProPrompt?>(null)
+    private var proSheetCount = 0
+    private var proEvaluating = false
 
     private val filter = MutableStateFlow(HistoryFilter.ALL)
     private val freeLimit = MutableStateFlow(false)
@@ -141,10 +161,51 @@ class VehicleDetailViewModel internal constructor(
                 s.copy(reports = reports, now = now)
             }
         }
+        .let { base ->
+            combine(base, proSheet, proPrice) { s, sheet, price ->
+                s.copy(proSheetCount = sheet?.let { proSheetCount }, proPrice = price)
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleDetailUiState())
 
     fun setFilter(f: HistoryFilter) {
         filter.value = f
+    }
+
+    /**
+     * Overview settled (a rest point: after a save the user is back here, with the new entry already in Recent
+     * entries). This screen hosts the sheet but has no card slot, so the policy gets `hasCardSlot = false` and a card
+     * (pump-session fallback, `remove_ads` owner) waits for the Garage.
+     */
+    fun onOverviewRestPoint() {
+        val coordinator = proPrompts ?: return
+        if (proSheet.value != null || proEvaluating) return
+        proEvaluating = true
+        viewModelScope.launch {
+            try {
+                val shown = coordinator.onRestPoint(ProPromptRestPoint.VEHICLE_OVERVIEW)
+                if (shown != null) {
+                    proSheetCount = entriesThreshold()
+                    proSheet.value = shown
+                }
+            } finally {
+                proEvaluating = false
+            }
+        }
+    }
+
+    /** Swipe, scrim tap or Back is `swipe`; the X is `close`; "Not now" is `not_now`. Counts toward the 3 sheet dismissals. */
+    fun dismissProSheet(method: ProPromptDismissMethod) {
+        val shown = proSheet.value ?: return
+        proSheet.value = null
+        viewModelScope.launch { proPrompts?.onDismissed(shown, method) }
+    }
+
+    /** The CTA: logs the tap and returns the paywall trigger to open, or null when no sheet is showing. */
+    fun onProSheetCta(): PaywallTrigger? {
+        val shown = proSheet.value ?: return null
+        proPrompts?.onCtaTapped(shown)
+        return ProPromptCoordinator.paywallTrigger(shown.trigger)
     }
 
     /** The user opened [tab]. History and Reports count as having reviewed the vehicle (DECISIONS.md item 9). */
