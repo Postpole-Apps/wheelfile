@@ -31,6 +31,10 @@
     <string name="pro_benefit_service_pdf" tools:ignore="MissingTranslation">PDF service history for resale or your mechanic</string>
     <string name="pro_benefit_charts_ranges" tools:ignore="MissingTranslation">All-time charts and custom ranges</string>
 
+    <!-- reports_3_months (card, Reports tab). Exact mockup copy. No ad mention. -->
+    <string name="pro_auto_reports_title" tools:ignore="MissingTranslation">Turn your history into a PDF</string>
+    <string name="pro_auto_reports_body" tools:ignore="MissingTranslation">All-time and custom ranges, plus a PDF report.</string>
+
     <!-- Shared. The CTA takes the Play price; with no price loaded yet it reads "See Pro". -->
     <string name="pro_auto_cta" tools:ignore="MissingTranslation">See Pro · %1$s</string>
     <string name="pro_auto_cta_no_price" tools:ignore="MissingTranslation">See Pro</string>

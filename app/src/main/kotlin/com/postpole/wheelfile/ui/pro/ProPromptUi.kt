@@ -64,6 +64,8 @@ private fun cardCopy(trigger: ProPromptTrigger, count: Int): PromptCopy = when (
         PromptCopy(stringResource(R.string.pro_auto_second_vehicle_title), stringResource(R.string.pro_auto_second_vehicle_body))
     ProPromptTrigger.SERVICE_LOGGED ->
         PromptCopy(stringResource(R.string.pro_auto_service_title), stringResource(R.string.pro_auto_service_body))
+    ProPromptTrigger.REPORTS_3_MONTHS ->
+        PromptCopy(stringResource(R.string.pro_auto_reports_title), stringResource(R.string.pro_auto_reports_body))
     else ->
         PromptCopy(
             pluralStringResource(R.plurals.pro_auto_entries_title, count, count),
@@ -100,7 +102,8 @@ fun ProPromptCard(
                     Modifier.padding(top = Spacing.s).size(40.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(SwapGlyph, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                    val glyph = if (trigger == ProPromptTrigger.REPORTS_3_MONTHS) PdfGlyph else SwapGlyph
+                    Icon(glyph, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
                 Column(Modifier.weight(1f).padding(start = Spacing.m, top = Spacing.m)) {
                     Text(copy.title, style = MaterialTheme.typography.titleMedium)
@@ -258,6 +261,21 @@ private fun PdfSamplePage() {
         }
     }
 }
+
+/** PDF-document glyph (the Material "description" path) for the Reports card. */
+private val PdfGlyph: ImageVector = ImageVector.Builder(
+    name = "Description",
+    defaultWidth = 24.dp,
+    defaultHeight = 24.dp,
+    viewportWidth = 24f,
+    viewportHeight = 24f,
+).addPath(
+    pathData = addPathNodes(
+        "M14,2H6C4.9,2 4,2.9 4,4v16c0,1.1 0.9,2 2,2h12c1.1,0 2,-0.9 2,-2V8L14,2z" +
+            "M16,18H8v-2h8V18zM16,14H8v-2h8V14zM13,9V3.5L18.5,9H13z",
+    ),
+    fill = SolidColor(Color.Black),
+).build()
 
 /** Compare / swap glyph (the Material "swap horiz" path), drawn here because only the core icon set is a dependency. */
 private val SwapGlyph: ImageVector = ImageVector.Builder(

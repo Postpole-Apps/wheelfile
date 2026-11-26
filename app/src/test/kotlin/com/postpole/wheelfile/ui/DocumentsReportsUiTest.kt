@@ -267,6 +267,33 @@ class DocumentsReportsUiTest {
         rule.onNodeWithTag(CHART_COST_TAG).assertContentDescriptionContains("Total cost was", substring = true)
     }
 
+    @Test fun reportsOpenedHookFiresOnlyAfterTheUserTapsTheReportsTab() {
+        // A Reports tab that is already selected at launch (a restored tabIndex) must not evaluate the card.
+        var opened = 0
+        val vm = VehicleDetailViewModel(repo, vehicleId, { false }, { now }, documents = documents, proFlow = flowOf(false))
+        rule.setContent {
+            val state by vm.state.collectAsState()
+            WheelfileTheme(darkTheme = false) {
+                VehicleDetailScreen(
+                    state = state,
+                    actions = VehicleDetailActions(
+                        {}, {}, {}, vm::setFilter, {}, {}, {}, {}, {}, {},
+                        onTabViewed = vm::onTabViewed, onRange = vm::setRange, onReportsOpened = { opened++ },
+                    ),
+                    historyAdSlot = {}, documentsAdSlot = {}, reportsAdSlot = {},
+                    initialTab = VehicleTab.REPORTS,
+                )
+            }
+        }
+        waitFor("Monthly cost")
+        rule.waitForIdle()
+        assertEquals(0, opened)
+        rule.onNodeWithText("Overview").performClick()
+        rule.onNodeWithText("Reports").performClick()
+        rule.waitForIdle()
+        assertEquals(1, opened)
+    }
+
     // ---- reviewed flag (V7 interstitial trigger; nothing is shown yet) ----
 
     @Test fun leavingAfterViewingHistoryOrReportsRecordsTheReviewedFlag() {
