@@ -44,6 +44,7 @@ import com.postpole.wheelfile.ui.pro.PRO_PROMPT_NOT_NOW_TAG
 import com.postpole.wheelfile.ui.pro.PRO_PROMPT_SHEET_TAG
 import com.postpole.wheelfile.ui.pro.ProPromptCard
 import com.postpole.wheelfile.ui.pro.ProPromptSheet
+import com.postpole.wheelfile.ui.vehicle.VehicleDetailViewModel
 import com.postpole.wheelfile.ui.theme.WheelfileTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -269,6 +270,78 @@ class ProPromptUiTest {
         rule.waitForIdle()
         rule.onNodeWithTag(PRO_PROMPT_CARD_TAG).assertDoesNotExist()
         assertNotNull(policy.current.pending["entries_milestone"])
+    }
+
+    // ---- Rest points: only after a completed save, never at launch or on plain navigation (spec §5.4a) ----
+
+    @Test fun garage_coldStartShowsNoPromptAndTheCardStaysPending() {
+        runBlocking { db.vehicleDao().insert(vehicle("A")) }
+        val policy = readyPolicy(sessions = 3)
+        runBlocking { coordinator(ProAccess.FREE, policy).onVehicleAdded(2) }
+        runBlocking { policy.startSession(install) } // the next session: the process restarted
+        // A fresh process: a new coordinator has no completed save.
+        val vm = GarageViewModel(repo, coordinator(ProAccess.FREE, policy), kotlinx.coroutines.flow.MutableStateFlow(null)) { 10 }
+        garageWith(vm)
+        vm.onResumed() // the launch resume
+        rule.waitForIdle()
+        rule.onNodeWithTag(PRO_PROMPT_CARD_TAG).assertDoesNotExist()
+        assertNotNull(policy.current.pending["second_vehicle_added"])
+        vm.onResumed() // plain navigation back to the Garage
+        rule.waitForIdle()
+        rule.onNodeWithTag(PRO_PROMPT_CARD_TAG).assertDoesNotExist()
+        assertNotNull(policy.current.pending["second_vehicle_added"])
+    }
+
+    @Test fun garage_backAfterASaveShowsThePendingCard() {
+        runBlocking { db.vehicleDao().insert(vehicle("A")) }
+        val policy = readyPolicy(sessions = 3)
+        runBlocking { coordinator(ProAccess.FREE, policy).onVehicleAdded(2) }
+        runBlocking { policy.startSession(install) }
+        val coordinator = coordinator(ProAccess.FREE, policy, entries = 3)
+        val vm = GarageViewModel(repo, coordinator, kotlinx.coroutines.flow.MutableStateFlow(null)) { 10 }
+        garageWith(vm)
+        vm.onResumed() // launch: nothing
+        rule.waitForIdle()
+        rule.onNodeWithTag(PRO_PROMPT_CARD_TAG).assertDoesNotExist()
+        runBlocking { coordinator.onEntrySaved(SaveKind.FILL_UP) } // a save in this session, then Back to the Garage
+        vm.onResumed()
+        rule.waitForIdle()
+        rule.onNodeWithText("Compare your vehicles with Pro").assertIsDisplayed()
+    }
+
+    private fun overviewVm(coordinator: ProPromptCoordinator): VehicleDetailViewModel {
+        val id = runBlocking { db.vehicleDao().insert(vehicle("A")) }
+        return VehicleDetailViewModel(repo, id, { false }, { now }, proPrompts = coordinator, entriesThreshold = { 10 })
+    }
+
+    @Test fun overview_openedFromGarageWithoutASaveShowsNoSheet() {
+        val policy = readyPolicy(sessions = 3)
+        val coordinator = coordinator(ProAccess.FREE, policy)
+        runBlocking { coordinator.onEntrySaved(SaveKind.SERVICE) } // the 10th entry earned a sheet...
+        val fresh = coordinator(ProAccess.FREE, policy) // ...but this is a new process: no save in it
+        val vm = overviewVm(fresh)
+        var sheetCount: Int? = null
+        rule.setContent { sheetCount = vm.state.collectAsState().value.proSheetCount }
+        vm.onOverviewResumed()
+        rule.waitForIdle()
+        assertNull(sheetCount)
+        assertNotNull(policy.current.pending["entries_milestone"])
+    }
+
+    @Test fun overview_backAfterAServiceSaveAtTheThresholdShowsTheSheet() {
+        val policy = readyPolicy(sessions = 3)
+        val coordinator = coordinator(ProAccess.FREE, policy)
+        val vm = overviewVm(coordinator)
+        var sheetCount: Int? = null
+        rule.setContent { sheetCount = vm.state.collectAsState().value.proSheetCount }
+        vm.onOverviewResumed() // opening Overview: nothing
+        rule.waitForIdle()
+        assertNull(sheetCount)
+        runBlocking { coordinator.onEntrySaved(SaveKind.SERVICE) }
+        vm.onOverviewResumed()
+        // The state is built from Room flows on background threads, so wait for it to emit.
+        rule.waitUntil(timeoutMillis = 5_000) { sheetCount != null }
+        assertEquals(10, sheetCount)
     }
 
     @Test fun garage_ctaOpensThePaywallHook() {

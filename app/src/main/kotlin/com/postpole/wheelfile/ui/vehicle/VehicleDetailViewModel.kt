@@ -194,6 +194,11 @@ class VehicleDetailViewModel internal constructor(
         }
     }
 
+    /** Overview resumed: a rest point only when the user returns after a completed save (not on plain navigation). */
+    fun onOverviewResumed() {
+        if (proPrompts?.consumeSaveCompleted() == true) onOverviewRestPoint()
+    }
+
     /** Swipe, scrim tap or Back is `swipe`; the X is `close`; "Not now" is `not_now`. Counts toward the 3 sheet dismissals. */
     fun dismissProSheet(method: ProPromptDismissMethod) {
         val shown = proSheet.value ?: return

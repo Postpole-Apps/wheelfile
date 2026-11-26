@@ -205,7 +205,7 @@ fun VehicleDetailRoute(
             onSharePdf = {
                 if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro(PaywallTrigger.PDF_REPORT)
             },
-            onOverviewRestPoint = viewModel::onOverviewRestPoint,
+            onOverviewRestPoint = viewModel::onOverviewResumed,
             onProSheetCta = { viewModel.onProSheetCta()?.let(onOpenPro) },
             onProSheetDismiss = viewModel::dismissProSheet,
         ),

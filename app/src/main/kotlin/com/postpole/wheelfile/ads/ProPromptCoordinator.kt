@@ -64,6 +64,7 @@ class ProPromptCoordinator internal constructor(
      * `remove_ads` ownership blocks the sheet).
      */
     suspend fun onEntrySaved(kind: SaveKind) = guarded {
+        markSaveCompleted()
         if (totalEntries() != config().coerced().entriesThreshold) return@guarded
         val surface = if (kind.isPumpSession) ProPromptSurface.CARD else ProPromptSurface.SHEET
         policy.qualify(ProPromptTrigger.ENTRIES_MILESTONE, surface, earnedBy = kind)
@@ -71,8 +72,27 @@ class ProPromptCoordinator internal constructor(
 
     /** Call after a vehicle was added. The 2nd active vehicle qualifies a Garage card for the next session. */
     suspend fun onVehicleAdded(activeCount: Int) = guarded {
+        markSaveCompleted()
         if (activeCount != SECOND_VEHICLE) return@guarded
         policy.qualify(ProPromptTrigger.SECOND_VEHICLE_ADDED, ProPromptSurface.CARD, nextSession = true)
+    }
+
+    @Volatile private var saveCompleted = false
+
+    /**
+     * A save or finish completed in this process (entry, service, expense, vehicle). The next main screen to resume
+     * consumes it with [consumeSaveCompleted] and only then is a rest point. It is in memory only, so a cold start
+     * never has it set.
+     */
+    fun markSaveCompleted() {
+        saveCompleted = true
+    }
+
+    /** One-shot: true once after [markSaveCompleted]. Launch and plain navigation find it false, so they never evaluate. */
+    fun consumeSaveCompleted(): Boolean {
+        val was = saveCompleted
+        saveCompleted = false
+        return was
     }
 
     /**

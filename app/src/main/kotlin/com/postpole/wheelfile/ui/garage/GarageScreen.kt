@@ -89,7 +89,7 @@ fun GarageRoute(
     // Rest point: the Garage is on screen with its vehicles (also after Back from a form or the paywall).
     val hasVehicles = state is GarageUiState.Content
     LifecycleResumeEffect(hasVehicles) {
-        if (hasVehicles) viewModel.onRestPoint()
+        if (hasVehicles) viewModel.onResumed()
         onPauseOrDispose {}
     }
     GarageScreen(

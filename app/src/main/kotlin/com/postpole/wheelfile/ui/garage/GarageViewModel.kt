@@ -106,6 +106,14 @@ class GarageViewModel internal constructor(
         }
     }
 
+    /**
+     * The Garage resumed. It is a rest point only when the user returns after a completed save or finish; the launch
+     * resume, the first resume of a new session and plain navigation do not evaluate and leave a pending card pending.
+     */
+    fun onResumed() {
+        if (proPrompts?.consumeSaveCompleted() == true) onRestPoint()
+    }
+
     /** The card's X. Cards have no swipe-dismiss. */
     fun dismissProPrompt() {
         val shown = _proPrompt.value ?: return
