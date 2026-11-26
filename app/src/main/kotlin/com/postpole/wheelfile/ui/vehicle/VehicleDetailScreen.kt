@@ -35,7 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -48,7 +47,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -102,9 +100,6 @@ enum class VehicleTab(val label: Int) {
     DOCUMENTS(R.string.tab_documents),
     REPORTS(R.string.tab_reports),
 }
-
-/** At 200% font scale the four tabs no longer fit, so the row scrolls. */
-internal const val SCROLLABLE_TABS_FONT_SCALE = 2f
 
 class VehicleDetailActions(
     val onBack: () -> Unit,
@@ -358,10 +353,10 @@ fun VehicleDetailScreen(
     }
 }
 
+/** Always scrollable: every tab keeps its intrinsic width, so full labels never clip on narrow screens or large fonts. */
 @Composable
-private fun VehicleTabs(selected: Int, onSelect: (Int) -> Unit) {
-    val scrollable = LocalDensity.current.fontScale >= SCROLLABLE_TABS_FONT_SCALE
-    val tabs: @Composable () -> Unit = {
+internal fun VehicleTabs(selected: Int, onSelect: (Int) -> Unit) {
+    ScrollableTabRow(selectedTabIndex = selected, edgePadding = Spacing.l) {
         VehicleTab.entries.forEachIndexed { i, t ->
             Tab(
                 selected = i == selected,
@@ -370,11 +365,6 @@ private fun VehicleTabs(selected: Int, onSelect: (Int) -> Unit) {
                 text = { Text(stringResource(t.label), style = MaterialTheme.typography.titleSmall, maxLines = 1) },
             )
         }
-    }
-    if (scrollable) {
-        ScrollableTabRow(selectedTabIndex = selected, edgePadding = Spacing.l, tabs = tabs)
-    } else {
-        TabRow(selectedTabIndex = selected, tabs = tabs)
     }
 }
 
