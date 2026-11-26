@@ -8,7 +8,9 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.ZoneOffset
 import java.util.concurrent.CopyOnWriteArrayList
 
@@ -53,6 +55,42 @@ class ReportsCardTest {
         assertFalse(q(today.minusMonths(3).plusDays(1)))
         assertFalse(q(today.minusMonths(2)))
         assertFalse(q(null))
+    }
+
+    private fun utcMillis(iso: String) = Instant.parse(iso).toEpochMilli()
+
+    @Test fun monthLengthClampsTheThreeMonthBoundary() {
+        // 31 Aug + 3 months clamps to 30 Nov (November has 30 days).
+        val first = millis(LocalDate.of(2026, 8, 31))
+        fun q(today: LocalDate) =
+            ProPromptCoordinator.hasThreeMonthsOfEntries(first, millis(today), ZoneOffset.UTC)
+        assertFalse(q(LocalDate.of(2026, 11, 29)))
+        assertTrue(q(LocalDate.of(2026, 11, 30)))
+        assertTrue(q(LocalDate.of(2026, 12, 1)))
+    }
+
+    @Test fun localZoneDecidesTheDateNotUtc() {
+        val kolkata = ZoneId.of("Asia/Kolkata")
+        // 2026-08-26T20:00Z is 27 Aug 01:30 in Kolkata. Now is 26 Nov in both zones.
+        val first = utcMillis("2026-08-26T20:00:00Z")
+        val now = utcMillis("2026-11-26T10:00:00Z")
+        assertTrue(ProPromptCoordinator.hasThreeMonthsOfEntries(first, now, ZoneOffset.UTC)) // 26 Aug + 3 = 26 Nov
+        assertFalse(ProPromptCoordinator.hasThreeMonthsOfEntries(first, now, kolkata)) // 27 Aug + 3 = 27 Nov
+        // The next local day qualifies in Kolkata.
+        assertTrue(ProPromptCoordinator.hasThreeMonthsOfEntries(first, utcMillis("2026-11-26T20:00:00Z"), kolkata))
+    }
+
+    @Test fun localZoneAcrossADstChange() {
+        val la = ZoneId.of("America/Los_Angeles")
+        // US DST ended on 2026-11-01. 06:30Z that day is 31 Oct 23:30 PDT (the UTC date is already 1 Nov).
+        val first = utcMillis("2026-11-01T06:30:00Z")
+        // 2027-01-31T20:00Z is 31 Jan 12:00 PST. Local: 31 Oct + 3 months = 31 Jan, so it qualifies.
+        val now = utcMillis("2027-01-31T20:00:00Z")
+        assertTrue(ProPromptCoordinator.hasThreeMonthsOfEntries(first, now, la))
+        // In UTC the first entry is on 1 Nov, so the same instant is still a day short.
+        assertFalse(ProPromptCoordinator.hasThreeMonthsOfEntries(first, now, ZoneOffset.UTC))
+        // One local day earlier does not qualify in LA either.
+        assertFalse(ProPromptCoordinator.hasThreeMonthsOfEntries(first, utcMillis("2027-01-30T20:00:00Z"), la))
     }
 
     @Test fun threeMonthVehicleShowsTheCardAndLogsShown() {

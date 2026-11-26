@@ -249,7 +249,10 @@ fun VehicleDetailScreen(
         onPauseOrDispose {}
     }
     // Reports is on screen with its data: the rest point where the reports_3_months card may show.
-    val reportsReady = tab == VehicleTab.REPORTS && state.data != null
+    // Only after the user taps the Reports tab. tabIndex is saved, so a Reports tab restored after process death must
+    // not evaluate at launch; this flag is not saved, so it is false again after a restore.
+    var reportsTapped by remember { mutableStateOf(false) }
+    val reportsReady = reportsTapped && tab == VehicleTab.REPORTS && state.data != null
     LaunchedEffect(reportsReady) { if (reportsReady) actions.onReportsOpened() }
     Scaffold(
         topBar = {
@@ -268,7 +271,10 @@ fun VehicleDetailScreen(
                         }
                     },
                 )
-                VehicleTabs(tabIndex) { tabIndex = it }
+                VehicleTabs(tabIndex) {
+                    tabIndex = it
+                    if (VehicleTab.entries[it] == VehicleTab.REPORTS) reportsTapped = true
+                }
             }
         },
         bottomBar = {
