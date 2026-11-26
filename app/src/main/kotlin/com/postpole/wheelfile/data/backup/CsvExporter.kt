@@ -1,6 +1,7 @@
 package com.postpole.wheelfile.data.backup
 
 import com.postpole.wheelfile.data.AppDatabase
+import com.postpole.wheelfile.domain.entry.PriceMath
 import com.postpole.wheelfile.importer.ImportService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -59,7 +60,7 @@ class CsvExporter @Inject constructor(private val db: AppDatabase) {
                 fills += listOf(
                     v.id.toString(), text(v.name), iso(it.dateTime), num(it.odometer), v.distanceUnit.name, it.stream.name,
                     num(it.quantity), if (it.stream.name == "ELECTRIC") "KWH" else v.volumeUnit.name,
-                    money(it.pricePerUnitMinor, digits), money(it.totalMinor, digits), v.currency, it.isFull.toString(),
+                    unitPrice(it.pricePerUnitMinor, digits), money(it.totalMinor, digits), v.currency, it.isFull.toString(),
                     it.missedPrevious.toString(), text(it.fuelGrade), it.chargerType?.name.orEmpty(), num(it.socStart), num(it.socEnd),
                     text(it.station), text(it.note),
                 )
@@ -125,6 +126,13 @@ class CsvExporter @Inject constructor(private val db: AppDatabase) {
 
         fun money(minor: Long?, digits: Int): String =
             minor?.let { BigDecimal.valueOf(it).movePointLeft(digits).setScale(digits).toPlainString() }.orEmpty()
+
+        /** Stored unit price (1000x minor units) in major units, with at least the currency's fraction digits. */
+        fun unitPrice(stored: Long?, digits: Int): String =
+            stored?.let {
+                val price = PriceMath.unitPriceFromStored(it, digits).stripTrailingZeros()
+                (if (price.scale() < digits) price.setScale(digits) else price).toPlainString()
+            }.orEmpty()
 
         /** Free text; a leading = + - @ is prefixed with an apostrophe so spreadsheets never run it as a formula. */
         fun text(value: String?): String {

@@ -71,7 +71,7 @@ class ImportServiceTest {
         // Money is stored in minor units: 72.00 is 7200, 1.80 per litre is 180.
         val firstLog = db.energyLogDao().getAll(vehicle.id).first()
         assertEquals(7200L, firstLog.totalMinor)
-        assertEquals(180L, firstLog.pricePerUnitMinor)
+        assertEquals(180_000L, firstLog.pricePerUnitMinor) // unit price is stored at 1000x
         assertEquals(12050L, db.serviceRecordDao().getForVehicle(vehicle.id).single().totalMinor)
 
         // Re-import into the vehicle just created: nothing new, everything counted as skipped.
