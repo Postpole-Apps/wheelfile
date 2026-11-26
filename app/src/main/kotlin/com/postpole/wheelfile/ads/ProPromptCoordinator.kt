@@ -8,6 +8,8 @@ import com.postpole.wheelfile.billing.BillingRepository
 import com.postpole.wheelfile.data.VehicleRepository
 import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import kotlinx.coroutines.CancellationException
+import java.time.Instant
+import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,6 +23,9 @@ enum class ProPromptRestPoint(val hasCardSlot: Boolean, val hasSheetHost: Boolea
 
     /** Vehicle detail › Overview hosts the sheet. It has no card slot, so a card waits for the Garage. */
     VEHICLE_OVERVIEW(hasCardSlot = false, hasSheetHost = true),
+
+    /** Vehicle detail › Reports has the inline card slot after the range chips. It only hosts `reports_3_months`. */
+    VEHICLE_REPORTS(hasCardSlot = true, hasSheetHost = false),
 }
 
 /**
@@ -91,6 +96,16 @@ class ProPromptCoordinator internal constructor(
         policy.qualify(ProPromptTrigger.SECOND_VEHICLE_ADDED, ProPromptSurface.CARD, nextSession = true)
     }
 
+    /**
+     * The Reports tab was opened for a vehicle whose first entry is at [firstEntryAt]. At least 3 calendar months
+     * before [now] qualifies `reports_3_months` (a card, no Remote Config key). Qualifying again is a no-op.
+     */
+    suspend fun onReportsOpened(firstEntryAt: Long?, now: Long, zone: ZoneId = ZoneId.systemDefault()) = guarded {
+        if (hasThreeMonthsOfEntries(firstEntryAt, now, zone)) {
+            policy.qualify(ProPromptTrigger.REPORTS_3_MONTHS, ProPromptSurface.CARD)
+        }
+    }
+
     @Volatile private var saveCompleted = false
 
     /**
@@ -114,7 +129,8 @@ class ProPromptCoordinator internal constructor(
      * prompt to render, or null. A shown prompt uses up the caps and logs `pro_prompt_shown`.
      */
     suspend fun onRestPoint(point: ProPromptRestPoint): ActiveProPrompt? = guarded {
-        for (trigger in REST_ORDER) {
+        val candidates = if (point == ProPromptRestPoint.VEHICLE_REPORTS) REPORTS_ORDER else REST_ORDER
+        for (trigger in candidates) {
             val outcome = policy.evaluate(trigger, config(), access(), hasCardSlot = point.hasCardSlot)
             val surface = outcome.surface
             if (!outcome.shouldShow || surface == null) continue
@@ -153,6 +169,18 @@ class ProPromptCoordinator internal constructor(
             ProPromptTrigger.SERVICE_LOGGED,
             ProPromptTrigger.ENTRIES_MILESTONE,
         )
+
+        private val REPORTS_ORDER = listOf(ProPromptTrigger.REPORTS_3_MONTHS)
+
+        private const val REPORTS_MONTHS = 3L
+
+        /** True when the first entry is at least 3 calendar months before [now]. Less than that does not qualify. */
+        fun hasThreeMonthsOfEntries(firstEntryAt: Long?, now: Long, zone: ZoneId = ZoneId.systemDefault()): Boolean {
+            if (firstEntryAt == null) return false
+            val first = Instant.ofEpochMilli(firstEntryAt).atZone(zone).toLocalDate()
+            val today = Instant.ofEpochMilli(now).atZone(zone).toLocalDate()
+            return !first.plusMonths(REPORTS_MONTHS).isAfter(today)
+        }
 
         fun paywallTrigger(trigger: ProPromptTrigger): PaywallTrigger = when (trigger) {
             ProPromptTrigger.ENTRIES_MILESTONE -> PaywallTrigger.AUTO_ENTRIES_MILESTONE

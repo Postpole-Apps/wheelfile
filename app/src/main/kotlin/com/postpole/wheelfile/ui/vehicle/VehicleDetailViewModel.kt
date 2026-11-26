@@ -66,6 +66,8 @@ data class VehicleDetailUiState(
     val proSheetTrigger: ProPromptTrigger? = null,
     /** Play's formatted Pro price for the sheet CTA; null until loaded. */
     val proPrice: String? = null,
+    /** The `reports_3_months` card on Reports; null when none shows. */
+    val reportsCard: ActiveProPrompt? = null,
 ) {
     val vehicle: Vehicle? get() = data?.vehicle
     val readOnly: Boolean get() = vehicle?.archived == true
@@ -109,6 +111,8 @@ class VehicleDetailViewModel internal constructor(
     )
 
     private val proSheet = MutableStateFlow<ActiveProPrompt?>(null)
+    private val reportsCard = MutableStateFlow<ActiveProPrompt?>(null)
+    private var reportsEvaluating = false
     private var proSheetCount = 0
     private var proEvaluating = false
 
@@ -165,8 +169,13 @@ class VehicleDetailViewModel internal constructor(
             }
         }
         .let { base ->
-            combine(base, proSheet, proPrice) { s, sheet, price ->
-                s.copy(proSheetCount = sheet?.let { proSheetCount }, proSheetTrigger = sheet?.trigger, proPrice = price)
+            combine(base, proSheet, proPrice, reportsCard) { s, sheet, price, card ->
+                s.copy(
+                    proSheetCount = sheet?.let { proSheetCount },
+                    proSheetTrigger = sheet?.trigger,
+                    proPrice = price,
+                    reportsCard = card,
+                )
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleDetailUiState())
@@ -195,6 +204,45 @@ class VehicleDetailViewModel internal constructor(
                 proEvaluating = false
             }
         }
+    }
+
+    /**
+     * Reports opened with its data loaded. Qualifies `reports_3_months` when this vehicle has 3 months of entries,
+     * then asks the policy. The card only shows on the 12-month view: never together with the locked chart card
+     * (`st-pro-upsell`), so on a Pro range nothing is evaluated and the prompt stays pending.
+     */
+    fun onReportsOpened() {
+        val coordinator = proPrompts ?: return
+        val data = state.value.data ?: return
+        if (reportsCard.value != null || reportsEvaluating || range.value != ReportRange.LAST_12_MONTHS) return
+        reportsEvaluating = true
+        viewModelScope.launch {
+            try {
+                val first = listOfNotNull(
+                    data.logs.minOfOrNull { it.dateTime },
+                    data.services.minOfOrNull { it.dateTime },
+                    data.expenses.minOfOrNull { it.dateTime },
+                ).minOrNull()
+                coordinator.onReportsOpened(first, clock())
+                reportsCard.value = coordinator.onRestPoint(ProPromptRestPoint.VEHICLE_REPORTS)
+            } finally {
+                reportsEvaluating = false
+            }
+        }
+    }
+
+    /** The card's X. Cards have no swipe-dismiss; counts toward the 3 dismissals of this card trigger. */
+    fun dismissReportsCard() {
+        val shown = reportsCard.value ?: return
+        reportsCard.value = null
+        viewModelScope.launch { proPrompts?.onDismissed(shown, ProPromptDismissMethod.CLOSE) }
+    }
+
+    /** The card CTA: logs the tap and returns the paywall trigger. The card stays for the return from the paywall. */
+    fun onReportsCardCta(): PaywallTrigger? {
+        val shown = reportsCard.value ?: return null
+        proPrompts?.onCtaTapped(shown)
+        return ProPromptCoordinator.paywallTrigger(shown.trigger)
     }
 
     /** Overview resumed: a rest point only when the user returns after a completed save (not on plain navigation). */

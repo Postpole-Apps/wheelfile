@@ -31,6 +31,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.postpole.wheelfile.R
+import com.postpole.wheelfile.ads.ProPromptTrigger
+import com.postpole.wheelfile.ui.pro.ProPromptCard
 import com.postpole.wheelfile.data.db.EnergyStream
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.domain.report.CurrencyCosts
@@ -63,6 +65,9 @@ data class ReportsUiState(
     val locked: Boolean get() = range.isPro && !isPro
 }
 
+/** The `reports_3_months` card to show on the 12-month view, with its price and actions. */
+class ReportsProCard(val price: String?, val onCta: () -> Unit, val onClose: () -> Unit)
+
 const val REPORTS_TAB_TAG = "ReportsTab"
 const val REPORTS_LOCKED_TAG = "ReportsLockedCard"
 const val CHART_ECONOMY_TAG = "ChartEconomy"
@@ -83,6 +88,7 @@ fun ReportsTab(
     onSeePro: () -> Unit,
     modifier: Modifier = Modifier,
     onSharePdf: (() -> Unit)? = null,
+    proCard: ReportsProCard? = null,
 ) {
     Column(modifier.fillMaxSize().testTag(REPORTS_TAB_TAG)) {
         Row(
@@ -112,6 +118,17 @@ fun ReportsTab(
             verticalArrangement = Arrangement.spacedBy(Spacing.m),
         ) {
             if (state.locked) LockedCard(state.range, onSeePro)
+            // After the range chips, before the charts, in the scrolling column so it never sits under the banner.
+            // Never together with the locked chart card: the automatic card is for the 12-month view only.
+            if (proCard != null && !state.locked && state.range == ReportRange.LAST_12_MONTHS) {
+                ProPromptCard(
+                    trigger = ProPromptTrigger.REPORTS_3_MONTHS,
+                    count = 0,
+                    price = proCard.price,
+                    onCta = proCard.onCta,
+                    onClose = proCard.onClose,
+                )
+            }
             if (state.range == ReportRange.CUSTOM && state.isPro) CustomRange(state, onCustom)
             if (state.range == ReportRange.COMPARE && state.isPro) CompareCard(state.comparisons)
             if (!state.isPro && !state.locked) {

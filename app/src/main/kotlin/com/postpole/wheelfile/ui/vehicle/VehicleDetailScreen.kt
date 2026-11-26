@@ -76,6 +76,7 @@ import com.postpole.wheelfile.ui.document.DocumentsTab
 import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import com.postpole.wheelfile.ui.report.PdfEvent
 import com.postpole.wheelfile.ui.report.PdfReportViewModel
+import com.postpole.wheelfile.ui.report.ReportsProCard
 import com.postpole.wheelfile.ui.report.ReportsTab
 import com.postpole.wheelfile.ui.common.EconomyDelta
 import com.postpole.wheelfile.ui.common.formatMoney
@@ -133,6 +134,10 @@ class VehicleDetailActions(
     val onSeeProCharts: () -> Unit = onSeePro,
     /** Overview settled and visible: the rest point where the `entries_milestone` sheet may show. */
     val onOverviewRestPoint: () -> Unit = {},
+    /** Reports opened with data: the policy may show the `reports_3_months` card. */
+    val onReportsOpened: () -> Unit = {},
+    val onReportsCardCta: () -> Unit = {},
+    val onReportsCardDismiss: () -> Unit = {},
     val onProSheetCta: () -> Unit = {},
     val onProSheetDismiss: (ProPromptDismissMethod) -> Unit = {},
 )
@@ -206,6 +211,9 @@ fun VehicleDetailRoute(
                 if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro(PaywallTrigger.PDF_REPORT)
             },
             onOverviewRestPoint = viewModel::onOverviewResumed,
+            onReportsOpened = viewModel::onReportsOpened,
+            onReportsCardCta = { viewModel.onReportsCardCta()?.let(onOpenPro) },
+            onReportsCardDismiss = viewModel::dismissReportsCard,
             onProSheetCta = { viewModel.onProSheetCta()?.let(onOpenPro) },
             onProSheetDismiss = viewModel::dismissProSheet,
         ),
@@ -240,6 +248,9 @@ fun VehicleDetailScreen(
         if (overviewReady) actions.onOverviewRestPoint()
         onPauseOrDispose {}
     }
+    // Reports is on screen with its data: the rest point where the reports_3_months card may show.
+    val reportsReady = tab == VehicleTab.REPORTS && state.data != null
+    LaunchedEffect(reportsReady) { if (reportsReady) actions.onReportsOpened() }
     Scaffold(
         topBar = {
             Column {
@@ -315,6 +326,9 @@ fun VehicleDetailScreen(
                     onCustom = actions.onCustomRange,
                     onSeePro = actions.onSeeProCharts,
                     onSharePdf = actions.onSharePdf,
+                    proCard = state.reportsCard?.let {
+                        ReportsProCard(state.proPrice, actions.onReportsCardCta, actions.onReportsCardDismiss)
+                    },
                 )
             }
         }
