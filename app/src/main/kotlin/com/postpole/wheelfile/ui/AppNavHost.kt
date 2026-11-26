@@ -94,6 +94,7 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                 onOpenVehicle = { navController.navigate(Routes.vehicle(it)) },
                 onAddEntry = { id, charge -> navController.navigate(Routes.entry(id, charge)) },
                 onSelect = {},
+                onOpenPaywall = { navController.navigate(Routes.pro(it)) },
             )
             if (!isListDetailWidth()) {
                 GarageRoute(actions = actions)
@@ -109,6 +110,7 @@ fun AppNavHost(onScreen: (String) -> Unit = {}, startViewModel: StartViewModel =
                                 onOpenVehicle = { openVehicle = it },
                                 onAddEntry = actions.onAddEntry,
                                 onSelect = actions.onSelect,
+                                onOpenPaywall = actions.onOpenPaywall,
                             ),
                             // The open vehicle's tab carries its own banner; never two banners on one screen.
                             showBanner = openVehicle == null,

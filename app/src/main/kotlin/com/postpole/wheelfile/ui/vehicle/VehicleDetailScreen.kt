@@ -53,7 +53,10 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.postpole.wheelfile.ads.ProPromptDismissMethod
+import com.postpole.wheelfile.ui.pro.ProPromptSheet
 import com.postpole.wheelfile.R
 import com.postpole.wheelfile.ads.AdScreen
 import com.postpole.wheelfile.ads.AdSlot
@@ -128,6 +131,10 @@ class VehicleDetailActions(
     val onSharePdf: () -> Unit = {},
     /** The locked all-time chart range on Reports. Defaults to [onSeePro]. */
     val onSeeProCharts: () -> Unit = onSeePro,
+    /** Overview settled and visible: the rest point where the `entries_milestone` sheet may show. */
+    val onOverviewRestPoint: () -> Unit = {},
+    val onProSheetCta: () -> Unit = {},
+    val onProSheetDismiss: (ProPromptDismissMethod) -> Unit = {},
 )
 
 @Composable
@@ -198,6 +205,9 @@ fun VehicleDetailRoute(
             onSharePdf = {
                 if (state.reports.isPro) id?.let(pdfViewModel::share) else onOpenPro(PaywallTrigger.PDF_REPORT)
             },
+            onOverviewRestPoint = viewModel::onOverviewResumed,
+            onProSheetCta = { viewModel.onProSheetCta()?.let(onOpenPro) },
+            onProSheetDismiss = viewModel::dismissProSheet,
         ),
         historyAdSlot = { AdSlot(AdScreen.HISTORY) },
         documentsAdSlot = { AdSlot(AdScreen.DOCUMENTS) },
@@ -224,6 +234,12 @@ fun VehicleDetailScreen(
     val tab = VehicleTab.entries[tabIndex]
     val vehicle = state.vehicle
     LaunchedEffect(tab) { actions.onTabViewed(tab) }
+    // Rest point: Overview is on screen with its data (also after Back from a form). The sheet only shows here.
+    val overviewReady = tab == VehicleTab.OVERVIEW && state.data != null
+    LifecycleResumeEffect(overviewReady) {
+        if (overviewReady) actions.onOverviewRestPoint()
+        onPauseOrDispose {}
+    }
     Scaffold(
         topBar = {
             Column {
@@ -302,6 +318,15 @@ fun VehicleDetailScreen(
                 )
             }
         }
+    }
+    val sheetCount = state.proSheetCount
+    if (sheetCount != null && tab == VehicleTab.OVERVIEW) {
+        ProPromptSheet(
+            count = sheetCount,
+            price = state.proPrice,
+            onCta = actions.onProSheetCta,
+            onDismiss = actions.onProSheetDismiss,
+        )
     }
     if (state.showFreeLimit) {
         FreeLimitDialog(onCancel = actions.onDismissFreeLimit, onSeePro = actions.onSeePro, onArchive = actions.onArchiveOpen)

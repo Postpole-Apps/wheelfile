@@ -44,6 +44,10 @@ interface VehicleDao {
 
 @Dao
 interface EnergyLogDao {
+    /** Every saved fill-up and charge, all vehicles. Deleted rows are gone, so they never count. */
+    @Query("SELECT COUNT(*) FROM EnergyLog")
+    suspend fun countAll(): Int
+
     @Query("SELECT * FROM EnergyLog WHERE vehicleId = :vehicleId ORDER BY odometer DESC, dateTime DESC, id DESC")
     fun observeForVehicle(vehicleId: Long): Flow<List<EnergyLog>>
 
@@ -75,6 +79,9 @@ interface EnergyLogDao {
 
 @Dao
 interface ServiceRecordDao {
+    @Query("SELECT COUNT(*) FROM ServiceRecord")
+    suspend fun countAll(): Int
+
     @Query("SELECT * FROM ServiceRecord WHERE vehicleId = :vehicleId ORDER BY dateTime DESC, id DESC")
     fun observeForVehicle(vehicleId: Long): Flow<List<ServiceRecord>>
 
@@ -93,6 +100,9 @@ interface ServiceRecordDao {
 
 @Dao
 interface ExpenseDao {
+    @Query("SELECT COUNT(*) FROM Expense")
+    suspend fun countAll(): Int
+
     @Query("SELECT * FROM Expense WHERE vehicleId = :vehicleId ORDER BY dateTime DESC, id DESC")
     fun observeForVehicle(vehicleId: Long): Flow<List<Expense>>
 

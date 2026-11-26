@@ -220,9 +220,15 @@ class ProPromptPolicy(
     /**
      * A trigger's condition was met. [earnedBy] is the save that earned it, if any: a fill-up or charge turns the
      * prompt into an inline card for the next session. An already pending trigger keeps its original time, so
-     * the 7-day drop can't be postponed by qualifying again.
+     * the 7-day drop can't be postponed by qualifying again. [nextSession] also holds a prompt back until the next
+     * session without a pump-session save (a card specified as "next session", such as a second vehicle).
      */
-    suspend fun qualify(trigger: ProPromptTrigger, surface: ProPromptSurface, earnedBy: SaveKind? = null): Unit =
+    suspend fun qualify(
+        trigger: ProPromptTrigger,
+        surface: ProPromptSurface,
+        earnedBy: SaveKind? = null,
+        nextSession: Boolean = false,
+    ): Unit =
         mutex.withLock {
             if (trigger.id in state.pending) return@withLock
             val pump = earnedBy?.isPumpSession == true
@@ -231,7 +237,7 @@ class ProPromptPolicy(
                 val prompt = PendingProPrompt(
                     surface = if (pump) ProPromptSurface.CARD else surface,
                     qualifiedAt = now,
-                    minSession = if (pump) it.sessionCount + 1 else 0,
+                    minSession = if (pump || nextSession) it.sessionCount + 1 else 0,
                 )
                 it.copy(pending = it.pending + (trigger.id to prompt))
             }
