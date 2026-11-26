@@ -16,7 +16,9 @@ import com.postpole.wheelfile.ads.FirebaseAdsConfigSource
 import com.postpole.wheelfile.ads.GoogleAdsSdk
 import com.postpole.wheelfile.ads.UmpConsentForms
 import com.postpole.wheelfile.ads.DataStoreProPromptStateStore
+import com.postpole.wheelfile.ads.DataStoreServiceLoggedGate
 import com.postpole.wheelfile.ads.ProPromptPolicy
+import com.postpole.wheelfile.ads.ServiceLoggedGate
 import com.postpole.wheelfile.ads.createAdsPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.createAnalytics
@@ -105,6 +107,11 @@ object AppModule {
     @Singleton
     fun provideProPromptPolicy(dataStore: DataStore<Preferences>): ProPromptPolicy =
         ProPromptPolicy(System::currentTimeMillis, DataStoreProPromptStateStore(dataStore))
+
+    @Provides
+    @Singleton
+    fun provideServiceLoggedGate(dataStore: DataStore<Preferences>): ServiceLoggedGate =
+        DataStoreServiceLoggedGate(dataStore)
 
     @Provides
     @Singleton

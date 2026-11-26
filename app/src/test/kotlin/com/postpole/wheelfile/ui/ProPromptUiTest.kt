@@ -100,7 +100,7 @@ class ProPromptUiTest {
 
     private fun sheet(price: String? = "PRICE") = rule.setContent {
         WheelfileTheme(darkTheme = false) {
-            ProPromptSheet(count = 10, price = price, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
+            ProPromptSheet(trigger = ProPromptTrigger.ENTRIES_MILESTONE, count = 10, price = price, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
         }
     }
 
@@ -120,6 +120,28 @@ class ProPromptUiTest {
         rule.onNodeWithText("Pro unlocks vehicle comparison and unlimited active vehicles.").assertIsDisplayed()
         rule.onNodeWithText("See Pro · PRICE").assertIsDisplayed()
         rule.onNodeWithContentDescription("Dismiss").assertIsDisplayed()
+    }
+
+    @Test fun serviceSheet_copyIsFromTheMockup() {
+        rule.setContent {
+            WheelfileTheme(darkTheme = false) {
+                ProPromptSheet(ProPromptTrigger.SERVICE_LOGGED, count = 10, price = null, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
+            }
+        }
+        rule.onNodeWithText("PDF service history for resale").assertExists()
+        rule.onNodeWithText("Share a clean record of services, costs and economy when you sell or visit the workshop.").assertExists()
+        rule.onNodeWithText("PDF service history for resale or your mechanic").assertExists()
+        rule.onNodeWithText("All-time charts and custom ranges").assertExists()
+        rule.onNodeWithText("Unlimited vehicles").assertExists()
+        rule.onNodeWithText("See Pro").assertExists() // no price loaded: no price on the CTA
+        rule.onNodeWithText("Not now").assertExists()
+        rule.onNodeWithContentDescription("Dismiss").assertExists()
+    }
+
+    @Test fun serviceCard_usesTheServiceCopy() {
+        card(ProPromptTrigger.SERVICE_LOGGED)
+        rule.onNodeWithText("PDF service history for resale").assertIsDisplayed()
+        rule.onNodeWithText("See Pro · PRICE").assertIsDisplayed()
     }
 
     @Test fun entriesSheet_copyIsExact() {
@@ -342,6 +364,81 @@ class ProPromptUiTest {
         // The state is built from Room flows on background threads, so wait for it to emit.
         rule.waitUntil(timeoutMillis = 5_000) { sheetCount != null }
         assertEquals(10, sheetCount)
+    }
+
+    // ---- service_logged through the real rest-point path (saveCompleted / consumeSaveCompleted) ----
+
+    /** A gate that behaves like the DataStore one: a reminder fired at [fired] and the gate is open once. */
+    private class FakeServiceGate(private val fired: Long?) : com.postpole.wheelfile.ads.ServiceLoggedGate {
+        private var used = false
+        override suspend fun tryConsume(savedAt: Long): Boolean {
+            val f = fired
+            if (f == null || f > savedAt || used) return false
+            used = true
+            return true
+        }
+    }
+
+    private fun serviceCoordinator(policy: ProPromptPolicy, entries: Int = 0) = ProPromptCoordinator(
+        policy, { ProPromptConfig() }, { ProAccess.FREE }, { entries }, NoOpAnalytics, FakeServiceGate(now - day),
+    )
+
+    @Test fun overview_pendingServiceLoggedWithoutASaveShowsNoSheetAndStaysPending() {
+        val policy = readyPolicy(sessions = 3)
+        runBlocking { serviceCoordinator(policy).onServiceSaved(now) } // earned in an earlier process
+        assertNotNull(policy.current.pending["service_logged"])
+        val vm = overviewVm(serviceCoordinator(policy)) // cold start: no save in this process
+        var trigger: ProPromptTrigger? = null
+        rule.setContent { trigger = vm.state.collectAsState().value.proSheetTrigger }
+        vm.onOverviewResumed() // launch resume
+        rule.waitForIdle()
+        assertNull(trigger)
+        vm.onOverviewResumed() // plain navigation back to Overview
+        rule.waitForIdle()
+        assertNull(trigger)
+        assertNotNull(policy.current.pending["service_logged"])
+    }
+
+    @Test fun overview_backAfterAServiceSaveShowsTheServiceSheet() {
+        val policy = readyPolicy(sessions = 3)
+        val coordinator = serviceCoordinator(policy)
+        val vm = overviewVm(coordinator)
+        var trigger: ProPromptTrigger? = null
+        rule.setContent { trigger = vm.state.collectAsState().value.proSheetTrigger }
+        vm.onOverviewResumed() // opening Overview: nothing
+        rule.waitForIdle()
+        assertNull(trigger)
+        runBlocking {
+            coordinator.onEntrySaved(SaveKind.SERVICE) // marks the save completed (below the entries threshold)
+            coordinator.onServiceSaved(now)
+        }
+        vm.onOverviewResumed()
+        rule.waitUntil(timeoutMillis = 5_000) { trigger != null }
+        assertEquals(ProPromptTrigger.SERVICE_LOGGED, trigger)
+    }
+
+    @Test fun overview_serviceSaveThatIsAlsoTheNthEntryShowsOnlyServiceLogged() {
+        val policy = readyPolicy(sessions = 3)
+        val coordinator = serviceCoordinator(policy, entries = 10) // this save is the 10th entry
+        val vm = overviewVm(coordinator)
+        var trigger: ProPromptTrigger? = null
+        rule.setContent { trigger = vm.state.collectAsState().value.proSheetTrigger }
+        runBlocking {
+            coordinator.onEntrySaved(SaveKind.SERVICE)
+            coordinator.onServiceSaved(now)
+        }
+        assertNotNull(policy.current.pending["entries_milestone"])
+        assertNotNull(policy.current.pending["service_logged"])
+        vm.onOverviewResumed()
+        rule.waitUntil(timeoutMillis = 5_000) { trigger != null }
+        assertEquals(ProPromptTrigger.SERVICE_LOGGED, trigger) // REST_ORDER: service_logged before entries_milestone
+        // One prompt per session: the entries milestone does not show now, even on a later rest point.
+        coordinator.markSaveCompleted()
+        vm.dismissProSheet(ProPromptDismissMethod.NOT_NOW)
+        vm.onOverviewResumed()
+        rule.waitForIdle()
+        assertNull(trigger)
+        assertEquals(1, policy.current.shownCounts.values.sum())
     }
 
     @Test fun garage_ctaOpensThePaywallHook() {

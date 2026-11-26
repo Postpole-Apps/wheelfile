@@ -185,6 +185,15 @@ class ProPromptPolicy(
         update { first }
     }
 
+    /**
+     * Delete all data cleared the stored prompt state. Drop the in-memory copy too, so the next write cannot restore
+     * the old counts and dates: the app starts over as a fresh install in its current session. Nothing is persisted
+     * here; the store was already cleared.
+     */
+    suspend fun resetAfterWipe(): Unit = mutex.withLock {
+        stateRef.set(ProPromptState(sessionCount = 1, installTimeMs = clock()))
+    }
+
     fun onBackgrounded() {
         backgroundedAt = clock()
     }

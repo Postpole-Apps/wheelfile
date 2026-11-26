@@ -17,6 +17,10 @@ enum class PaywallTrigger(val analyticsValue: String) {
     AUTO_SERVICE_LOGGED("auto_service_logged"),
     AUTO_REPORTS_3_MONTHS("auto_reports_3_months");
 
+    /** True when a free-tier limit or locked feature opened the paywall (not Settings, Garage or an automatic prompt). */
+    val isHardGate: Boolean
+        get() = this == VEHICLE_LIMIT || this == PDF_REPORT || this == ALL_TIME_CHARTS || this == ATTACHMENT_LIMIT
+
     companion object {
         fun fromRoute(value: String?): PaywallTrigger =
             entries.firstOrNull { it.analyticsValue == value } ?: SETTINGS

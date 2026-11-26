@@ -25,6 +25,12 @@
     <string name="pro_auto_second_vehicle_title" tools:ignore="MissingTranslation">Compare your vehicles with Pro</string>
     <string name="pro_auto_second_vehicle_body" tools:ignore="MissingTranslation">Pro unlocks vehicle comparison and unlimited active vehicles.</string>
 
+    <!-- service_logged (sheet; the title and body also serve the fallback card). Exact mockup copy. -->
+    <string name="pro_auto_service_title" tools:ignore="MissingTranslation">PDF service history for resale</string>
+    <string name="pro_auto_service_body" tools:ignore="MissingTranslation">Share a clean record of services, costs and economy when you sell or visit the workshop.</string>
+    <string name="pro_benefit_service_pdf" tools:ignore="MissingTranslation">PDF service history for resale or your mechanic</string>
+    <string name="pro_benefit_charts_ranges" tools:ignore="MissingTranslation">All-time charts and custom ranges</string>
+
     <!-- Shared. The CTA takes the Play price; with no price loaded yet it reads "See Pro". -->
     <string name="pro_auto_cta" tools:ignore="MissingTranslation">See Pro · %1$s</string>
     <string name="pro_auto_cta_no_price" tools:ignore="MissingTranslation">See Pro</string>
@@ -32,6 +38,8 @@
     <!-- One id cannot hold both values: the card says "Dismiss", the sheet says "Close". -->
     <string name="pro_auto_close_cd_card" tools:ignore="MissingTranslation">Dismiss</string>
     <string name="pro_auto_close_cd_sheet" tools:ignore="MissingTranslation">Close</string>
+    <!-- The service_logged sheet is drawn with "Dismiss" on its mockup. -->
+    <string name="pro_auto_close_cd_sheet_service" tools:ignore="MissingTranslation">Dismiss</string>
 
     <!-- Static PDF sample page on the sheet (not user data, no price). -->
     <string name="pro_auto_sample_title" tools:ignore="MissingTranslation">Service history</string>
