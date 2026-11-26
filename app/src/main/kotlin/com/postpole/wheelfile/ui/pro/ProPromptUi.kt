@@ -62,6 +62,8 @@ private class PromptCopy(val title: String, val body: String)
 private fun cardCopy(trigger: ProPromptTrigger, count: Int): PromptCopy = when (trigger) {
     ProPromptTrigger.SECOND_VEHICLE_ADDED ->
         PromptCopy(stringResource(R.string.pro_auto_second_vehicle_title), stringResource(R.string.pro_auto_second_vehicle_body))
+    ProPromptTrigger.SERVICE_LOGGED ->
+        PromptCopy(stringResource(R.string.pro_auto_service_title), stringResource(R.string.pro_auto_service_body))
     else ->
         PromptCopy(
             pluralStringResource(R.plurals.pro_auto_entries_title, count, count),
@@ -126,18 +128,20 @@ fun ProPromptCard(
 }
 
 /**
- * The `entries_milestone` sheet (`surface=sheet`) for a service or expense as the threshold entry, hosted on
- * Vehicle detail › Overview. Swipe, scrim tap and Back are reported as `swipe`; the X as `close`; "Not now" as `not_now`.
+ * The shared Pro sheet (`surface=sheet`), hosted on Vehicle detail › Overview: `service_logged`, and
+ * `entries_milestone` when a service or expense was the threshold entry. Swipe, scrim tap and Back are reported as `swipe`; the X as `close`; "Not now" as `not_now`.
  * The max height keeps the vehicle top bar visible and the inner content scrolls at large font sizes.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProPromptSheet(
+    trigger: ProPromptTrigger,
     count: Int,
     price: String?,
     onCta: () -> Unit,
     onDismiss: (ProPromptDismissMethod) -> Unit,
 ) {
+    val service = trigger == ProPromptTrigger.SERVICE_LOGGED
     ModalBottomSheet(
         onDismissRequest = { onDismiss(ProPromptDismissMethod.SWIPE) },
         containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
@@ -150,7 +154,11 @@ fun ProPromptSheet(
         ) {
             Row(verticalAlignment = Alignment.Top) {
                 Text(
-                    pluralStringResource(R.plurals.pro_auto_entries_sheet_title, count, count),
+                    if (service) {
+                        stringResource(R.string.pro_auto_service_title)
+                    } else {
+                        pluralStringResource(R.plurals.pro_auto_entries_sheet_title, count, count)
+                    },
                     Modifier.weight(1f).padding(top = Spacing.m),
                     style = MaterialTheme.typography.headlineSmall,
                 )
@@ -158,14 +166,28 @@ fun ProPromptSheet(
                     onClick = { onDismiss(ProPromptDismissMethod.CLOSE) },
                     Modifier.size(Sizes.touchTargetMin).testTag(PRO_PROMPT_CLOSE_TAG),
                 ) {
-                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.pro_auto_close_cd_sheet))
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = stringResource(
+                            if (service) R.string.pro_auto_close_cd_sheet_service else R.string.pro_auto_close_cd_sheet,
+                        ),
+                    )
                 }
             }
-            Text(stringResource(R.string.pro_auto_entries_sheet_body), style = MaterialTheme.typography.bodyMedium)
+            Text(
+                stringResource(if (service) R.string.pro_auto_service_body else R.string.pro_auto_entries_sheet_body),
+                style = MaterialTheme.typography.bodyMedium,
+            )
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.s)) {
-                BenefitRow(stringResource(R.string.pro_benefit_unlimited_vehicles))
-                BenefitRow(stringResource(R.string.pro_benefit_pdf_history))
-                BenefitRow(stringResource(R.string.pro_benefit_all_time_charts))
+                if (service) {
+                    BenefitRow(stringResource(R.string.pro_benefit_service_pdf))
+                    BenefitRow(stringResource(R.string.pro_benefit_charts_ranges))
+                    BenefitRow(stringResource(R.string.pro_benefit_unlimited_vehicles))
+                } else {
+                    BenefitRow(stringResource(R.string.pro_benefit_unlimited_vehicles))
+                    BenefitRow(stringResource(R.string.pro_benefit_pdf_history))
+                    BenefitRow(stringResource(R.string.pro_benefit_all_time_charts))
+                }
             }
             PdfSamplePage()
             Button(

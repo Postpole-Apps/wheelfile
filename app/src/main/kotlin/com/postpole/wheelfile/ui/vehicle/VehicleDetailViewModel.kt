@@ -10,6 +10,7 @@ import com.postpole.wheelfile.ads.AdsPolicy
 import com.postpole.wheelfile.ads.ProPromptCoordinator
 import com.postpole.wheelfile.ads.ProPromptDismissMethod
 import com.postpole.wheelfile.ads.ProPromptRestPoint
+import com.postpole.wheelfile.ads.ProPromptTrigger
 import com.postpole.wheelfile.ui.pro.PaywallTrigger
 import com.postpole.wheelfile.ads.InterstitialCoordinator
 import com.postpole.wheelfile.billing.BillingRepository
@@ -61,6 +62,8 @@ data class VehicleDetailUiState(
     val now: Long = 0L,
     /** The `entries_milestone` sheet on Overview: the threshold that fired, or null when none shows. */
     val proSheetCount: Int? = null,
+    /** Which trigger the Overview sheet is for; set whenever [proSheetCount] is. */
+    val proSheetTrigger: ProPromptTrigger? = null,
     /** Play's formatted Pro price for the sheet CTA; null until loaded. */
     val proPrice: String? = null,
 ) {
@@ -163,7 +166,7 @@ class VehicleDetailViewModel internal constructor(
         }
         .let { base ->
             combine(base, proSheet, proPrice) { s, sheet, price ->
-                s.copy(proSheetCount = sheet?.let { proSheetCount }, proPrice = price)
+                s.copy(proSheetCount = sheet?.let { proSheetCount }, proSheetTrigger = sheet?.trigger, proPrice = price)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), VehicleDetailUiState())

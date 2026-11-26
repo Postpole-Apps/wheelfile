@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.postpole.wheelfile.ads.AdsPolicy
+import com.postpole.wheelfile.ads.ProPromptPolicy
 import com.postpole.wheelfile.ads.QuietAction
 import com.postpole.wheelfile.data.DataWiper
 import com.postpole.wheelfile.data.backup.BackupManager
@@ -47,6 +48,7 @@ class DataTransferViewModel @Inject constructor(
     private val backups: BackupManager,
     private val adsPolicy: AdsPolicy,
     private val wiper: DataWiper.Factory,
+    private val proPrompts: ProPromptPolicy,
 ) : ViewModel() {
     private val _busy = MutableStateFlow(false)
     val busy: StateFlow<Boolean> = _busy.asStateFlow()
@@ -99,6 +101,8 @@ class DataTransferViewModel @Inject constructor(
         viewModelScope.launch {
             val ok = try {
                 withContext(Dispatchers.IO) { wiper.create().wipe() }
+                // The wipe cleared the stored prompt state; the in-memory copy must not write it back.
+                proPrompts.resetAfterWipe()
                 true
             } catch (e: CancellationException) {
                 throw e

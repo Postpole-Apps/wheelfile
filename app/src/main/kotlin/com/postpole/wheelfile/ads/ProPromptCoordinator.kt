@@ -34,6 +34,7 @@ class ProPromptCoordinator internal constructor(
     private val access: () -> ProAccess,
     private val totalEntries: suspend () -> Int,
     private val analytics: Analytics,
+    private val serviceGate: ServiceLoggedGate? = null,
 ) {
     @Inject
     constructor(
@@ -42,6 +43,7 @@ class ProPromptCoordinator internal constructor(
         billing: BillingRepository,
         repo: VehicleRepository,
         analytics: Analytics,
+        serviceGate: ServiceLoggedGate,
     ) : this(
         policy,
         { configSource.config.value.proPrompt },
@@ -55,7 +57,19 @@ class ProPromptCoordinator internal constructor(
         },
         repo::totalEntryCount,
         analytics,
+        serviceGate,
     )
+
+    /**
+     * Call after a new service was saved at [savedAt] (not an edit), after [onEntrySaved]. The first service after
+     * a reminder fired qualifies `service_logged` as a sheet, once ever; the policy turns it into a next-session card
+     * when the pump-session rule or `remove_ads` ownership blocks the sheet. Pro owners never get it: the policy
+     * returns `PRO_OWNER` and the 7-day drop clears it.
+     */
+    suspend fun onServiceSaved(savedAt: Long) = guarded {
+        if (serviceGate?.tryConsume(savedAt) != true) return@guarded
+        policy.qualify(ProPromptTrigger.SERVICE_LOGGED, ProPromptSurface.SHEET)
+    }
 
     /**
      * Call after a new entry was saved (not an edit). The Nth saved entry, counted from the database so deleted
@@ -134,7 +148,11 @@ class ProPromptCoordinator internal constructor(
         private const val SECOND_VEHICLE = 2
 
         /** Older earned prompt first. Only one can show per session (the policy's session cap). */
-        private val REST_ORDER = listOf(ProPromptTrigger.SECOND_VEHICLE_ADDED, ProPromptTrigger.ENTRIES_MILESTONE)
+        private val REST_ORDER = listOf(
+            ProPromptTrigger.SECOND_VEHICLE_ADDED,
+            ProPromptTrigger.SERVICE_LOGGED,
+            ProPromptTrigger.ENTRIES_MILESTONE,
+        )
 
         fun paywallTrigger(trigger: ProPromptTrigger): PaywallTrigger = when (trigger) {
             ProPromptTrigger.ENTRIES_MILESTONE -> PaywallTrigger.AUTO_ENTRIES_MILESTONE

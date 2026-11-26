@@ -320,8 +320,10 @@ fun VehicleDetailScreen(
         }
     }
     val sheetCount = state.proSheetCount
-    if (sheetCount != null && tab == VehicleTab.OVERVIEW) {
+    val sheetTrigger = state.proSheetTrigger
+    if (sheetCount != null && sheetTrigger != null && tab == VehicleTab.OVERVIEW) {
         ProPromptSheet(
+            trigger = sheetTrigger,
             count = sheetCount,
             price = state.proPrice,
             onCta = actions.onProSheetCta,

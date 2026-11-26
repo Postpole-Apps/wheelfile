@@ -3,6 +3,7 @@ package com.postpole.wheelfile.ui.pro
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.postpole.wheelfile.ads.ProPromptPolicy
 import com.postpole.wheelfile.analytics.Analytics
 import com.postpole.wheelfile.analytics.AnalyticsEvents
 import com.postpole.wheelfile.analytics.AnalyticsParams
@@ -22,6 +23,7 @@ import javax.inject.Inject
 class ProViewModel @Inject constructor(
     private val billing: BillingRepository,
     private val analytics: Analytics,
+    private val proPrompts: ProPromptPolicy,
 ) : ViewModel() {
     val isPro: StateFlow<Boolean> = billing.isPro
     val adsHidden: StateFlow<Boolean> = billing.adsHidden
@@ -42,6 +44,8 @@ class ProViewModel @Inject constructor(
     fun onViewed(trigger: PaywallTrigger) {
         if (viewLogged) return
         viewLogged = true
+        // A paywall opened by a hard gate starts the 48 h quiet period for automatic Pro prompts.
+        if (trigger.isHardGate) viewModelScope.launch { proPrompts.onHardGateShown() }
         val params = mapOf<String, Any>(AnalyticsParams.TRIGGER to trigger.analyticsValue)
         analytics.logEvent(AnalyticsEvents.PRO_SCREEN_VIEW, params)
         analytics.logEvent(AnalyticsEvents.REMOVE_ADS_PAYWALL_VIEW, params)

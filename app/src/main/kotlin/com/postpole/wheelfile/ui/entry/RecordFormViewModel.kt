@@ -229,6 +229,7 @@ class RecordFormViewModel internal constructor(
                 adsPolicy.onSaved(saveKind)
                 // The Nth saved entry earns the entries_milestone sheet (shown on Vehicle detail > Overview).
                 proPrompts?.onEntrySaved(saveKind)
+                if (service) proPrompts?.onServiceSaved(now)
                 analytics.logEvent(if (service) AnalyticsEvents.SERVICE_SAVED else AnalyticsEvents.EXPENSE_SAVED)
                 _events.send(RecordEvent.Saved(prompt))
             } catch (e: Exception) {

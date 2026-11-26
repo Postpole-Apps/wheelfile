@@ -100,7 +100,7 @@ class ProPromptUiTest {
 
     private fun sheet(price: String? = "PRICE") = rule.setContent {
         WheelfileTheme(darkTheme = false) {
-            ProPromptSheet(count = 10, price = price, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
+            ProPromptSheet(trigger = ProPromptTrigger.ENTRIES_MILESTONE, count = 10, price = price, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
         }
     }
 
@@ -120,6 +120,28 @@ class ProPromptUiTest {
         rule.onNodeWithText("Pro unlocks vehicle comparison and unlimited active vehicles.").assertIsDisplayed()
         rule.onNodeWithText("See Pro · PRICE").assertIsDisplayed()
         rule.onNodeWithContentDescription("Dismiss").assertIsDisplayed()
+    }
+
+    @Test fun serviceSheet_copyIsFromTheMockup() {
+        rule.setContent {
+            WheelfileTheme(darkTheme = false) {
+                ProPromptSheet(ProPromptTrigger.SERVICE_LOGGED, count = 10, price = null, onCta = { ctaTaps++ }, onDismiss = { dismissed += it })
+            }
+        }
+        rule.onNodeWithText("PDF service history for resale").assertExists()
+        rule.onNodeWithText("Share a clean record of services, costs and economy when you sell or visit the workshop.").assertExists()
+        rule.onNodeWithText("PDF service history for resale or your mechanic").assertExists()
+        rule.onNodeWithText("All-time charts and custom ranges").assertExists()
+        rule.onNodeWithText("Unlimited vehicles").assertExists()
+        rule.onNodeWithText("See Pro").assertExists() // no price loaded: no price on the CTA
+        rule.onNodeWithText("Not now").assertExists()
+        rule.onNodeWithContentDescription("Dismiss").assertExists()
+    }
+
+    @Test fun serviceCard_usesTheServiceCopy() {
+        card(ProPromptTrigger.SERVICE_LOGGED)
+        rule.onNodeWithText("PDF service history for resale").assertIsDisplayed()
+        rule.onNodeWithText("See Pro · PRICE").assertIsDisplayed()
     }
 
     @Test fun entriesSheet_copyIsExact() {
