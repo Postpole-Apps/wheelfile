@@ -24,7 +24,7 @@ enum class ProPromptDismissMethod(val id: String) {
     SWIPE("swipe"),
 }
 
-/** What the user owns. `remove_ads` owners get cards only; Pro owners never get a prompt. */
+/** What the user owns. `remove_ads` owners get cards instead of sheets; Pro owners never get a prompt. */
 enum class ProAccess { FREE, REMOVE_ADS, PRO }
 
 enum class ProPromptDecision {
@@ -33,7 +33,6 @@ enum class ProPromptDecision {
     EXPIRED,
     DISABLED_BY_CONFIG,
     PRO_OWNER,
-    REMOVE_ADS_NO_SHEET,
     FIRST_SESSION,
     TOO_SOON_AFTER_INSTALL,
     MIN_SESSION,
@@ -46,6 +45,7 @@ enum class ProPromptDecision {
     CARD_RESHOW_WINDOW,
     SHEET_DISMISS_LIMIT,
     CARD_DISMISS_LIMIT,
+    NO_CARD_SLOT,
 }
 
 /** The decision plus the surface to render, which can differ from the qualified one (sheet turned into a card). */
@@ -237,11 +237,16 @@ class ProPromptPolicy(
             }
         }
 
-    /** Decides whether [trigger] may show now. Also drops expired prompts and turns pump-blocked sheets into cards. */
+    /**
+     * Decides whether [trigger] may show now. Also drops expired prompts and turns pump-blocked sheets, and sheets
+     * of remove_ads owners, into cards. [hasCardSlot] is false on screens without an inline card slot (Garage
+     * always has one); a card then stays pending until a rest point that has one, or until it is dropped.
+     */
     suspend fun evaluate(
         trigger: ProPromptTrigger,
         config: ProPromptConfig,
         access: ProAccess,
+        hasCardSlot: Boolean = true,
     ): ProPromptOutcome = mutex.withLock {
         val now = clock()
         val cfg = config.coerced()
@@ -255,6 +260,12 @@ class ProPromptPolicy(
 
         if (!cfg.enabled) return out(ProPromptDecision.DISABLED_BY_CONFIG)
         if (access == ProAccess.PRO) return out(ProPromptDecision.PRO_OWNER)
+        if (access == ProAccess.REMOVE_ADS && surface == ProPromptSurface.SHEET) {
+            // §E: a remove_ads owner gets the inline card for a sheet trigger. Same trigger and same qualifiedAt
+            // (the 7-day drop is unchanged); the card caps apply and the sheet counters are never touched.
+            surface = ProPromptSurface.CARD
+            update { it.copy(pending = it.pending + (trigger.id to pending.copy(surface = surface))) }
+        }
         if (state.pumpSession) {
             if (surface == ProPromptSurface.SHEET) {
                 surface = ProPromptSurface.CARD
@@ -264,9 +275,6 @@ class ProPromptPolicy(
                 }
             }
             return out(ProPromptDecision.PUMP_SESSION)
-        }
-        if (access == ProAccess.REMOVE_ADS && surface == ProPromptSurface.SHEET) {
-            return out(ProPromptDecision.REMOVE_ADS_NO_SHEET)
         }
         if (state.sessionCount <= 1) return out(ProPromptDecision.FIRST_SESSION)
         if (now - state.installTimeMs < MIN_INSTALL_AGE_MS) return out(ProPromptDecision.TOO_SOON_AFTER_INSTALL)
@@ -293,6 +301,7 @@ class ProPromptPolicy(
                 return out(ProPromptDecision.CARD_RESHOW_WINDOW)
             }
         }
+        if (surface == ProPromptSurface.CARD && !hasCardSlot) return out(ProPromptDecision.NO_CARD_SLOT)
         out(ProPromptDecision.SHOW)
     }
 
