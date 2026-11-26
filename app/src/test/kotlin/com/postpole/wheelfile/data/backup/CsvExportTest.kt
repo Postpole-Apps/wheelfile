@@ -74,7 +74,7 @@ class CsvExportTest {
         db.energyLogDao().insert(
             EnergyLog(
                 vehicleId = a, stream = EnergyStream.LIQUID, dateTime = 1_704_450_600_000, // 2024-01-05T10:30:00Z
-                odometer = 12345.5, quantity = 40.25, pricePerUnitMinor = 180, totalMinor = 7245, isFull = true,
+                odometer = 12345.5, quantity = 40.25, pricePerUnitMinor = 180_000, totalMinor = 7245, isFull = true,
                 station = "=SUM(A1)", note = "line one\nline two", createdAt = 1, updatedAt = 1,
             ),
         )

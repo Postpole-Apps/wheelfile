@@ -12,6 +12,7 @@ import com.postpole.wheelfile.data.db.ServiceRecord
 import com.postpole.wheelfile.data.db.Vehicle
 import com.postpole.wheelfile.data.db.VehicleType
 import com.postpole.wheelfile.data.db.VolumeUnit
+import com.postpole.wheelfile.domain.entry.PriceMath
 import com.postpole.wheelfile.domain.units.LocaleDefaults
 import com.postpole.wheelfile.domain.units.UnitConversion
 import com.postpole.wheelfile.domain.vehicle.VehicleLimit
@@ -126,7 +127,7 @@ class ImportService(
                     EnergyLog(
                         vehicleId = vehicle.id, stream = EnergyStream.LIQUID, dateTime = f.dateTime,
                         odometer = odometer, quantity = quantity,
-                        pricePerUnitMinor = f.pricePerUnit?.let { minor(it / volumeFactor, digits) },
+                        pricePerUnitMinor = f.pricePerUnit?.let { PriceMath.unitPriceToStored(BigDecimal.valueOf(it / volumeFactor), digits) },
                         totalMinor = f.total?.let { minor(it, digits) },
                         isFull = f.isFull, missedPrevious = f.missedPrevious,
                         fuelGrade = f.fuelGrade, station = f.station, note = f.note,
